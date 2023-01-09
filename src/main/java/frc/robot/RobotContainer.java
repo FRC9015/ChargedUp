@@ -41,8 +41,10 @@ public class RobotContainer
     DiffDriveSubsystem driveSubsystem = DiffDriveSubsystem.getInstance();
     PigeonSubsystem pigeonSubsystem = PigeonSubsystem.getInstance();
 
-    private final ExampleCommand autoCommand = new ExampleCommand(exampleSubsystem);
-    private final Command driveCommand = new TankDrive();
+    private final Command autoCommand = new ExampleCommand(exampleSubsystem);
+    private final Command driveCommand = new ArcadeDrive();
+
+    public final RobotState robotState = RobotState.getInstance();
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer()
