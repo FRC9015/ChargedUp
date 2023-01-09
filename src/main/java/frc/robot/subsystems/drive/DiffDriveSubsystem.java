@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -44,6 +45,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
     private IdleMode brakeMode = IdleMode.kCoast;
 
+    private final SlewRateLimiter accelRateLimit;
+
     /**
      * Creates a new instance of this DiffDriveSubsystem. This constructor
      * is private since this class is a Singleton. Code should use
@@ -68,6 +71,9 @@ public class DiffDriveSubsystem extends SubsystemBase {
         // Instantiate the drive class
         drive = new DifferentialDrive(left, right);
         addChild("drive", drive);
+
+        accelRateLimit = new SlewRateLimiter(DriveConstants.ACCEL_RATE_LIMIT);
+        
     }
 
     @Override
@@ -77,10 +83,16 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
 
     public void arcadeDrive(double fwd, double turn) {
+        fwd = accelRateLimit.calculate(fwd);
+        turn = accelRateLimit.calculate(turn);
+
         drive.arcadeDrive(calcSpeed(fwd), calcSpeed(turn));
     }
 
     public void tankDrive(double left, double right) {
+        left = accelRateLimit.calculate(left);
+        right = accelRateLimit.calculate(right);
+        
         drive.tankDrive(calcSpeed(left), calcSpeed(right));
     }
 
