@@ -45,7 +45,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
     private IdleMode brakeMode = IdleMode.kCoast;
 
-    private final SlewRateLimiter accelRateLimit;
+    private final SlewRateLimiter accelRateLimit1, accelRateLimit2;
 
     /**
      * Creates a new instance of this DiffDriveSubsystem. This constructor
@@ -72,8 +72,13 @@ public class DiffDriveSubsystem extends SubsystemBase {
         drive = new DifferentialDrive(left, right);
         addChild("drive", drive);
 
-        accelRateLimit = new SlewRateLimiter(DriveConstants.ACCEL_RATE_LIMIT);
-        
+        /**
+         * Each input to be rate limited must have it's own filter. In any given drive, we have two possible inputs, and thus two filters.
+         * 1: used for the Left input (Tank) and the Forward input (Arcade)
+         * 2: used for the Right input (Tank) and the Turn input (Arcade)
+         */
+        accelRateLimit1 = new SlewRateLimiter(DriveConstants.ACCEL_RATE_LIMIT);
+        accelRateLimit2 = new SlewRateLimiter(DriveConstants.ACCEL_RATE_LIMIT);
     }
 
     @Override
@@ -83,15 +88,15 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
 
     public void arcadeDrive(double fwd, double turn) {
-        fwd = accelRateLimit.calculate(fwd);
-        turn = accelRateLimit.calculate(turn);
+        fwd = accelRateLimit1.calculate(fwd);
+        turn = accelRateLimit2.calculate(turn);
 
         drive.arcadeDrive(calcSpeed(fwd), calcSpeed(turn));
     }
 
     public void tankDrive(double left, double right) {
-        left = accelRateLimit.calculate(left);
-        right = accelRateLimit.calculate(right);
+        left = accelRateLimit1.calculate(left);
+        right = accelRateLimit2.calculate(right);
         
         drive.tankDrive(calcSpeed(left), calcSpeed(right));
     }
