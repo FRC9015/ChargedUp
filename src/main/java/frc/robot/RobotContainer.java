@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TankDrive;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
 
 
@@ -38,9 +39,11 @@ public class RobotContainer
     }
     // The robot's subsystems and commands are defined here...
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
+    DiffDriveSubsystem driveSubsystem = DiffDriveSubsystem.getInstance();
+    PigeonSubsystem pigeonSubsystem = PigeonSubsystem.getInstance();
 
     private final ExampleCommand autoCommand = new ExampleCommand(exampleSubsystem);
-    private final TankDrive driveCommand = new TankDrive();
+    private final Command driveCommand = new TankDrive();
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer()
@@ -48,8 +51,11 @@ public class RobotContainer
         // Configure the button bindings
         configureButtonBindings();
 
-        DiffDriveSubsystem driveSubsystem = DiffDriveSubsystem.getInstance();
         driveSubsystem.setDefaultCommand(driveCommand);
+    }
+
+    public void initRobot() {
+        pigeonSubsystem.resetAngles();
     }
     
     
@@ -72,6 +78,8 @@ public class RobotContainer
     public XboxController getOperatorJoystick() {
         return new XboxController(1);
     }
+
+    
     
     
     /**
