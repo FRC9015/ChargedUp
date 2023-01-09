@@ -24,6 +24,8 @@ public final class Constants {
         public static final boolean LEFT_INVERTED = false;
         public static final boolean RIGHT_INVERTED = true;
 
+        public static final double SLOW_SPEED_MULTIPLIER = 0.5;
+
     }
 
     public static final class SensorConstants {

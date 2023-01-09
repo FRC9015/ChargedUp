@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
 
 public class DiffDriveSubsystem extends SubsystemBase {
@@ -76,11 +77,11 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
 
     public void arcadeDrive(double fwd, double turn) {
-        drive.arcadeDrive(fwd, turn);
+        drive.arcadeDrive(calcSpeed(fwd), calcSpeed(turn));
     }
 
     public void tankDrive(double left, double right) {
-        drive.tankDrive(left, right);
+        drive.tankDrive(calcSpeed(left), calcSpeed(right));
     }
 
     public void setBrakeMode(IdleMode newBrakeMode) {
@@ -96,6 +97,13 @@ public class DiffDriveSubsystem extends SubsystemBase {
         setBrakeMode(IdleMode.kBrake);
         stop();
         setBrakeMode(prevBrakeMode);
+    }
+
+    private double calcSpeed(double input) {
+        boolean isSlowed = RobotContainer.getInstance().robotState.getSlowed();
+
+        // If the robot should be running in slow mode, reduce speed by the constant multiplier
+        return isSlowed ? input * DriveConstants.SLOW_SPEED_MULTIPLIER : input;
     }
 
 }
