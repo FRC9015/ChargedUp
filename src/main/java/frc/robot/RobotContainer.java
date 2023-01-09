@@ -8,8 +8,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.TankDrive;
+import frc.robot.commands.SwitchSpeed;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
@@ -70,6 +73,15 @@ public class RobotContainer
     {
         // Add button to command mappings here.
         // See https://docs.wpilib.org/en/stable/docs/software/commandbased/binding-commands-to-triggers.html
+
+        JoystickButton driveAButton = new JoystickButton(getDriverJoystick(), XboxController.Button.kA.value);
+        // Toggle the balance command on and off when the driver's A button is pressed
+        driveAButton.toggleWhenPressed(new BalanceCommand(pigeonSubsystem, driveSubsystem));
+
+        JoystickButton driveLBumper = new JoystickButton(getDriverJoystick(), XboxController.Button.kLeftBumper.value);
+        // When the driver's left bumper is pressed, switch between low and high speed.
+        driveLBumper.whenPressed(new SwitchSpeed());
+
     }
 
     public XboxController getDriverJoystick() {
