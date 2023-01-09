@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.DriveConstants;
 
 public class DiffDriveSubsystem extends SubsystemBase {
 
@@ -33,8 +33,6 @@ public class DiffDriveSubsystem extends SubsystemBase {
         return INSTANCE;
     }
 
-    Constants.DriveConstants driveConstants = new Constants.DriveConstants();
-
     private final MotorControllerGroup left;
     private final CANSparkMax left1;
     private final CANSparkMax left2;
@@ -52,20 +50,23 @@ public class DiffDriveSubsystem extends SubsystemBase {
      */
     private DiffDriveSubsystem() {
         MotorType motorType = MotorType.kBrushless;
-        left1 = new CANSparkMax(driveConstants.LEFT_FRONT_MOTOR_ID, motorType);
-        left2 = new CANSparkMax(driveConstants.LEFT_BACK_MOTOR_ID, motorType);
+        left1 = new CANSparkMax(DriveConstants.LEFT_FRONT_MOTOR_ID, motorType);
+        left2 = new CANSparkMax(DriveConstants.LEFT_BACK_MOTOR_ID, motorType);
         left = new MotorControllerGroup(left1, left2);
+        addChild("leftDrive", left);
 
-        right1 = new CANSparkMax(driveConstants.RIGHT_FRONT_MOTOR_ID, motorType);
-        right2 = new CANSparkMax(driveConstants.RIGHT_BACK_MOTOR_ID, motorType);
+        right1 = new CANSparkMax(DriveConstants.RIGHT_FRONT_MOTOR_ID, motorType);
+        right2 = new CANSparkMax(DriveConstants.RIGHT_BACK_MOTOR_ID, motorType);
         right = new MotorControllerGroup(right1, right2);
+        addChild("rightDrive", right);
 
         // Properly invert motors
-        left.setInverted(driveConstants.LEFT_INVERTED);
-        right.setInverted(driveConstants.RIGHT_INVERTED);
+        left.setInverted(DriveConstants.LEFT_INVERTED);
+        right.setInverted(DriveConstants.RIGHT_INVERTED);
 
         // Instantiate the drive class
         drive = new DifferentialDrive(left, right);
+        addChild("drive", drive);
     }
 
     @Override

@@ -16,14 +16,18 @@ package frc.robot;
 public final class Constants {
     public static final class DriveConstants {
 
-        public final int LEFT_FRONT_MOTOR_ID = 0;
-        public final int LEFT_BACK_MOTOR_ID = 0;
-        public final int RIGHT_FRONT_MOTOR_ID = 0;
-        public final int RIGHT_BACK_MOTOR_ID = 0;
+        public static final int LEFT_FRONT_MOTOR_ID = 0;
+        public static final int LEFT_BACK_MOTOR_ID = 0;
+        public static final int RIGHT_FRONT_MOTOR_ID = 0;
+        public static final int RIGHT_BACK_MOTOR_ID = 0;
 
-        public final boolean LEFT_INVERTED = false;
-        public final boolean RIGHT_INVERTED = true;
+        public static final boolean LEFT_INVERTED = false;
+        public static final boolean RIGHT_INVERTED = true;
 
+    }
+
+    public static final class SensorConstants {
+        public static final int PIGEON_CAN_ID = 0;
     }
 
 }
