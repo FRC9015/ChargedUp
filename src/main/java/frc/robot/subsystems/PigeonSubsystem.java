@@ -29,5 +29,4 @@ public class PigeonSubsystem extends SubsystemBase {
         pigeonSensor.zeroGyroBiasNow();
     }
 
-
 }

@@ -7,20 +7,26 @@ import frc.robot.subsystems.drive.DiffDriveSubsystem;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class BalanceCommand extends CommandBase {
 
-    PigeonSubsystem pigeon;
-    DiffDriveSubsystem drive;
+    private PigeonSubsystem pigeon;
+    private DiffDriveSubsystem drive;
 
-    double kP = 0, kI = 0, kD = 0;
-    PIDController balancePID = new PIDController(kP, kI, kD);
+    private double kP = 0, kI = 0, kD = 0;
+    private PIDController balancePID = new PIDController(kP, kI, kD);
+
+    private MedianFilter angleFilter;
     
 
   public BalanceCommand(PigeonSubsystem newPigeon, DiffDriveSubsystem newDrive) {
-    this.pigeon = newPigeon;
-    this.drive = newDrive;
+    pigeon = newPigeon;
+    drive = newDrive;
+
+    
+    angleFilter = new MedianFilter(5);
     
     addRequirements(pigeon, drive);
   }
@@ -38,7 +44,8 @@ public class BalanceCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double angle = pigeon.getXTilt();
+    // angleFilter calculates a moving average of the angle to correct for any spikes
+    double angle = angleFilter.calculate(pigeon.getXTilt());
 
     double moveSpeed = balancePID.calculate(angle);
 
