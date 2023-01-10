@@ -76,11 +76,11 @@ public class RobotContainer
 
         JoystickButton driveAButton = new JoystickButton(getDriverJoystick(), XboxController.Button.kA.value);
         // Toggle the balance command on and off when the driver's A button is pressed
-        driveAButton.toggleWhenPressed(new BalanceCommand(pigeonSubsystem, driveSubsystem));
+        driveAButton.toggleOnTrue(new BalanceCommand(pigeonSubsystem, driveSubsystem));
 
         JoystickButton driveLBumper = new JoystickButton(getDriverJoystick(), XboxController.Button.kLeftBumper.value);
         // When the driver's left bumper is pressed, switch between low and high speed.
-        driveLBumper.whenPressed(new SwitchSpeed());
+        driveLBumper.onTrue(new SwitchSpeed());
 
     }
 
