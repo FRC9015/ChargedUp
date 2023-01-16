@@ -91,7 +91,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
         fwd = accelRateLimit1.calculate(fwd);
         turn = accelRateLimit2.calculate(turn);
 
-        drive.arcadeDrive(calcSpeed(fwd), calcSpeed(turn));
+        drive.arcadeDrive(fwd, -turn);
     }
 
     public void tankDrive(double left, double right) {

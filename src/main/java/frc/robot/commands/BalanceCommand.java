@@ -15,7 +15,7 @@ public class BalanceCommand extends CommandBase {
     private PigeonSubsystem pigeon;
     private DiffDriveSubsystem drive;
 
-    private double kP = 0, kI = 0, kD = 0;
+    private double kP = 0.5, kI = 0, kD = 0;
     private PIDController balancePID = new PIDController(kP, kI, kD);
 
     private MedianFilter angleFilter;
@@ -38,19 +38,21 @@ public class BalanceCommand extends CommandBase {
     drive.setBrakeMode(IdleMode.kBrake);
 
     balancePID.setSetpoint(0.0);
-    balancePID.setTolerance(2.0);
+    balancePID.setTolerance(5.0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
     // angleFilter calculates a moving average of the angle to correct for any spikes
     double angle = angleFilter.calculate(pigeon.getXTilt());
 
     double moveSpeed = balancePID.calculate(angle);
-
+    System.out.print("moveSpeed");
+    System.out.println(moveSpeed);
     // Limit max motor speed to 0.2
-    drive.arcadeDrive(Helpers.limitDecimal(moveSpeed, 0.2), 0);
+    drive.arcadeDrive(Helpers.limitDecimal(-moveSpeed, 0.2), 0);
   }
 
   // Called once the command ends or is interrupted.

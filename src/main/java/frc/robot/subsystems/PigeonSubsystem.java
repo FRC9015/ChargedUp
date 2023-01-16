@@ -22,6 +22,7 @@ public class PigeonSubsystem extends SubsystemBase {
     }
 
     public double getXTilt() {
+        System.out.println(pigeonSensor.getPitch());
         return pigeonSensor.getPitch();
     }
 
