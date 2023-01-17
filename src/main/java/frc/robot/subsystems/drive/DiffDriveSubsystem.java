@@ -102,6 +102,20 @@ public class DiffDriveSubsystem extends SubsystemBase {
         drive.tankDrive(calcSpeed(left), calcSpeed(right));
     }
 
+    public void arcadeDriveRaw(double fwd, double turn, boolean rateLimited) {
+        fwd = rateLimited ? accelRateLimit1.calculate(fwd) : fwd;
+        turn = rateLimited ? accelRateLimit2.calculate(turn) : turn;
+
+        drive.arcadeDrive(fwd, turn);
+    }
+
+    public void tankDriveRaw(double left, double right, boolean rateLimited) {
+        left = rateLimited ? accelRateLimit1.calculate(left) : left;
+        right = rateLimited ? accelRateLimit2.calculate(right) : right;
+        
+        drive.tankDrive(left, right);
+    }
+
     public void setBrakeMode(IdleMode newBrakeMode) {
         this.brakeMode = newBrakeMode;
     }
