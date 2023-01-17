@@ -53,7 +53,7 @@ public class BalanceCommand extends CommandBase {
     System.out.print("moveSpeed");
     System.out.println(moveSpeed);
     // Limit max motor speed to 0.2
-    drive.arcadeDrive(Helpers.limitDecimal(-moveSpeed, 0.2), 0);
+    drive.arcadeDriveRaw(Helpers.limitDecimal(moveSpeed, 0.2), 0, false);
 
     if (Math.abs(angle) <= 2.0) {
       Dashboard.getInstance().balance.setBalanced(true);

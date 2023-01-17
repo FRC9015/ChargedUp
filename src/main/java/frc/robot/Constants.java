@@ -21,8 +21,8 @@ public final class Constants {
         public static final int RIGHT_FRONT_MOTOR_ID = 16;
         public static final int RIGHT_BACK_MOTOR_ID = 13;
 
-        public static final boolean LEFT_INVERTED = false;
-        public static final boolean RIGHT_INVERTED = true;
+        public static final boolean LEFT_INVERTED = true;
+        public static final boolean RIGHT_INVERTED = false;
 
         public static final double SLOW_SPEED_MULTIPLIER = 0.5;
         
