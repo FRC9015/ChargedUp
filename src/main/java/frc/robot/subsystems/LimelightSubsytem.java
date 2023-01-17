@@ -22,7 +22,7 @@ public class LimelightSubsytem extends SubsystemBase {
         tid = limelight.getEntry("tid");
     }
 
-    /* 
+    /** 
      * Check if the camera has (a) target(s) in sight
      */
     public boolean hasTargets() {
@@ -34,7 +34,7 @@ public class LimelightSubsytem extends SubsystemBase {
         }
     }
 
-    /* 
+    /** 
      * Get the ID of the detected primary AprilTag
      */
     public int getPrimaryAprilTag() {
@@ -42,7 +42,7 @@ public class LimelightSubsytem extends SubsystemBase {
         return (int) rawTagId;
     }
 
-    /* 
+    /** 
      * Set the mode of the camera
      */
     public void setMode(CamMode newMode) {
