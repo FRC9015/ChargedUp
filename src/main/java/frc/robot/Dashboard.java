@@ -26,19 +26,17 @@ public class Dashboard {
     private ShuffleboardTab teleopTab, autoTab, currentTab;
     private ShuffleboardLayout balanceLayout, driveLayout;
 
-    public final DriveData drive;
-    public final BalanceData balance;
+    public DriveData drive;
+    public BalanceData balance;
 
     private Dashboard() {
         init();
-
-        drive = new DriveData(driveLayout);
-        balance = new BalanceData(balanceLayout);
     }
 
     public void init() {
         initTabs();
         initLayouts();
+        initSubclasses();
     }
 
     public void initTabs() {
@@ -50,8 +48,15 @@ public class Dashboard {
     public void initLayouts() {
         balanceLayout = currentTab.getLayout(DashboardConstants.BALANCE_LAYOUT_NAME, BuiltInLayouts.kList)
                 .withSize(1, 4).withPosition(2, 0);
-        driveLayout = currentTab.getLayout(DashboardConstants.DRIVE_LAYOUT_NAME, BuiltInLayouts.kList).withSize(2, 4)
+        // Create a List layout for drivetrain information on the Teleop Tab
+        // Drive data is only needed during Teleop
+        driveLayout = teleopTab.getLayout(DashboardConstants.DRIVE_LAYOUT_NAME, BuiltInLayouts.kList).withSize(2, 4)
                 .withPosition(0, 0);
+    }
+
+    public void initSubclasses() {
+        drive = new DriveData(driveLayout);
+        balance = new BalanceData(balanceLayout);
     }
 
     public void setCurrentTab(CurrentTab newTab) {
@@ -62,10 +67,14 @@ public class Dashboard {
             currentTab = autoTab;
             Shuffleboard.selectTab(DashboardConstants.AUTO_TAB_NAME);
         }
+        
+        // Refresh layouts when current tab is switched
+        initLayouts();
+        initSubclasses();
     }
 
     // Nested class that handles all drivebase interactions with the dashboard
-    class DriveData {
+    public class DriveData {
 
         private ShuffleboardLayout layout;
         private SimpleWidget speedMultiplierSelect, speedMode;
@@ -94,7 +103,7 @@ public class Dashboard {
         }
     }
 
-    class BalanceData {
+    public class BalanceData {
         private ShuffleboardLayout layout;
         private SimpleWidget angleDisplay, isBalanced, autoMode;
 

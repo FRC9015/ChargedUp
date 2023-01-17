@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Dashboard;
 import frc.robot.Constants.SensorConstants;
 
 public class PigeonSubsystem extends SubsystemBase {
@@ -28,6 +29,11 @@ public class PigeonSubsystem extends SubsystemBase {
 
     public void resetAngles() {
         pigeonSensor.zeroGyroBiasNow();
+    }
+
+    @Override
+    public void periodic() {
+        Dashboard.getInstance().balance.setAngle(getXTilt());
     }
 
 }

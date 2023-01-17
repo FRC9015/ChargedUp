@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import frc.robot.Dashboard;
 import frc.robot.Helpers;
 import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
@@ -53,6 +54,12 @@ public class BalanceCommand extends CommandBase {
     System.out.println(moveSpeed);
     // Limit max motor speed to 0.2
     drive.arcadeDrive(Helpers.limitDecimal(-moveSpeed, 0.2), 0);
+
+    if (Math.abs(angle) <= 2.0) {
+      Dashboard.getInstance().balance.setBalanced(true);
+    } else { 
+      Dashboard.getInstance().balance.setBalanced(false);
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -8,6 +8,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Dashboard.CurrentTab;
 
 
 
@@ -71,6 +72,8 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousInit()
     {
+        Dashboard.getInstance().setCurrentTab(CurrentTab.Auto);
+
         autonomousCommand = robotContainer.getAutonomousCommand();
         
         // schedule the autonomous command (example)
@@ -89,6 +92,7 @@ public class Robot extends TimedRobot
     @Override
     public void teleopInit()
     {
+        Dashboard.getInstance().setCurrentTab(CurrentTab.TeleOp);
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
@@ -107,7 +111,10 @@ public class Robot extends TimedRobot
     
     /** This method is called periodically during operator control. */
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        // Update the dashboard to show whether the robot is slowed
+        Dashboard.getInstance().drive.setSpeedMode(RobotContainer.getInstance().robotState.getSlowed());
+    }
     
     
     @Override

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Dashboard;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
 
@@ -57,12 +58,12 @@ public class DiffDriveSubsystem extends SubsystemBase {
         left1 = new CANSparkMax(DriveConstants.LEFT_FRONT_MOTOR_ID, motorType);
         left2 = new CANSparkMax(DriveConstants.LEFT_BACK_MOTOR_ID, motorType);
         left = new MotorControllerGroup(left1, left2);
-        addChild("leftDrive", left);
+        addChild("Left Motors", left);
 
         right1 = new CANSparkMax(DriveConstants.RIGHT_FRONT_MOTOR_ID, motorType);
         right2 = new CANSparkMax(DriveConstants.RIGHT_BACK_MOTOR_ID, motorType);
         right = new MotorControllerGroup(right1, right2);
-        addChild("rightDrive", right);
+        addChild("Right Motors", right);
 
         // Properly invert motors
         left.setInverted(DriveConstants.LEFT_INVERTED);
@@ -70,7 +71,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         // Instantiate the drive class
         drive = new DifferentialDrive(left, right);
-        addChild("drive", drive);
+        addChild("DiffDrive", drive);
 
         /**
          * Each input to be rate limited must have it's own filter. In any given drive, we have two possible inputs, and thus two filters.
@@ -119,8 +120,10 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private double calcSpeed(double input) {
         boolean isSlowed = RobotContainer.getInstance().robotState.getSlowed();
 
-        // If the robot should be running in slow mode, reduce speed by the constant multiplier
-        return isSlowed ? input * DriveConstants.SLOW_SPEED_MULTIPLIER : input;
+        double speedMultiplier = Dashboard.getInstance().drive.getSpeedMultiplier();
+
+        // If the robot should be running in slow mode, reduce speed by the multiplier (set in dashboard)
+        return isSlowed ? input * speedMultiplier : input;
     }
 
 }
