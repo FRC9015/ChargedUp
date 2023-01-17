@@ -4,26 +4,15 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 
-public class SwitchSpeed extends CommandBase {
-  private boolean finished = false;
-  
-  public SwitchSpeed() {
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
+public class SwitchSpeed extends InstantCommand {
 
-  // Called when the command is initially scheduled.
+  public SwitchSpeed() {}
+  
   @Override
   public void initialize() {
     RobotContainer.getInstance().robotState.toggleSlow();
-    finished = true;
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return finished;
   }
 }
