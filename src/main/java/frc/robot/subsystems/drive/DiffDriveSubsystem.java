@@ -1,5 +1,7 @@
 package frc.robot.subsystems.drive;
 
+import java.util.ArrayList;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -48,20 +50,27 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
     private final SlewRateLimiter accelRateLimit1, accelRateLimit2;
 
+    private ArrayList<CANSparkMax> allMotors = new ArrayList<CANSparkMax>();
+
     /**
      * Creates a new instance of this DiffDriveSubsystem. This constructor
      * is private since this class is a Singleton. Code should use
      * the {@link #getInstance()} method to get the singleton instance.
      */
     private DiffDriveSubsystem() {
+
         MotorType motorType = MotorType.kBrushless;
         left1 = new CANSparkMax(DriveConstants.LEFT_FRONT_MOTOR_ID, motorType);
+        allMotors.add(left1);
         left2 = new CANSparkMax(DriveConstants.LEFT_BACK_MOTOR_ID, motorType);
+        allMotors.add(left2);
         left = new MotorControllerGroup(left1, left2);
         addChild("Left Motors", left);
 
         right1 = new CANSparkMax(DriveConstants.RIGHT_FRONT_MOTOR_ID, motorType);
+        allMotors.add(right1);
         right2 = new CANSparkMax(DriveConstants.RIGHT_BACK_MOTOR_ID, motorType);
+        allMotors.add(right2);
         right = new MotorControllerGroup(right1, right2);
         addChild("Right Motors", right);
 
@@ -92,7 +101,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
         fwd = accelRateLimit1.calculate(fwd);
         turn = accelRateLimit2.calculate(turn);
 
-        drive.arcadeDrive(fwd, -turn);
+        drive.arcadeDrive(calcSpeed(fwd), calcSpeed(turn));
     }
 
     public void tankDrive(double left, double right) {
@@ -102,6 +111,12 @@ public class DiffDriveSubsystem extends SubsystemBase {
         drive.tankDrive(calcSpeed(left), calcSpeed(right));
     }
 
+    /**
+     * 
+     * @param fwd Forward Speed
+     * @param turn Turning Speed
+     * @param rateLimited Should the inputs be rate limited?
+      */
     public void arcadeDriveRaw(double fwd, double turn, boolean rateLimited) {
         fwd = rateLimited ? accelRateLimit1.calculate(fwd) : fwd;
         turn = rateLimited ? accelRateLimit2.calculate(turn) : turn;
@@ -109,6 +124,12 @@ public class DiffDriveSubsystem extends SubsystemBase {
         drive.arcadeDrive(fwd, turn);
     }
 
+    /**
+     * Tank Drive the robot without any speed multiplier and optional rate limiting
+     * @param left Left Speed
+     * @param right Right Speed
+     * @param rateLimited Should the input be rate limited?
+      */
     public void tankDriveRaw(double left, double right, boolean rateLimited) {
         left = rateLimited ? accelRateLimit1.calculate(left) : left;
         right = rateLimited ? accelRateLimit2.calculate(right) : right;
@@ -118,6 +139,9 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
     public void setBrakeMode(IdleMode newBrakeMode) {
         this.brakeMode = newBrakeMode;
+        for(CANSparkMax controller : allMotors) {
+            controller.setIdleMode(newBrakeMode);
+        }
     }
 
     public void stop() {
