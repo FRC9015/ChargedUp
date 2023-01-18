@@ -4,6 +4,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
@@ -12,6 +13,7 @@ public class DriverController implements Sendable {
 
     private final DoubleSupplier tankLeft, tankRight, arcadeFwd, arcadeTurn;
     private final JoystickButton balanceButton, switchSpeed;
+    private final GenericHID rawController;
 
     /** Create a driver controller with two standard Joysticks */
     public DriverController(Joystick joystick1, Joystick joystick2) {
@@ -22,6 +24,7 @@ public class DriverController implements Sendable {
 
         balanceButton = null;
         switchSpeed = new JoystickButton(joystick1, Joystick.ButtonType.kTrigger.value);
+        rawController = joystick1;
     }
 
     /** Create a driver controller with an XboxController */
@@ -33,6 +36,8 @@ public class DriverController implements Sendable {
 
         balanceButton = new JoystickButton(controller, XboxController.Button.kA.value);
         switchSpeed = new JoystickButton(controller, XboxController.Button.kLeftBumper.value);
+
+        rawController = controller;
     }
 
     /** Create a driver controller with a PS4Controller */
@@ -45,6 +50,7 @@ public class DriverController implements Sendable {
         balanceButton = new JoystickButton(controller, PS4Controller.Button.kTriangle.value);
         switchSpeed = new JoystickButton(controller, PS4Controller.Button.kL3.value); // Left Joystick button
 
+        rawController = controller;
     }
 
     public double getTankLeft() {
@@ -69,6 +75,10 @@ public class DriverController implements Sendable {
 
     public JoystickButton getSwitchSpeed() {
         return switchSpeed;
+    }
+
+    public void setRumble(GenericHID.RumbleType rumble, double value) {
+        rawController.setRumble(rumble, value);
     }
 
     
