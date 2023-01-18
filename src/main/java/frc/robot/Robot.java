@@ -93,6 +93,10 @@ public class Robot extends TimedRobot
     public void teleopInit()
     {
         Dashboard.getInstance().setCurrentTab(CurrentTab.TeleOp);
+        
+        // On teleop init, make sure that the dashboard does not continue to show the robot as AutoBalanced
+        Dashboard.getInstance().balance.setAutoBalanced(false);
+        
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove

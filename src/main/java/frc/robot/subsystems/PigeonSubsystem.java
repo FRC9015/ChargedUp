@@ -43,6 +43,16 @@ public class PigeonSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         Dashboard.getInstance().balance.setAngle(getXTilt());
+
+        /* 
+         * If the absolute value of the robot's pitch is within 2.0 degrees, show the robot as balanced on the dashboard
+         * Will be useful for evaluating if manual adjustments are needed
+         */
+        if (Math.abs(getXTilt()) < 2.0 ) {
+            Dashboard.getInstance().balance.setBalanced(true);
+        } else {
+            Dashboard.getInstance().balance.setBalanced(false);
+        }
     }
 
 }
