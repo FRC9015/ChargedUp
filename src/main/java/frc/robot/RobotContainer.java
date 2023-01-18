@@ -8,11 +8,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.SwitchSpeed;
+import frc.robot.controllers.DriverController;
+import frc.robot.controllers.OperatorController;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
@@ -39,12 +40,18 @@ public class RobotContainer {
     private final Command driveCommand = new ArcadeDrive();
 
     public final RobotState robotState = RobotState.getInstance();
+
+    private final DriverController driver;
+    private final OperatorController operator;
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer()
     {
         // Configure the button bindings
         configureButtonBindings();
+
+        driver = new DriverController(new XboxController(0));
+        operator = new OperatorController(new XboxController(1));
 
         driveSubsystem.setDefaultCommand(driveCommand);
     }
@@ -59,22 +66,20 @@ public class RobotContainer {
      */
     private void configureButtonBindings()
     {
-        JoystickButton driveAButton = new JoystickButton(getDriverJoystick(), XboxController.Button.kA.value);
         // Toggle the balance command on and off when the driver's A button is pressed
-        driveAButton.toggleOnTrue(new RepeatCommand(new BalanceCommand(pigeonSubsystem, driveSubsystem)));
+        driver.getBalanceButton().toggleOnTrue(new RepeatCommand(new BalanceCommand(pigeonSubsystem, driveSubsystem)));
 
-        JoystickButton driveLBumper = new JoystickButton(getDriverJoystick(), XboxController.Button.kLeftBumper.value);
         // When the driver's left bumper is pressed, switch between low and high speed.
-        driveLBumper.onTrue(new SwitchSpeed());
+        driver.getSwitchSpeed().onTrue(new SwitchSpeed());
 
     }
 
-    public XboxController getDriverJoystick() {
-        return new XboxController(0);
+    public DriverController getDriver() {
+        return driver;
     }
 
-    public XboxController getOperatorJoystick() {
-        return new XboxController(1);
+    public OperatorController getOperator() {
+        return operator;
     }
 
     /**

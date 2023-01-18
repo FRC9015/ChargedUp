@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class DriverController implements Sendable {
 
     private final DoubleSupplier tankLeft, tankRight, arcadeFwd, arcadeTurn;
-    private final JoystickButton balanceButton;
+    private final JoystickButton balanceButton, switchSpeed;
 
     /** Create a driver controller with two standard Joysticks */
     public DriverController(Joystick joystick1, Joystick joystick2) {
@@ -21,6 +21,7 @@ public class DriverController implements Sendable {
         arcadeTurn = joystick1::getX;
 
         balanceButton = null;
+        switchSpeed = new JoystickButton(joystick1, Joystick.ButtonType.kTrigger.value);
     }
 
     /** Create a driver controller with an XboxController */
@@ -31,6 +32,7 @@ public class DriverController implements Sendable {
         arcadeTurn = controller::getRightX;
 
         balanceButton = new JoystickButton(controller, XboxController.Button.kA.value);
+        switchSpeed = new JoystickButton(controller, XboxController.Button.kLeftBumper.value);
     }
 
     /** Create a driver controller with a PS4Controller */
@@ -41,6 +43,8 @@ public class DriverController implements Sendable {
         arcadeTurn = controller::getRightX;
 
         balanceButton = new JoystickButton(controller, PS4Controller.Button.kTriangle.value);
+        switchSpeed = new JoystickButton(controller, PS4Controller.Button.kL3.value); // Left Joystick button
+
     }
 
     public double getTankLeft() {
@@ -62,6 +66,11 @@ public class DriverController implements Sendable {
     public JoystickButton getBalanceButton() {
         return balanceButton;
     }
+
+    public JoystickButton getSwitchSpeed() {
+        return switchSpeed;
+    }
+
     
     // This allows us to send this DriverController to the Dashboard and read all of its values
     @Override
