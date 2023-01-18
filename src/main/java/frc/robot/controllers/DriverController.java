@@ -2,10 +2,12 @@ package frc.robot.controllers;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
-public class DriverController {
+public class DriverController implements Sendable {
 
     private final DoubleSupplier tankLeft, tankRight, arcadeFwd, arcadeTurn;
 
@@ -50,6 +52,14 @@ public class DriverController {
         return arcadeTurn.getAsDouble();
     }
     
-    
+    // This allows us to send this DriverController to the Dashboard and read all of its values
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("DriverController");
+        builder.addDoubleProperty("arcadeFwd", arcadeFwd, null);
+        builder.addDoubleProperty("arcadeTurn", arcadeTurn, null);
+        builder.addDoubleProperty("tankLeft", tankLeft, null);
+        builder.addDoubleProperty("tankLeft", tankRight, null);
+    }
 
 }
