@@ -26,7 +26,7 @@ public final class Constants {
 
         public static final double SLOW_SPEED_MULTIPLIER = 0.5;
         
-        public static final double ACCEL_RATE_LIMIT = 1;
+        public static final double ACCEL_RATE_LIMIT = 0.5;
 
     }
 
