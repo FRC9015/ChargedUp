@@ -1,7 +1,8 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Dashboard;
 import frc.robot.Constants.SensorConstants;
@@ -16,10 +17,10 @@ public class PigeonSubsystem extends SubsystemBase {
         return INSTANCE;
     }
 
-    private final Pigeon2 pigeonSensor;
+    private final WPI_Pigeon2 pigeonSensor;
 
     private PigeonSubsystem() {
-        pigeonSensor = new Pigeon2(SensorConstants.PIGEON_CAN_ID);
+        pigeonSensor = new WPI_Pigeon2(SensorConstants.PIGEON_CAN_ID);
     }
 
     public double getXTilt() {
@@ -27,8 +28,16 @@ public class PigeonSubsystem extends SubsystemBase {
         return pigeonSensor.getPitch();
     }
 
+    public Rotation2d getRotation2d() {
+        return pigeonSensor.getRotation2d();
+    }
+
     public void resetAngles() {
         pigeonSensor.zeroGyroBiasNow();
+    }
+
+    public void resetHeading() {
+        pigeonSensor.reset();
     }
 
     @Override
