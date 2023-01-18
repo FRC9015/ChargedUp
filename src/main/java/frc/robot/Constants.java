@@ -38,7 +38,7 @@ public final class Constants {
         public static final String TELEOP_TAB_NAME = "TeleOp";
         public static final String AUTO_TAB_NAME = "Autonomous";
 
-        public static final String BALANCE_LAYOUT_NAME = "Balance System";
+        public static final String BALANCE_LAYOUT_NAME = "Balance";
         public static final String DRIVE_LAYOUT_NAME = "Drive";
     }
 
