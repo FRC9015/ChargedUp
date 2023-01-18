@@ -80,7 +80,6 @@ public class DriverController implements Sendable {
     public void setRumble(GenericHID.RumbleType rumble, double value) {
         rawController.setRumble(rumble, value);
     }
-
     
     // This allows us to send this DriverController to the Dashboard and read all of its values
     @Override
