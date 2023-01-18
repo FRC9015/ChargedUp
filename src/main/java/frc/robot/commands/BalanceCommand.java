@@ -48,7 +48,7 @@ public class BalanceCommand extends CommandBase {
   public void execute() {
     
     // angleFilter calculates a moving average of the angle to correct for any spikes
-    double angle = angleFilter.calculate(pigeon.getXTilt());
+    double angle = angleFilter.calculate(pigeon.getPitch());
 
     double moveSpeed = balancePID.calculate(angle);
     // Limit max motor speed to 0.2
