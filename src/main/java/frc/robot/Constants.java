@@ -28,6 +28,9 @@ public final class Constants {
         
         public static final double ACCEL_RATE_LIMIT = 0.5;
 
+        public static final double WHEEL_SIZE_INCHES = 4.0;
+        public static final double DRIVETRAIN_RATIO = 8.45; // Represents KOP-included 8.45:1 gear ratio
+
     }
 
     public static final class SensorConstants {

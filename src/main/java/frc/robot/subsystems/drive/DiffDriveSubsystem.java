@@ -3,17 +3,22 @@ package frc.robot.subsystems.drive;
 import java.util.ArrayList;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Dashboard;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.subsystems.PigeonSubsystem;
 
 public class DiffDriveSubsystem extends SubsystemBase {
 
@@ -39,18 +44,21 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
 
     private final MotorControllerGroup left;
-    private final CANSparkMax left1;
-    private final CANSparkMax left2;
+    private final CANSparkMax left1, left2;
     private final MotorControllerGroup right;
-    private final CANSparkMax right1;
-    private final CANSparkMax right2;
+    private final CANSparkMax right1, right2;    
     private final DifferentialDrive drive;
+    private final RelativeEncoder leftEncoder, rightEncoder;
+    private final DifferentialDriveOdometry odometry;
+    private final Field2d field;
 
     private IdleMode brakeMode = IdleMode.kCoast;
 
     private final SlewRateLimiter accelRateLimit1, accelRateLimit2;
 
     private ArrayList<CANSparkMax> allMotors = new ArrayList<CANSparkMax>();
+
+    private PigeonSubsystem pigeon = PigeonSubsystem.getInstance();
 
     /**
      * Creates a new instance of this DiffDriveSubsystem. This constructor
@@ -82,6 +90,22 @@ public class DiffDriveSubsystem extends SubsystemBase {
         drive = new DifferentialDrive(left, right);
         addChild("DiffDrive", drive);
 
+        // Converts from rotations to wheel position in inches
+        double POSITION_CONVERSION_FACTOR = Math.PI * (DriveConstants.WHEEL_SIZE_INCHES / DriveConstants.DRIVETRAIN_RATIO);
+
+        leftEncoder = left1.getEncoder(); 
+        leftEncoder.setPositionConversionFactor(POSITION_CONVERSION_FACTOR);
+        leftEncoder.setInverted(DriveConstants.LEFT_INVERTED);
+
+        rightEncoder = right1.getEncoder();
+        rightEncoder.setPositionConversionFactor(POSITION_CONVERSION_FACTOR);
+        rightEncoder.setInverted(DriveConstants.RIGHT_INVERTED);
+
+        odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(),
+                Units.inchesToMeters(leftEncoder.getPosition()), Units.inchesToMeters(rightEncoder.getPosition()));
+        field = new Field2d();
+        addChild("Field", field);
+
         /**
          * Each input to be rate limited must have it's own filter. In any given drive, we have two possible inputs, and thus two filters.
          * 1: used for the Left input (Tank) and the Forward input (Arcade)
@@ -89,6 +113,13 @@ public class DiffDriveSubsystem extends SubsystemBase {
          */
         accelRateLimit1 = new SlewRateLimiter(DriveConstants.ACCEL_RATE_LIMIT);
         accelRateLimit2 = new SlewRateLimiter(DriveConstants.ACCEL_RATE_LIMIT);
+    }
+
+    @Override
+    public void periodic() {
+        odometry.update(pigeon.getRotation2d(), Units.inchesToMeters(leftEncoder.getPosition()),
+                Units.inchesToMeters(rightEncoder.getPosition()));
+        field.setRobotPose(odometry.getPoseMeters());
     }
 
     @Override
