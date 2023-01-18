@@ -114,7 +114,7 @@ public class Dashboard {
             angleDisplay = layout.add("Pitch Angle", 0).withWidget(BuiltInWidgets.kDial)
                     .withProperties(Map.of("min", -45, "max", 45));
             isBalanced = layout.add("Balanced", false).withWidget(BuiltInWidgets.kBooleanBox);
-            autoMode = layout.add("Auto Balancing", false).withWidget(BuiltInWidgets.kBooleanBox);
+            autoMode = layout.add("Auto Balanced", false).withWidget(BuiltInWidgets.kBooleanBox);
         }
 
         public void setAngle(double currentAngle) {
@@ -125,7 +125,7 @@ public class Dashboard {
             isBalanced.getEntry().setBoolean(currentlyBalanced);
         }
 
-        public void setAutoBalance(boolean autoBalanced) {
+        public void setAutoBalanced(boolean autoBalanced) {
             autoMode.getEntry().setBoolean(autoBalanced);
         }
     }

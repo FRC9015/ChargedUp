@@ -7,6 +7,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.BalanceCommand;
@@ -60,7 +61,7 @@ public class RobotContainer {
     {
         JoystickButton driveAButton = new JoystickButton(getDriverJoystick(), XboxController.Button.kA.value);
         // Toggle the balance command on and off when the driver's A button is pressed
-        driveAButton.toggleOnTrue(new BalanceCommand(pigeonSubsystem, driveSubsystem));
+        driveAButton.toggleOnTrue(new RepeatCommand(new BalanceCommand(pigeonSubsystem, driveSubsystem)));
 
         JoystickButton driveLBumper = new JoystickButton(getDriverJoystick(), XboxController.Button.kLeftBumper.value);
         // When the driver's left bumper is pressed, switch between low and high speed.

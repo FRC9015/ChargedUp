@@ -13,21 +13,22 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class BalanceCommand extends CommandBase {
 
-    private PigeonSubsystem pigeon;
-    private DiffDriveSubsystem drive;
+  private PigeonSubsystem pigeon;
+  private DiffDriveSubsystem drive;
 
-    private double kP = 0.5, kI = 0, kD = 0;
-    private PIDController balancePID = new PIDController(kP, kI, kD);
+  private double kP = 0.5, kI = 0, kD = 0;
+  private PIDController balancePID = new PIDController(kP, kI, kD);
 
-    private MedianFilter angleFilter;
+  private MedianFilter angleFilter;
+
+  private boolean finished = false;
     
 
   public BalanceCommand(PigeonSubsystem newPigeon, DiffDriveSubsystem newDrive) {
     pigeon = newPigeon;
     drive = newDrive;
 
-    
-    angleFilter = new MedianFilter(5);
+    angleFilter = new MedianFilter(25); // Robot refreshes at ~50Hz, so average over the last half second of measurements
     
     addRequirements(pigeon, drive);
   }
@@ -35,11 +36,11 @@ public class BalanceCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drive.tankDrive(0, 0);
+    drive.tankDriveRaw(0, 0, false);
     drive.setBrakeMode(IdleMode.kBrake);
 
-    balancePID.setSetpoint(0.0);
-    balancePID.setTolerance(5.0);
+    balancePID.setSetpoint(0.0); // 0 degrees is obviously balanced
+    balancePID.setTolerance(4.0); // Allow for 2 degrees of error in either direction
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -50,27 +51,30 @@ public class BalanceCommand extends CommandBase {
     double angle = angleFilter.calculate(pigeon.getXTilt());
 
     double moveSpeed = balancePID.calculate(angle);
-    System.out.print("moveSpeed");
-    System.out.println(moveSpeed);
     // Limit max motor speed to 0.2
     drive.arcadeDriveRaw(Helpers.limitDecimal(moveSpeed, 0.2), 0, false);
 
-    if (Math.abs(angle) <= 2.0) {
-      Dashboard.getInstance().balance.setBalanced(true);
-    } else { 
-      Dashboard.getInstance().balance.setBalanced(false);
-    }
+    if (Math.abs(moveSpeed) <= 0.01) {
+      // If the PID is calculating below a certain threshold, we can safely assume that we're balanced
+      finished = true;
+    } 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    if (!interrupted) {
+      // If the command finished without being interrupted, then set the s
+      Dashboard.getInstance().balance.setAutoBalanced(true);
+    } else if (interrupted) {
+      Dashboard.getInstance().balance.setAutoBalanced(false);
+    }
     drive.brakeStop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return finished;
   }
 }
