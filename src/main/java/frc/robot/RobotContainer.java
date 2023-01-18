@@ -77,9 +77,6 @@ public class RobotContainer {
         return new XboxController(1);
     }
 
-    
-    
-    
     /**
      * @return the command to run in autonomous
      */
