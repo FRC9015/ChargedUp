@@ -4,7 +4,10 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
 import java.util.Map;
+
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 
 import frc.robot.Constants.*;
@@ -24,13 +27,15 @@ public class Dashboard {
     }
 
     private ShuffleboardTab teleopTab, autoTab, currentTab;
-    private ShuffleboardLayout balanceLayout, driveLayout;
+    private ShuffleboardLayout balanceLayout, driveLayout;  
+    private static ArrayList<String> dataInstances;
 
     public DriveData drive;
     public BalanceData balance;
 
     private Dashboard() {
         init();
+        dataInstances = new ArrayList<String>();
     }
 
     public void init() {
@@ -73,20 +78,31 @@ public class Dashboard {
         initSubclasses();
     }
 
+    public void putData(String name, Sendable send) {
+        // check if the sendable with the given name has already been sent
+        int indexExists = dataInstances.indexOf(name);
+        if (indexExists < 0) {
+            currentTab.add(name, send);
+            dataInstances.add(name);
+        }
+        
+    }
+
     // Nested class that handles all drivebase interactions with the dashboard
     public class DriveData {
 
         private ShuffleboardLayout layout;
-        private SimpleWidget speedMultiplierSelect, speedMode;
+        private static SimpleWidget speedMultiplierSelect, speedMode;
+
 
         public DriveData(ShuffleboardLayout myLayout) {
             this.layout = myLayout;
 
             // Creates a number slider with a min value of 0 and max value of 1;
-            speedMultiplierSelect = layout.addPersistent("Speed Multiplier", DriveConstants.SLOW_SPEED_MULTIPLIER)
+            if(speedMultiplierSelect == null) speedMultiplierSelect = layout.addPersistent("Speed Multiplier", DriveConstants.SLOW_SPEED_MULTIPLIER)
                     .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 1));
             // Boolean display for whether the drivetrain is running in Slow Mode
-            speedMode = layout.add("Slow Mode", true).withWidget(BuiltInWidgets.kBooleanBox);
+            if(speedMode == null) speedMode = layout.add("Slow Mode", true).withWidget(BuiltInWidgets.kBooleanBox);
         }
 
         /**
@@ -105,16 +121,16 @@ public class Dashboard {
 
     public class BalanceData {
         private ShuffleboardLayout layout;
-        private SimpleWidget angleDisplay, isBalanced, autoMode;
+        private static SimpleWidget angleDisplay, isBalanced, autoMode;
 
         public BalanceData(ShuffleboardLayout myLayout) {
             this.layout = myLayout;
 
             // Dial display for current pitch
-            angleDisplay = layout.add("Pitch Angle", 0).withWidget(BuiltInWidgets.kDial)
+            if(angleDisplay == null) angleDisplay = layout.add("Pitch Angle", 0).withWidget(BuiltInWidgets.kDial)
                     .withProperties(Map.of("min", -45, "max", 45));
-            isBalanced = layout.add("Balanced", false).withWidget(BuiltInWidgets.kBooleanBox);
-            autoMode = layout.add("Auto Balanced", false).withWidget(BuiltInWidgets.kBooleanBox);
+            if(isBalanced == null) isBalanced = layout.add("Balanced", false).withWidget(BuiltInWidgets.kBooleanBox);
+            if(autoMode == null) autoMode = layout.add("Auto Balanced", false).withWidget(BuiltInWidgets.kBooleanBox);
         }
 
         public void setAngle(double currentAngle) {
