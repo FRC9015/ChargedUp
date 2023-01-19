@@ -82,7 +82,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
         right1.setInverted(DriveConstants.RIGHT_INVERTED);
 
         // Instantiate the drive class
-        drive = new DifferentialDrive(left1, right2);
+        drive = new DifferentialDrive(left1, right1);
         addChild("DiffDrive", drive);
 
         // Converts from rotations to wheel position in inches
