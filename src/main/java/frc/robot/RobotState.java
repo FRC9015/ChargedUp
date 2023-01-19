@@ -1,6 +1,9 @@
 package frc.robot;
 
-public class RobotState {
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+
+public class RobotState implements Sendable {
     
     private final static RobotState INSTANCE = new RobotState();
 
@@ -26,5 +29,15 @@ public class RobotState {
         runningSlow = !runningSlow;
 
         return runningSlow;
+    }
+
+    private synchronized void setSlowed(boolean isSlowed) {
+        runningSlow = isSlowed;
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("RobotState");
+        builder.addBooleanProperty("runningSlow", RobotState::getSlowed, this::setSlowed);
     }
 }
