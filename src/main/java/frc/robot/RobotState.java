@@ -8,21 +8,21 @@ public class RobotState {
         return INSTANCE;
     }
 
-    private boolean runningSlow = false;
+    private static boolean runningSlow = false;
 
-    public boolean getSlowed() {
+    public static boolean getSlowed() {
         return runningSlow;
     }
 
-    public void setSlow() {
+    public static synchronized void setSlow() {
         runningSlow = true;
     }
 
-    public void setFast() {
+    public static synchronized void setFast() {
         runningSlow = false;
     }
 
-    public boolean toggleSlow() {
+    public static synchronized boolean toggleSlow() {
         runningSlow = !runningSlow;
 
         return runningSlow;

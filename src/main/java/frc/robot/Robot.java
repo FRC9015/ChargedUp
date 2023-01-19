@@ -117,7 +117,7 @@ public class Robot extends TimedRobot
     @Override
     public void teleopPeriodic() {
         // Update the dashboard to show whether the robot is slowed
-        Dashboard.getInstance().drive.setSpeedMode(RobotContainer.getInstance().robotState.getSlowed());
+        Dashboard.getInstance().drive.setSpeedMode(RobotState.getSlowed());
     }
     
     

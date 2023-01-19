@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Dashboard;
-import frc.robot.RobotContainer;
+import frc.robot.RobotState;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.PigeonSubsystem;
 
@@ -187,7 +187,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
 
     private double calcSpeed(double input) {
-        boolean isSlowed = RobotContainer.getInstance().robotState.getSlowed();
+        boolean isSlowed = RobotState.getSlowed();
 
         double speedMultiplier = Dashboard.getInstance().drive.getSpeedMultiplier();
 

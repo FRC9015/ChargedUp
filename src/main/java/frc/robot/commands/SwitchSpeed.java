@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.RobotContainer;
+import frc.robot.RobotState;
 
 public class SwitchSpeed extends InstantCommand {
 
@@ -13,6 +13,6 @@ public class SwitchSpeed extends InstantCommand {
   
   @Override
   public void initialize() {
-    RobotContainer.getInstance().robotState.toggleSlow();
+    RobotState.toggleSlow();
   }
 }
