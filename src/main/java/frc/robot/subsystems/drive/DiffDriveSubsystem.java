@@ -11,7 +11,6 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -43,9 +42,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
         return INSTANCE;
     }
 
-    private final MotorControllerGroup left;
     private final CANSparkMax left1, left2;
-    private final MotorControllerGroup right;
     private final CANSparkMax right1, right2;    
     private final DifferentialDrive drive;
     private final RelativeEncoder leftEncoder, rightEncoder;
@@ -71,23 +68,21 @@ public class DiffDriveSubsystem extends SubsystemBase {
         left1 = new CANSparkMax(DriveConstants.LEFT_FRONT_MOTOR_ID, motorType);
         allMotors.add(left1);
         left2 = new CANSparkMax(DriveConstants.LEFT_BACK_MOTOR_ID, motorType);
+        left2.follow(left1);
         allMotors.add(left2);
-        left = new MotorControllerGroup(left1, left2);
-        addChild("Left Motors", left);
 
         right1 = new CANSparkMax(DriveConstants.RIGHT_FRONT_MOTOR_ID, motorType);
         allMotors.add(right1);
         right2 = new CANSparkMax(DriveConstants.RIGHT_BACK_MOTOR_ID, motorType);
+        right2.follow(right1);  
         allMotors.add(right2);
-        right = new MotorControllerGroup(right1, right2);
-        addChild("Right Motors", right);
 
         // Properly invert motors
-        left.setInverted(DriveConstants.LEFT_INVERTED);
-        right.setInverted(DriveConstants.RIGHT_INVERTED);
+        left1.setInverted(DriveConstants.LEFT_INVERTED);
+        right1.setInverted(DriveConstants.RIGHT_INVERTED);
 
         // Instantiate the drive class
-        drive = new DifferentialDrive(left, right);
+        drive = new DifferentialDrive(left1, right2);
         addChild("DiffDrive", drive);
 
         // Converts from rotations to wheel position in inches
@@ -95,11 +90,9 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         leftEncoder = left1.getEncoder(); 
         leftEncoder.setPositionConversionFactor(POSITION_CONVERSION_FACTOR);
-        leftEncoder.setInverted(DriveConstants.LEFT_INVERTED);
 
         rightEncoder = right1.getEncoder();
         rightEncoder.setPositionConversionFactor(POSITION_CONVERSION_FACTOR);
-        rightEncoder.setInverted(DriveConstants.RIGHT_INVERTED);
 
         odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(),
                 Units.inchesToMeters(leftEncoder.getPosition()), Units.inchesToMeters(rightEncoder.getPosition()));

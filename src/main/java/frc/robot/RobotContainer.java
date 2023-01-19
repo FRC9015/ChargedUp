@@ -25,10 +25,14 @@ import frc.robot.subsystems.drive.DiffDriveSubsystem;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    private final static RobotContainer INSTANCE = new RobotContainer();
+    private static RobotContainer INSTANCE = new RobotContainer();
 
     @SuppressWarnings("WeakerAccess")
     public static RobotContainer getInstance() {
+        if (INSTANCE == null) {
+            System.out.println("---------- CREATING NEW ROBOT-CONTAINER ----------");
+            INSTANCE = new RobotContainer();
+        }
         return INSTANCE;
     }
     // The robot's subsystems and commands are defined here...
@@ -37,12 +41,12 @@ public class RobotContainer {
     PigeonSubsystem pigeonSubsystem = PigeonSubsystem.getInstance();
 
     private final Command autoCommand = new ExampleCommand(exampleSubsystem);
-    private final Command driveCommand = new ArcadeDrive();
+    // private final Command driveCommand = new ArcadeDrive();
 
     public final RobotState robotState = RobotState.getInstance();
 
-    private final DriverController driver;
-    private final OperatorController operator;
+    private DriverController driver;
+    private OperatorController operator;
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer()
@@ -50,14 +54,18 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
 
-        driver = new DriverController(new XboxController(0));
-        operator = new OperatorController(new XboxController(1));
+        init();
 
-        driveSubsystem.setDefaultCommand(driveCommand);
+        driveSubsystem.setDefaultCommand(new ArcadeDrive(driver));
     }
 
     public void initRobot() {
         pigeonSubsystem.resetAngles();
+    }
+
+    private void init() {
+        if (driver == null) driver = new DriverController(new XboxController(0));
+        if (operator == null) operator = new OperatorController(new XboxController(1));
     }
     
     
@@ -66,6 +74,8 @@ public class RobotContainer {
      */
     private void configureButtonBindings()
     {
+        init();
+        
         // Toggle the balance command on and off when the driver's A button is pressed
         driver.getBalanceButton().toggleOnTrue(new RepeatCommand(new BalanceCommand(pigeonSubsystem, driveSubsystem)));
 
