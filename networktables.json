@@ -2,7 +2,7 @@
   {
     "name": "/Shuffleboard/TeleOp/Drive/Speed Multiplier",
     "type": "double",
-    "value": 0.5103806294371926,
+    "value": 0.4999999835004445,
     "properties": {
       "persistent": true
     }

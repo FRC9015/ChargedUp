@@ -5,12 +5,21 @@
         "header": {
           "open": true
         }
+      },
+      "window": {
+        "visible": false
       }
     }
   },
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo"
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/DiffDriveSubsystem": "Subsystem",
+      "/LiveWindow/DiffDriveSubsystem/DiffDrive": "DifferentialDrive",
+      "/LiveWindow/DiffDriveSubsystem/Field": "Field2d",
+      "/LiveWindow/PigeonSubsystem/pigeon": "Gyro",
+      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler"
     }
   },
   "NetworkTables": {
@@ -18,6 +27,37 @@
       "Shuffleboard": {
         "TeleOp": {
           "Drive": {
+            "open": true
+          },
+          "open": true
+        },
+        "open": true
+      }
+    },
+    "transitory": {
+      "FMSInfo": {
+        "open": true
+      },
+      "LiveWindow": {
+        "Ungrouped": {
+          "open": true
+        },
+        "open": true
+      },
+      "Shuffleboard": {
+        "Autonomous": {
+          "Balance": {
+            "open": true
+          }
+        },
+        "TeleOp": {
+          "Balance": {
+            "open": true
+          },
+          "Drive": {
+            "open": true
+          },
+          "RobotState": {
             "open": true
           },
           "open": true
