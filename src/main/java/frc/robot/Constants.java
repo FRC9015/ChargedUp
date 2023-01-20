@@ -43,6 +43,13 @@ public final class Constants {
 
         public static final String BALANCE_LAYOUT_NAME = "Balance";
         public static final String DRIVE_LAYOUT_NAME = "Drive";
+        public static final String COUNTERWEIGHT_LAYOUT_NAME = "Counterweight";
+    }
+
+    public static final class CounterweightConstants {
+        public static final int DRIVE_MOTOR_CAN_ID = 7;
+        public static final int ENDSTOP_SWITCH_PORT = 0;
+        public static final int[] ENCODER_DIO_PINS = {1, 2}; // Encoder wired into DIO pins 1 & 2 on the roboRIO
     }
 
 }

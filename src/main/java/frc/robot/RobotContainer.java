@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
@@ -14,10 +15,10 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.SwitchSpeed;
 import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
+import frc.robot.subsystems.CounterweightSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
-
 
 /**
  * Very little robot logic should actually be handled in the {@link Robot}
@@ -39,6 +40,7 @@ public class RobotContainer {
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     DiffDriveSubsystem driveSubsystem = DiffDriveSubsystem.getInstance();
     PigeonSubsystem pigeonSubsystem = PigeonSubsystem.getInstance();
+    CounterweightSubsystem counterweightSubsystem = CounterweightSubsystem.getInstance();
 
     private final Command autoCommand = new ExampleCommand(exampleSubsystem);
     // private final Command driveCommand = new ArcadeDrive();
@@ -61,11 +63,15 @@ public class RobotContainer {
 
     public void initRobot() {
         pigeonSubsystem.resetAngles();
+        Dashboard.getInstance().putData("RobotState",robotState);
+        init();
     }
 
     private void init() {
-        if (driver == null) driver = new DriverController(new XboxController(0));
+        if (driver == null) driver = new DriverController(new PS4Controller(0));
+        Dashboard.getInstance().putData("Driver", driver);
         if (operator == null) operator = new OperatorController(new XboxController(1));
+        Dashboard.getInstance().putData("Operator", operator);
     }
     
     
@@ -75,7 +81,7 @@ public class RobotContainer {
     private void configureButtonBindings()
     {
         init();
-        
+
         // Toggle the balance command on and off when the driver's A button is pressed
         driver.getBalanceButton().toggleOnTrue(new RepeatCommand(new BalanceCommand(pigeonSubsystem, driveSubsystem)));
 

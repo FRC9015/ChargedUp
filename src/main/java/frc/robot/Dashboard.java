@@ -27,11 +27,12 @@ public class Dashboard {
     }
 
     private ShuffleboardTab teleopTab, autoTab, currentTab;
-    private ShuffleboardLayout balanceLayout, driveLayout;  
+    private ShuffleboardLayout balanceLayout, driveLayout, counterweightLayout;  
     private static ArrayList<String> dataInstances;
 
     public DriveData drive;
     public BalanceData balance;
+    public CounterweightData counterweight;
 
     private Dashboard() {
         init();
@@ -57,11 +58,14 @@ public class Dashboard {
         // Drive data is only needed during Teleop
         driveLayout = teleopTab.getLayout(DashboardConstants.DRIVE_LAYOUT_NAME, BuiltInLayouts.kList).withSize(2, 4)
                 .withPosition(0, 0);
+        counterweightLayout = teleopTab.getLayout(DashboardConstants.COUNTERWEIGHT_LAYOUT_NAME, BuiltInLayouts.kList).withSize(1, 2)
+        .withPosition(3, 0);
     }
 
     public void initSubclasses() {
         drive = new DriveData(driveLayout);
         balance = new BalanceData(balanceLayout);
+        counterweight = new CounterweightData(counterweightLayout);
     }
 
     public void setCurrentTab(CurrentTab newTab) {
@@ -143,6 +147,22 @@ public class Dashboard {
 
         public void setAutoBalanced(boolean autoBalanced) {
             autoMode.getEntry().setBoolean(autoBalanced);
+        }
+    }
+
+    public class CounterweightData {
+
+        private ShuffleboardLayout layout;
+        private static SimpleWidget endstop;
+
+        public CounterweightData(ShuffleboardLayout myLayout) {
+            layout = myLayout;
+
+            if (endstop == null) endstop = layout.add("Endstop", false).withWidget(BuiltInWidgets.kBooleanBox);
+        }
+
+        public void setEndstop(boolean clicked) {
+            endstop.getEntry().setBoolean(clicked);
         }
     }
 
