@@ -44,5 +44,9 @@ public final class Constants {
         public static final String BALANCE_LAYOUT_NAME = "Balance";
         public static final String DRIVE_LAYOUT_NAME = "Drive";
     }
+    public static final class ArmConstants {
+        public static final int ROTATE_CAN_ID=0;
+        public static final int TELESCOPE_CAN_ID=0;
+    }
 
 }
