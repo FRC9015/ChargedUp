@@ -82,7 +82,7 @@ public class Dashboard {
         initSubclasses();
     }
 
-    public void putData(String name, Sendable send) {
+    public void putSendable(String name, Sendable send) {
         // check if the sendable with the given name has already been sent
         int indexExists = dataInstances.indexOf(name);
         if (indexExists < 0) {
@@ -90,6 +90,24 @@ public class Dashboard {
             dataInstances.add(name);
         }
         
+    }
+
+    /**
+     * Add a number to the dashboard
+     * @param name Name of number
+     * @param num double value that you would like to show (int vals can be coerced)
+     * @return SimpleWidget instance that you use for updating the data via NetworkTables
+     */
+    public SimpleWidget putNumber(String name, double num) {
+        SimpleWidget toReturn = null;
+        // check if the sendable with the given name has already been sent
+        int indexExists = dataInstances.indexOf(name);
+        if (indexExists < 0) {
+            toReturn = currentTab.add(name, num);
+            dataInstances.add(name);
+        }
+
+        return toReturn;
     }
 
     // Nested class that handles all drivebase interactions with the dashboard
