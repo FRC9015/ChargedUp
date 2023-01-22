@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class DriverController implements Sendable {
 
     private final DoubleSupplier tankLeft, tankRight, arcadeFwd, arcadeTurn;
-    private final JoystickButton balanceButton, switchSpeed;
+    private final JoystickButton balanceButton, switchSpeed, homeWeightButton;
     private final GenericHID rawController;
 
     /** Create a driver controller with two standard Joysticks */
@@ -21,6 +21,8 @@ public class DriverController implements Sendable {
         tankRight = joystick2::getY;
         arcadeFwd = joystick1::getY;
         arcadeTurn = joystick1::getX;
+
+        homeWeightButton = new JoystickButton(joystick1, XboxController.Button.kB.value);
 
         balanceButton = null;
         switchSpeed = new JoystickButton(joystick1, Joystick.ButtonType.kTrigger.value);
@@ -35,6 +37,7 @@ public class DriverController implements Sendable {
         arcadeTurn = controller::getRightX;
 
         balanceButton = new JoystickButton(controller, XboxController.Button.kA.value);
+        homeWeightButton = new JoystickButton(controller, XboxController.Button.kB.value);
         switchSpeed = new JoystickButton(controller, XboxController.Button.kLeftBumper.value);
 
         rawController = controller;
@@ -46,6 +49,8 @@ public class DriverController implements Sendable {
         tankRight = controller::getRightY;
         arcadeFwd = controller::getLeftY;
         arcadeTurn = controller::getRightX;
+
+        homeWeightButton = new JoystickButton(controller, XboxController.Button.kB.value);
 
         balanceButton = new JoystickButton(controller, PS4Controller.Button.kTriangle.value);
         switchSpeed = new JoystickButton(controller, PS4Controller.Button.kL3.value); // Left Joystick button
@@ -73,6 +78,10 @@ public class DriverController implements Sendable {
         return balanceButton;
     }
 
+    public JoystickButton getHomeWeightButton(){
+        return homeWeightButton;
+    }
+    
     public JoystickButton getSwitchSpeed() {
         return switchSpeed;
     }
