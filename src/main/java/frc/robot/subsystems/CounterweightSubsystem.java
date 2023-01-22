@@ -34,7 +34,9 @@ public class CounterweightSubsystem extends SubsystemBase {
     encoder = new Encoder(CounterweightConstants.ENCODER_DIO_PINS[0], CounterweightConstants.ENCODER_DIO_PINS[1]);
   }
 
-  
+  public void zeroEncoder() {
+    encoder.reset();
+  }
 
   @Override
   public void periodic() {
