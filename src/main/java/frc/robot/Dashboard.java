@@ -26,7 +26,7 @@ public class Dashboard {
         TeleOp
     }
 
-    private ShuffleboardTab teleopTab, autoTab, currentTab;
+    private ShuffleboardTab teleopTab, autoTab, currentTab, debugTab;
     private ShuffleboardLayout balanceLayout, driveLayout, counterweightLayout;  
     private static ArrayList<String> dataInstances;
 
@@ -48,6 +48,8 @@ public class Dashboard {
     public void initTabs() {
         teleopTab = Shuffleboard.getTab(DashboardConstants.TELEOP_TAB_NAME);
         autoTab = Shuffleboard.getTab(DashboardConstants.AUTO_TAB_NAME);
+        debugTab = Shuffleboard.getTab("Debug");
+
         currentTab = teleopTab;
     }
 
@@ -82,18 +84,23 @@ public class Dashboard {
         initSubclasses();
     }
 
+    /**
+     * Add a {@link Sendable} object to the debug dashboard
+     * @param name
+     * @param send
+     */
     public void putSendable(String name, Sendable send) {
         // check if the sendable with the given name has already been sent
         int indexExists = dataInstances.indexOf(name);
         if (indexExists < 0) {
-            currentTab.add(name, send);
+            debugTab.add(name, send);
             dataInstances.add(name);
         }
         
     }
 
     /**
-     * Add a number to the dashboard
+     * Add a number to the debug dashboard
      * @param name Name of number
      * @param num double value that you would like to show (int vals can be coerced)
      * @return SimpleWidget instance that you use for updating the data via NetworkTables
@@ -103,7 +110,7 @@ public class Dashboard {
         // check if the sendable with the given name has already been sent
         int indexExists = dataInstances.indexOf(name);
         if (indexExists < 0) {
-            toReturn = currentTab.add(name, num);
+            toReturn = debugTab.add(name, num);
             dataInstances.add(name);
         }
 

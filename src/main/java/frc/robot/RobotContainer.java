@@ -65,15 +65,15 @@ public class RobotContainer {
 
     public void initRobot() {
         pigeonSubsystem.resetAngles();
-        Dashboard.getInstance().putData("RobotState",robotState);
+        Dashboard.getInstance().putSendable("RobotState", robotState);
         init();
     }
 
     private void init() {
         if (driver == null) driver = new DriverController(new PS4Controller(0));
-        Dashboard.getInstance().putData("Driver", driver);
+        Dashboard.getInstance().putSendable("Driver", driver);
         if (operator == null) operator = new OperatorController(new XboxController(1));
-        Dashboard.getInstance().putData("Operator", operator);
+        Dashboard.getInstance().putSendable("Operator", operator);
     }
     
     
