@@ -83,7 +83,15 @@ public class RobotContainer {
     private void configureButtonBindings()
     {
         init();
+        /*button bindings:
+        ABXY buttons for setting the arm/intake to preset locations for scoring and intaking
+        dpad: up/down for adjusting the arm, left/right for slowly rotating the robot for the sake of scoring
+        left trigger/bumper: deployabe intake rollers
+        right trigger/bumper: intake claw
+        start/select: balancing/foot
+        
 
+        */
         // Toggle the balance command on and off when the driver's A button is pressed
         driver.getBalanceButton().toggleOnTrue(new RepeatCommand(new BalanceCommand(pigeonSubsystem, driveSubsystem)));
 
