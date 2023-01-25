@@ -44,6 +44,7 @@ public final class Constants {
         public static final String BALANCE_LAYOUT_NAME = "Balance";
         public static final String DRIVE_LAYOUT_NAME = "Drive";
         public static final String COUNTERWEIGHT_LAYOUT_NAME = "Counterweight";
+        public static final String AUTO_PATH_LAYOUT_NAME = "AutoPath";
     }
 
     public static final class CounterweightConstants {

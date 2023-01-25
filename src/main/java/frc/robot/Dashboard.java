@@ -27,12 +27,13 @@ public class Dashboard {
     }
 
     private ShuffleboardTab teleopTab, autoTab, currentTab, debugTab;
-    private ShuffleboardLayout balanceLayout, driveLayout, counterweightLayout;  
+    private ShuffleboardLayout balanceLayout, driveLayout, counterweightLayout, autoPathLayout;  
     private static ArrayList<String> dataInstances;
 
     public DriveData drive;
     public BalanceData balance;
     public CounterweightData counterweight;
+    public AutoPathData autoPath;
 
     private Dashboard() {
         init();
@@ -62,12 +63,15 @@ public class Dashboard {
                 .withPosition(0, 0);
         counterweightLayout = teleopTab.getLayout(DashboardConstants.COUNTERWEIGHT_LAYOUT_NAME, BuiltInLayouts.kList).withSize(1, 2)
         .withPosition(3, 0);
-    }
 
+        autoPathLayout = autoTab.getLayout(DashboardConstants.AUTO_PATH_LAYOUT_NAME, BuiltInLayouts.kList).withSize(1, 1);
+    }
+    
     public void initSubclasses() {
         drive = new DriveData(driveLayout);
         balance = new BalanceData(balanceLayout);
         counterweight = new CounterweightData(counterweightLayout);
+        autoPath = new AutoPathData(autoPathLayout);
     }
 
     public void setCurrentTab(CurrentTab newTab) {
@@ -116,6 +120,27 @@ public class Dashboard {
 
         return toReturn;
     }
+
+    public class AutoPathData {
+        private ShuffleboardLayout layout;
+        private static SimpleWidget selectPathDropdown;
+
+        public AutoPathData(ShuffleboardLayout myLayout) {
+            this.layout = myLayout;
+
+            if (selectPathDropdown == null) selectPathDropdown = layout.add("Select Path", "Choose Path").withWidget(BuiltInWidgets.kComboBoxChooser);
+        }
+
+        public String getSelectedPath() {
+            return selectPathDropdown.getEntry().getString("Choose Path");
+        }
+
+        public void setPaths(String[] paths) {
+            selectPathDropdown.getEntry().setStringArray(paths);
+        }
+
+        
+    } 
 
     // Nested class that handles all drivebase interactions with the dashboard
     public class DriveData {
