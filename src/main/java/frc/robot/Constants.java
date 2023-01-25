@@ -5,6 +5,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.PathConstraints;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -30,6 +32,9 @@ public final class Constants {
 
         public static final double WHEEL_SIZE_INCHES = 4.0;
         public static final double DRIVETRAIN_RATIO = 8.45; // Represents KOP-included 8.45:1 gear ratio
+
+        // Global constraints object for PathPlanner Trajectories
+        public static final PathConstraints kPathConstraints = new PathConstraints(2.5, 1);
 
     }
 
