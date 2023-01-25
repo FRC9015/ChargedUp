@@ -17,7 +17,7 @@ public class ArmDown implements Command {
 
     @Override
     public void initialize() {
-
+        armSubsystem.moveArm(-0.5);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class ArmDown implements Command {
 
     @Override
     public void end(boolean interrupted) {
-
+        armSubsystem.moveArm(0);
     }
 
     @Override
