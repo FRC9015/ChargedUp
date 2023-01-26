@@ -9,7 +9,7 @@ import java.util.Map;
 
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.shuffleboard.*;
-
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.*;
 
 /** Singleton Dashboard Class */
@@ -121,28 +121,9 @@ public class Dashboard {
         return toReturn;
     }
 
-    public class AutoPathData {
-        private ShuffleboardLayout layout;
-        private static SimpleWidget selectPathDropdown;
-
-        public AutoPathData(ShuffleboardLayout myLayout) {
-            this.layout = myLayout;
-
-            if (selectPathDropdown == null) selectPathDropdown = layout.add("Select Path", "Choose Path").withWidget(BuiltInWidgets.kComboBoxChooser);
-        }
-
-        public String getSelectedPath() {
-            return selectPathDropdown.getEntry().getString("Choose Path");
-        }
-
-        public void setPaths(String[] paths) {
-            selectPathDropdown.getEntry().setStringArray(paths);
-        }
-
-        
-    } 
-
-    // Nested class that handles all drivebase interactions with the dashboard
+    /**
+     * Dashboard subclass that handles all drive system data and interactions
+     */
     public class DriveData {
 
         private ShuffleboardLayout layout;
@@ -154,7 +135,7 @@ public class Dashboard {
 
             // Creates a number slider with a min value of 0 and max value of 1;
             if(speedMultiplierSelect == null) speedMultiplierSelect = layout.addPersistent("Speed Multiplier", DriveConstants.SLOW_SPEED_MULTIPLIER)
-                    .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 1));
+                    .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0.1, "max", 0.9));
             // Boolean display for whether the drivetrain is running in Slow Mode
             if(speedMode == null) speedMode = layout.add("Slow Mode", true).withWidget(BuiltInWidgets.kBooleanBox);
         }
@@ -173,6 +154,9 @@ public class Dashboard {
         }
     }
 
+    /**
+     * Dashboard subclass that displays balance data as well as auto balancing state (balancing using the drive system)
+     */
     public class BalanceData {
         private ShuffleboardLayout layout;
         private static SimpleWidget angleDisplay, isBalanced, autoMode;
@@ -200,6 +184,9 @@ public class Dashboard {
         }
     }
 
+    /**
+     * Displays data related to the counterweight system
+     */
     public class CounterweightData {
 
         private ShuffleboardLayout layout;
@@ -215,5 +202,24 @@ public class Dashboard {
             endstop.getEntry().setBoolean(clicked);
         }
     }
+
+    /**
+     * Select and display status for PathPlanner autonomous trajectories
+     */
+    public class AutoPathData {
+        private ShuffleboardLayout layout;
+        private static SimpleWidget selectPathDropdown;
+
+        public AutoPathData(ShuffleboardLayout myLayout) {
+            this.layout = myLayout;
+
+            if (selectPathDropdown == null) selectPathDropdown = layout.add("Select Path", "Choose Path").withWidget(BuiltInWidgets.kComboBoxChooser);
+        }
+
+        public void setPaths(SendableChooser<Object> paths) {
+            selectPathDropdown.getEntry();
+        }
+        
+    } 
 
 }
