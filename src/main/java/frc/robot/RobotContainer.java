@@ -45,6 +45,7 @@ public class RobotContainer {
     // private final Command driveCommand = new ArcadeDrive();
 
     public final RobotState robotState = RobotState.getInstance();
+    private AutoPaths autoPaths = AutoPaths.getInstance();
 
     private DriverController driver;
     private OperatorController operator;
@@ -63,7 +64,10 @@ public class RobotContainer {
     public void initRobot() {
         pigeonSubsystem.resetAngles();
         Dashboard.getInstance().putSendable("RobotState", robotState);
+
         init();
+
+        autoPaths.init();
     }
 
     private void init() {
