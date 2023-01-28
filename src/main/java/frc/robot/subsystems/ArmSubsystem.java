@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -19,21 +21,21 @@ public class ArmSubsystem implements Subsystem
 
 
     private final CANSparkMax rotateArm; //rotateArm pivots the arm. 
-    private final CANSparkMax telescopeArm; //telescopeArm moves the arm in and out.
+    private final TalonSRX telescopeArm; //telescopeArm moves the arm in and out.
 
     // Creates a new ArmSubsystem.
     private ArmSubsystem() 
     {
         rotateArm = new CANSparkMax(ArmConstants.ROTATE_CAN_ID, MotorType.kBrushless);
-        telescopeArm = new CANSparkMax(ArmConstants.TELESCOPE_CAN_ID, MotorType.kBrushless);
+        telescopeArm = new TalonSRX(ArmConstants.TELESCOPE_CAN_ID);
     }
 
     public void rotateArm(double motorspeed){
         rotateArm.set(motorspeed);
     }
 
-    public void telscopeArm(double motorspeed){
-        telescopeArm.set(motorspeed);
+    public void telescopeArm(double motorspeed){
+        telescopeArm.set(TalonSRXControlMode.PercentOutput,motorspeed);
     }
 
     public void periodic()

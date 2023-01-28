@@ -16,11 +16,17 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class DriverController implements Sendable {
 
     private final DoubleSupplier tankLeft, tankRight, arcadeFwd, arcadeTurn;
-    private final JoystickButton balanceButton, switchSpeed, homeWeightButton;
+    private final JoystickButton balanceButton, switchSpeed, homeWeightButton, x, y;
     private final GenericHID rawController;
     private final POVButton up;
+    private final POVButton down;
 
-    /** Create a driver controller with two standard Joysticks */
+    private final POVButton left;
+
+    private final POVButton right;
+
+
+    /** Create a driver controller with two standard Joysticks 
     public DriverController(Joystick joystick1, Joystick joystick2) {
         tankLeft = joystick1::getY;
         tankRight = joystick2::getY;
@@ -28,6 +34,12 @@ public class DriverController implements Sendable {
         arcadeTurn = joystick1::getX;
 
         up = new POVButton(joystick1, 0);
+        down = new POVButton(joystick1, 180);
+
+        left = new POVButton(joystick1, 270);
+
+        right = new POVButton(joystick1, 90);
+
 
         homeWeightButton = new JoystickButton(joystick1, XboxController.Button.kB.value);
 
@@ -35,6 +47,8 @@ public class DriverController implements Sendable {
         switchSpeed = new JoystickButton(joystick1, Joystick.ButtonType.kTrigger.value);
         rawController = joystick1;
     }
+    */
+
 
     /** Create a driver controller with an XboxController */
     public DriverController(XboxController controller) {
@@ -44,10 +58,19 @@ public class DriverController implements Sendable {
         arcadeTurn = controller::getRightX;
 
         up = new POVButton(controller, 0);
+        down = new POVButton(controller, 180);
+
+        left = new POVButton(controller, 270);
+
+        right = new POVButton(controller, 90);
 
         balanceButton = new JoystickButton(controller, XboxController.Button.kA.value);
         homeWeightButton = new JoystickButton(controller, XboxController.Button.kB.value);
         switchSpeed = new JoystickButton(controller, XboxController.Button.kLeftBumper.value);
+
+        x = new JoystickButton(controller, XboxController.Button.kX.value);
+        y = new JoystickButton(controller, XboxController.Button.kY.value);
+
 
         rawController = controller;
     }
@@ -73,6 +96,21 @@ public class DriverController implements Sendable {
     */
     public Trigger getUpDpad(){
         return up;
+
+    }
+
+    public Trigger getDownDpad(){
+        return down;
+
+    }
+
+    public Trigger getLeftDpad(){
+        return left;
+
+    }
+
+    public Trigger getRightDpad(){
+        return right;
 
     }
     public double getTankLeft() {
@@ -101,6 +139,15 @@ public class DriverController implements Sendable {
     
     public JoystickButton getSwitchSpeed() {
         return switchSpeed;
+    }
+
+
+    public JoystickButton getX(){
+        return x;
+    }
+
+    public JoystickButton getY(){
+        return y;
     }
 
     public void setRumble(GenericHID.RumbleType rumble, double value) {

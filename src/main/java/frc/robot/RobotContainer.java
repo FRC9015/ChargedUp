@@ -5,22 +5,29 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ArmDown;
+import frc.robot.commands.ArmInCommand;
+import frc.robot.commands.ArmOutCommand;
+import frc.robot.commands.ArmUp;
 import frc.robot.commands.BalanceCommand;
+import frc.robot.commands.CloseIntakeCommand;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.OpenIntakeCommand;
 import frc.robot.commands.SwitchSpeed;
 import frc.robot.commands.WeightCalibrationCommand;
 import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
-import frc.robot.subsystems.ArmSubsystem;
 //import frc.robot.subsystems.CounterweightSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CounterweightPIDSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.IntakeNewmaticSubsystem;
 import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
 
@@ -44,11 +51,12 @@ public class RobotContainer {
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     DiffDriveSubsystem driveSubsystem = DiffDriveSubsystem.getInstance();
     PigeonSubsystem pigeonSubsystem = PigeonSubsystem.getInstance();
+    ArmSubsystem armSubsystem= ArmSubsystem.getInstance();
     //CounterweightSubsystem counterweightSubsystem = CounterweightSubsystem.getInstance();
     CounterweightPIDSubsystem counterweightPIDSubsystem = CounterweightPIDSubsystem.getInstance();
     private final Command autoCommand = new ExampleCommand(exampleSubsystem);
+    IntakeNewmaticSubsystem intakeNewmaticSubsystem = IntakeNewmaticSubsystem.getInstance();
     // private final Command driveCommand = new ArcadeDrive();
-    ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
 
     public final RobotState robotState = RobotState.getInstance();
 
@@ -68,15 +76,15 @@ public class RobotContainer {
 
     public void initRobot() {
         pigeonSubsystem.resetAngles();
-        Dashboard.getInstance().putSendable("RobotState", robotState);
+        //Dashboard.getInstance().putData("RobotState",robotState);
         init();
     }
 
     private void init() {
         if (driver == null) driver = new DriverController(new XboxController(0));
-        Dashboard.getInstance().putSendable("Driver", driver);
+        //Dashboard.getInstance().putData("Driver", driver);
         if (operator == null) operator = new OperatorController(new XboxController(1));
-        Dashboard.getInstance().putSendable("Operator", operator);
+        //Dashboard.getInstance().putData("Operator", operator);
     }
     
     
@@ -92,7 +100,7 @@ public class RobotContainer {
         left trigger/bumper: deployabe intake rollers
         right trigger/bumper: intake claw
         start/select: balancing/foot
-        
+        6
 
         */
         // Toggle the balance command on and off when the driver's A button is pressed
@@ -104,7 +112,14 @@ public class RobotContainer {
 
         driver.getHomeWeightButton().onTrue(new WeightCalibrationCommand(counterweightPIDSubsystem));
 
-        driver.getUpDpad().onTrue(new WeightCalibrationCommand(counterweightPIDSubsystem));
+        driver.getUpDpad().whileTrue(new ArmUp(armSubsystem));
+        driver.getDownDpad().whileTrue(new ArmDown(armSubsystem));
+
+        driver.getLeftDpad().whileTrue(new ArmInCommand(armSubsystem));
+        driver.getRightDpad().whileTrue(new ArmOutCommand(armSubsystem));
+
+        driver.getX().onTrue(new OpenIntakeCommand(intakeNewmaticSubsystem));
+        driver.getY().onTrue(new CloseIntakeCommand(intakeNewmaticSubsystem));
 
 
     }

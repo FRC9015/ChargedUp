@@ -17,7 +17,7 @@ public class ArmDown implements Command {
 
     @Override
     public void initialize() {
-        armSubsystem.rotateArm(-0.5);
+        armSubsystem.rotateArm(-0.2);
     }
 
     @Override
