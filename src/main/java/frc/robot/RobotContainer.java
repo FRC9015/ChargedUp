@@ -16,7 +16,7 @@ import frc.robot.commands.SwitchSpeed;
 import frc.robot.commands.WeightCalibrationCommand;
 import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
-import frc.robot.subsystems.CounterweightSubsystem;
+//import frc.robot.subsystems.CounterweightSubsystem;
 import frc.robot.subsystems.CounterweightPIDSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.PigeonSubsystem;
@@ -42,7 +42,7 @@ public class RobotContainer {
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     DiffDriveSubsystem driveSubsystem = DiffDriveSubsystem.getInstance();
     PigeonSubsystem pigeonSubsystem = PigeonSubsystem.getInstance();
-    CounterweightSubsystem counterweightSubsystem = CounterweightSubsystem.getInstance();
+    //CounterweightSubsystem counterweightSubsystem = CounterweightSubsystem.getInstance();
     CounterweightPIDSubsystem counterweightPIDSubsystem = CounterweightPIDSubsystem.getInstance();
     private final Command autoCommand = new ExampleCommand(exampleSubsystem);
     // private final Command driveCommand = new ArcadeDrive();
