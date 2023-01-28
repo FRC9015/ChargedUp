@@ -1,5 +1,6 @@
 package frc.robot.controllers;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.util.sendable.Sendable;
@@ -8,12 +9,16 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class DriverController implements Sendable {
 
     private final DoubleSupplier tankLeft, tankRight, arcadeFwd, arcadeTurn;
     private final JoystickButton balanceButton, switchSpeed, homeWeightButton;
     private final GenericHID rawController;
+    private final POVButton up;
 
     /** Create a driver controller with two standard Joysticks */
     public DriverController(Joystick joystick1, Joystick joystick2) {
@@ -21,6 +26,8 @@ public class DriverController implements Sendable {
         tankRight = joystick2::getY;
         arcadeFwd = joystick1::getY;
         arcadeTurn = joystick1::getX;
+
+        up = new POVButton(joystick1, 0);
 
         homeWeightButton = new JoystickButton(joystick1, XboxController.Button.kB.value);
 
@@ -36,6 +43,8 @@ public class DriverController implements Sendable {
         arcadeFwd = controller::getLeftY;
         arcadeTurn = controller::getRightX;
 
+        up = new POVButton(controller, 0);
+
         balanceButton = new JoystickButton(controller, XboxController.Button.kA.value);
         homeWeightButton = new JoystickButton(controller, XboxController.Button.kB.value);
         switchSpeed = new JoystickButton(controller, XboxController.Button.kLeftBumper.value);
@@ -43,12 +52,15 @@ public class DriverController implements Sendable {
         rawController = controller;
     }
 
-    /** Create a driver controller with a PS4Controller */
+    /** Create a driver controller with a PS4Controller 
     public DriverController(PS4Controller controller) {
         tankLeft = controller::getLeftY;
         tankRight = controller::getRightY;
         arcadeFwd = controller::getLeftY;
         arcadeTurn = controller::getRightX;
+
+
+        up = null;
 
         homeWeightButton = new JoystickButton(controller, XboxController.Button.kB.value);
 
@@ -58,6 +70,11 @@ public class DriverController implements Sendable {
         rawController = controller;
     }
 
+    */
+    public Trigger getUpDpad(){
+        return up;
+
+    }
     public double getTankLeft() {
         return tankLeft.getAsDouble();
     }

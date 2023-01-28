@@ -10,12 +10,14 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.ArmDown;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.SwitchSpeed;
 import frc.robot.commands.WeightCalibrationCommand;
 import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
+import frc.robot.subsystems.ArmSubsystem;
 //import frc.robot.subsystems.CounterweightSubsystem;
 import frc.robot.subsystems.CounterweightPIDSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -46,6 +48,7 @@ public class RobotContainer {
     CounterweightPIDSubsystem counterweightPIDSubsystem = CounterweightPIDSubsystem.getInstance();
     private final Command autoCommand = new ExampleCommand(exampleSubsystem);
     // private final Command driveCommand = new ArcadeDrive();
+    ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
 
     public final RobotState robotState = RobotState.getInstance();
 
@@ -70,7 +73,7 @@ public class RobotContainer {
     }
 
     private void init() {
-        if (driver == null) driver = new DriverController(new PS4Controller(0));
+        if (driver == null) driver = new DriverController(new XboxController(0));
         Dashboard.getInstance().putSendable("Driver", driver);
         if (operator == null) operator = new OperatorController(new XboxController(1));
         Dashboard.getInstance().putSendable("Operator", operator);
@@ -100,6 +103,8 @@ public class RobotContainer {
 
 
         driver.getHomeWeightButton().onTrue(new WeightCalibrationCommand(counterweightPIDSubsystem));
+
+        driver.getUpDpad().onTrue(new WeightCalibrationCommand(counterweightPIDSubsystem));
 
 
     }
