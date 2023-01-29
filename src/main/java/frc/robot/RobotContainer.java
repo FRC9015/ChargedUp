@@ -70,7 +70,7 @@ public class RobotContainer {
     }
 
     private void init() {
-        if (driver == null) driver = new DriverController(new PS4Controller(0));
+        if (driver == null) driver = new DriverController(new XboxController(0));
         Dashboard.getInstance().putSendable("Driver", driver);
         if (operator == null) operator = new OperatorController(new XboxController(1));
         Dashboard.getInstance().putSendable("Operator", operator);
