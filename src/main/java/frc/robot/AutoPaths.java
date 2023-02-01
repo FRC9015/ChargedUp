@@ -5,9 +5,11 @@ import java.util.ArrayList;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 
 public class AutoPaths {
@@ -57,5 +59,9 @@ public class AutoPaths {
 
     public SendableChooser<PathPlannerTrajectory> getChooser() {
         return paths;
+    }
+
+    public PathPlannerTrajectory getSelectedTrajectory(){
+        return paths.getSelected();
     }
 }
