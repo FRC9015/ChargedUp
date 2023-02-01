@@ -18,10 +18,9 @@ public class IntakeNewmaticSubsystem implements Subsystem{
 
 
     DoubleSolenoid intake;
-    PneumaticHub pHub;
+    //PneumaticHub pHub;
 
     private IntakeNewmaticSubsystem(){
-        //pHub = new PneumaticHub();
         intake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
     }
 

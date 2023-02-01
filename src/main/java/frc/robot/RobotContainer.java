@@ -20,7 +20,9 @@ import frc.robot.commands.CloseIntakeCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.OpenIntakeCommand;
 import frc.robot.commands.SwitchSpeed;
+import frc.robot.commands.WeightBackCommand;
 import frc.robot.commands.WeightCalibrationCommand;
+import frc.robot.commands.WeightForwardCommand;
 import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
 //import frc.robot.subsystems.CounterweightSubsystem;
@@ -115,8 +117,11 @@ public class RobotContainer {
         driver.getUpDpad().whileTrue(new ArmUp(armSubsystem));
         driver.getDownDpad().whileTrue(new ArmDown(armSubsystem));
 
-        driver.getLeftDpad().whileTrue(new ArmInCommand(armSubsystem));
-        driver.getRightDpad().whileTrue(new ArmOutCommand(armSubsystem));
+        //driver.getLeftDpad().whileTrue(new ArmInCommand(armSubsystem));
+        //driver.getRightDpad().whileTrue(new ArmOutCommand(armSubsystem));
+
+        driver.getLeftDpad().whileTrue(new WeightBackCommand(counterweightPIDSubsystem));
+        driver.getRightDpad().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
 
         driver.getX().onTrue(new OpenIntakeCommand(intakeNewmaticSubsystem));
         driver.getY().onTrue(new CloseIntakeCommand(intakeNewmaticSubsystem));
