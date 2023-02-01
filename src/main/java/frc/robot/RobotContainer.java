@@ -106,19 +106,19 @@ public class RobotContainer {
 
         */
         // Toggle the balance command on and off when the driver's A button is pressed
-        driver.getBalanceButton().toggleOnTrue(new RepeatCommand(new BalanceCommand(pigeonSubsystem, driveSubsystem)));
+        driver.getA().toggleOnTrue(new RepeatCommand(new BalanceCommand(pigeonSubsystem, driveSubsystem)));
 
         // When the driver's left bumper is pressed, switch between low and high speed.
-        driver.getSwitchSpeed().onTrue(new SwitchSpeed());
+        driver.getLB().onTrue(new SwitchSpeed());
 
 
-        driver.getHomeWeightButton().onTrue(new WeightCalibrationCommand(counterweightPIDSubsystem));
+        driver.getB().onTrue(new WeightCalibrationCommand(counterweightPIDSubsystem));
 
         driver.getUpDpad().whileTrue(new ArmUp(armSubsystem));
         driver.getDownDpad().whileTrue(new ArmDown(armSubsystem));
 
-        //driver.getLeftDpad().whileTrue(new ArmInCommand(armSubsystem));
-        //driver.getRightDpad().whileTrue(new ArmOutCommand(armSubsystem));
+        driver.getY().whileTrue(new ArmInCommand(armSubsystem));
+        driver.getX().whileTrue(new ArmOutCommand(armSubsystem));
 
         driver.getLeftDpad().whileTrue(new WeightBackCommand(counterweightPIDSubsystem));
         driver.getRightDpad().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
