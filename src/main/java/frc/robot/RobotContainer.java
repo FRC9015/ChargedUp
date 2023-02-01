@@ -15,7 +15,8 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.SwitchSpeed;
 import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
-import frc.robot.subsystems.CounterweightSubsystem;
+//import frc.robot.subsystems.CounterweightSubsystem;
+import frc.robot.subsystems.CounterweightPIDSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
@@ -40,7 +41,8 @@ public class RobotContainer {
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     DiffDriveSubsystem driveSubsystem = DiffDriveSubsystem.getInstance();
     PigeonSubsystem pigeonSubsystem = PigeonSubsystem.getInstance();
-    CounterweightSubsystem counterweightSubsystem = CounterweightSubsystem.getInstance();
+    //CounterweightSubsystem counterweightSubsystem = CounterweightSubsystem.getInstance();
+    CounterweightPIDSubsystem counterweightPIDSubsystem = CounterweightPIDSubsystem.getInstance();
     private final Command autoCommand = new ExampleCommand(exampleSubsystem);
     // private final Command driveCommand = new ArcadeDrive();
 
@@ -71,7 +73,7 @@ public class RobotContainer {
     }
 
     private void init() {
-        if (driver == null) driver = new DriverController(new PS4Controller(0));
+        if (driver == null) driver = new DriverController(new XboxController(0));
         Dashboard.getInstance().putSendable("Driver", driver);
         if (operator == null) operator = new OperatorController(new XboxController(1));
         Dashboard.getInstance().putSendable("Operator", operator);
