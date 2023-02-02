@@ -7,6 +7,8 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -27,7 +29,8 @@ public class Dashboard {
     }
 
     private ShuffleboardTab teleopTab, autoTab, currentTab, debugTab;
-    private ShuffleboardLayout balanceLayout, driveLayout, counterweightLayout, autoPathLayout;  
+    private ShuffleboardLayout balanceLayout, driveLayout, counterweightLayout, autoPathLayout; 
+    private static SendableChooser<PathPlannerTrajectory> autoPathChooser; 
     private static ArrayList<String> dataInstances;
 
     public DriveData drive;
@@ -101,6 +104,10 @@ public class Dashboard {
             dataInstances.add(name);
         }
         
+    }
+
+    public void addAutoPathChooser(SendableChooser<PathPlannerTrajectory> chooser) {
+        if (autoPathChooser == null) {autoTab.add(chooser); autoPathChooser = chooser;}
     }
 
     /**
@@ -207,17 +214,10 @@ public class Dashboard {
      * Select and display status for PathPlanner autonomous trajectories
      */
     public class AutoPathData {
-        private ShuffleboardLayout layout;
-        private static SimpleWidget selectPathDropdown;
+        // private ShuffleboardLayout layout;
 
         public AutoPathData(ShuffleboardLayout myLayout) {
-            this.layout = myLayout;
-
-            if (selectPathDropdown == null) selectPathDropdown = layout.add("Select Path", "Choose Path").withWidget(BuiltInWidgets.kComboBoxChooser);
-        }
-
-        public void setPaths(SendableChooser<Object> paths) {
-            selectPathDropdown.getEntry();
+            // this.layout = myLayout;
         }
         
     } 
