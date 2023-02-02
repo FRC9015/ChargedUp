@@ -202,6 +202,19 @@ public class DiffDriveSubsystem extends SubsystemBase {
         setBrakeMode(prevBrakeMode);
     }
 
+    public void resetOdometry(Pose2d initPose) {
+        resetEncoders();
+        odometry.resetPosition(pigeon.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition(), initPose);
+    }
+
+    public Pose2d getPose() {
+        return odometry.getPoseMeters();
+    }
+
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(), rightEncoder.getVelocity());
+    }
+
     private double calcSpeed(double input) {
         boolean isSlowed = RobotState.getSlowed();
 
@@ -209,6 +222,11 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         // If the robot should be running in slow mode, reduce speed by the multiplier (set in dashboard)
         return isSlowed ? input * speedMultiplier : input;
+    }
+
+    private void resetEncoders() {
+        leftEncoder.setPosition(0);
+        rightEncoder.setPosition(0);
     }
 
 }
