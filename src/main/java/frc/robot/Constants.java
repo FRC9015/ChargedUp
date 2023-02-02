@@ -41,6 +41,9 @@ public final class Constants {
         public static final double DRIVE_TRACKWIDTH_INCHES = 14.75; // Rough distance between wheels
         public static final double MAX_RPM = 5500.0; // Max allowed RPM of the NEO motors (yes its actually 5700 but we're being conservative)
 
+        public static final double RAMSETE_B = 2.0; // Ramsete B constant, 2.0 is the default WPILib value
+        public static final double RAMSETE_ZETA = 0.7; // Ramsete Zeta constant, 0.7 is the default WPILib value
+
         public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(Units.inchesToMeters(DRIVE_TRACKWIDTH_INCHES));
         
         /**
