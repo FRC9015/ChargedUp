@@ -1,6 +1,7 @@
 package frc.robot.subsystems.drive;
 
 import java.util.ArrayList;
+import java.util.function.BiConsumer;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -9,7 +10,9 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -54,6 +57,11 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private final PIDFConstants velocityPIDFConstants, positionPIDFConstants;
     private final Field2d field;
 
+    /**
+     * BiConsumer function that accepts a left and right double values for meters per second
+     */
+    private BiConsumer<Double, Double> ramseteOutputConsumer;
+
     private IdleMode brakeMode = IdleMode.kCoast;
 
     private final SlewRateLimiter accelRateLimit1, accelRateLimit2;
@@ -81,7 +89,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
         right2 = new CANSparkMax(DriveConstants.RIGHT_BACK_MOTOR_ID, motorType);
         right2.follow(right1);  
         allMotors.add(right2);
-
+  
         // Properly invert motors
         left1.setInverted(DriveConstants.LEFT_INVERTED);
         right1.setInverted(DriveConstants.RIGHT_INVERTED);
@@ -90,8 +98,6 @@ public class DiffDriveSubsystem extends SubsystemBase {
         drive = new DifferentialDrive(left1, right1);
         addChild("DiffDrive", drive);
 
-        // Converts from rotations to wheel position in inches
-        double POSITION_CONVERSION_FACTOR = Math.PI * (DriveConstants.WHEEL_SIZE_INCHES / DriveConstants.DRIVETRAIN_RATIO);
 
         leftEncoder = left1.getEncoder(); 
         leftEncoder.setPositionConversionFactor(DriveConstants.DRIVE_ENCODER_POSITION_FACTOR);
@@ -129,10 +135,16 @@ public class DiffDriveSubsystem extends SubsystemBase {
          */
         accelRateLimit1 = new SlewRateLimiter(DriveConstants.ACCEL_RATE_LIMIT);
         accelRateLimit2 = new SlewRateLimiter(DriveConstants.ACCEL_RATE_LIMIT);
+
+
+        ramseteOutputConsumer = (left,  right) -> {
+            leftPID.setReference(left, CANSparkMax.ControlType.kVelocity, DriveConstants.VELOCITY_PID_SLOT);
+            rightPID.setReference(right, CANSparkMax.ControlType.kVelocity, DriveConstants.VELOCITY_PID_SLOT);
+        };
     }
 
     @Override
-    public void periodic() {
+    public void periodic() {    
         odometry.update(pigeon.getRotation2d(), leftEncoder.getPosition(),
                 rightEncoder.getPosition());
         field.setRobotPose(odometry.getPoseMeters());
