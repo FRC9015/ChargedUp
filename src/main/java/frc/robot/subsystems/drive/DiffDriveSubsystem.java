@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -17,7 +18,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Dashboard;
 import frc.robot.RobotState;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.UpdatePIDFConstantsCommand;
 import frc.robot.subsystems.PigeonSubsystem;
+import frc.robot.utils.PIDFConstants;
 
 public class DiffDriveSubsystem extends SubsystemBase {
 
@@ -46,7 +49,9 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private final CANSparkMax right1, right2;    
     private final DifferentialDrive drive;
     private final RelativeEncoder leftEncoder, rightEncoder;
+    private final SparkMaxPIDController leftPID, rightPID;
     private final DifferentialDriveOdometry odometry;
+    private final PIDFConstants velocityPIDFConstants, positionPIDFConstants;
     private final Field2d field;
 
     private IdleMode brakeMode = IdleMode.kCoast;
@@ -93,6 +98,22 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         rightEncoder = right1.getEncoder();
         rightEncoder.setPositionConversionFactor(POSITION_CONVERSION_FACTOR);
+
+
+        leftPID = left1.getPIDController();
+        leftPID.setOutputRange(-1, 1, DriveConstants.VELOCITY_PID_SLOT);
+        rightPID = right1.getPIDController();
+        rightPID.setOutputRange(-1, 1, DriveConstants.VELOCITY_PID_SLOT);
+
+
+        // Create a new PIDFConstants object for the drive, using the PIDF controller from the left side as a source of truth
+        velocityPIDFConstants = new PIDFConstants(leftPID, DriveConstants.VELOCITY_PID_SLOT);
+        positionPIDFConstants = new PIDFConstants(leftPID, DriveConstants.POSITION_PID_SLOT);
+
+        addChild("Drive Velocity PIDF Constants", velocityPIDFConstants);
+        addChild("Drive Position PIDF Constants", positionPIDFConstants);
+        addChild("Update Velocity PIDF Constants", new UpdatePIDFConstantsCommand(velocityPIDFConstants, DriveConstants.VELOCITY_PID_SLOT, leftPID, rightPID));
+        addChild("Update Position PIDF Constants", new UpdatePIDFConstantsCommand(positionPIDFConstants, DriveConstants.POSITION_PID_SLOT, leftPID, rightPID));
 
         odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(),
                 Units.inchesToMeters(leftEncoder.getPosition()), Units.inchesToMeters(rightEncoder.getPosition()));
