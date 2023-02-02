@@ -5,7 +5,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
@@ -116,8 +115,8 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand()
     {
-        // An ExampleCommand will run in autonomous
-        return autoCommand;
+        // Read the selected trajectory from the Dashboard and transform that into a Ramsete command
+        return driveSubsystem.getTrajectoryCommand(autoPaths.getSelectedTrajectory(), true);
     }
 
     /**
