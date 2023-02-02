@@ -7,6 +7,9 @@ package frc.robot;
 
 import com.pathplanner.lib.PathConstraints;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -22,6 +25,9 @@ public final class Constants {
         public static final int LEFT_BACK_MOTOR_ID = 15;
         public static final int RIGHT_FRONT_MOTOR_ID = 16;
         public static final int RIGHT_BACK_MOTOR_ID = 13;
+
+        public static final int VELOCITY_PID_SLOT = 1; // Slot numbers for PIDF constants
+        public static final int POSITION_PID_SLOT = 2; // Slot numbers for PIDF constants
 
         public static final boolean LEFT_INVERTED = true;
         public static final boolean RIGHT_INVERTED = false;
