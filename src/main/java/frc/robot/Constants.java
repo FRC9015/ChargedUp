@@ -32,7 +32,9 @@ public final class Constants {
 
         public static final double WHEEL_SIZE_INCHES = 4.0;
         public static final double DRIVETRAIN_RATIO = 8.45; // Represents KOP-included 8.45:1 gear ratio
-
+        public static final double DRIVE_TRACKWIDTH = 14.75; // Rough distance between wheels
+        public static final double MAX_RPM = 5500.0;
+        
         // Global constraints object for PathPlanner Trajectories
         public static final PathConstraints kPathConstraints = new PathConstraints(2.5, 1);
 
