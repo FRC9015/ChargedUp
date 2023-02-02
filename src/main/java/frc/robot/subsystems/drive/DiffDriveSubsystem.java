@@ -175,10 +175,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
 
     public void tankDrive(double left, double right) {
-        left = accelRateLimit1.calculate(left);
-        right = accelRateLimit2.calculate(right);
-
-        drive.tankDrive(calcSpeed(left), calcSpeed(right));
+        tankDriveRaw(left, right, true);
     }
 
     /**
@@ -205,7 +202,17 @@ public class DiffDriveSubsystem extends SubsystemBase {
         left = rateLimited ? accelRateLimit1.calculate(left) : left;
         right = rateLimited ? accelRateLimit2.calculate(right) : right;
 
-        drive.tankDrive(left, right);
+        double leftSpeed = calcMetersPerSecond(left);
+        double rightSpeed = calcMetersPerSecond(right);
+
+        DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed);
+
+        setSpeeds(wheelSpeeds);
+    }
+
+    private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+        leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity, DriveConstants.VELOCITY_PID_SLOT);
+        rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity, DriveConstants.VELOCITY_PID_SLOT);
     }
 
     public void setBrakeMode(IdleMode newBrakeMode) {
