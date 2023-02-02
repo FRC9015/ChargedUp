@@ -69,6 +69,8 @@ public class RobotContainer {
         init();
 
         autoPaths.init();
+
+        Dashboard.getInstance().addAutoPathChooser(autoPaths.getChooser());
     }
 
     private void init() {
