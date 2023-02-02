@@ -257,14 +257,21 @@ public class DiffDriveSubsystem extends SubsystemBase {
                         this));
     }
 
-    private double calcSpeed(double input) {
-        boolean isSlowed = RobotState.getSlowed();
+    /**
+     * Takes in a joystick input and converts it to meters per second, taking into account slow mode
+     * @param input Joystick input, within range [-1, 1]
+     * @return meters per second
+     */
+    private double calcMetersPerSecond(double input) {
+        boolean isSlowed = RobotState.getSlowedSmart();
+
+        double inputMetersPerSecond = (input * DriveConstants.MAX_RPM) * DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR;
 
         double speedMultiplier = Dashboard.getInstance().drive.getSpeedMultiplier();
 
         // If the robot should be running in slow mode, reduce speed by the multiplier
         // (set in dashboard)
-        return isSlowed ? input * speedMultiplier : input;
+        return isSlowed ? inputMetersPerSecond * speedMultiplier : inputMetersPerSecond;
     }
 
     private void resetEncoders() {
