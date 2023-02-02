@@ -6,7 +6,7 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 
 /**
- * Class that represents PIDF constants, and allows editing of them via Sendable
+ * Class that represents PIDF constants, and allows editing of them via Sendable.
  */
 public class PIDFConstants implements Sendable {
     private double kP, kI, kD, kIZone, kFF;
@@ -63,7 +63,7 @@ public class PIDFConstants implements Sendable {
 
     /**
      * Update a SparkMaxPIDController with the values in this object. Useful for tuning from the dashboard. <p>
-     * IMPORTANT: These settings will not persist unless the {@link com.revrobotics.CANSparkMax#burnFlash() CANSparkMax.burnFlash() } method is called.
+     * <b>IMPORTANT:</b> These settings will not persist unless the {@link com.revrobotics.CANSparkMax#burnFlash() CANSparkMax.burnFlash()} method is called.
      * @param toUpdate {@link SparkMaxPIDController} to update  
      */
     public void updateSparkMax(SparkMaxPIDController toUpdate) {
