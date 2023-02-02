@@ -94,10 +94,12 @@ public class DiffDriveSubsystem extends SubsystemBase {
         double POSITION_CONVERSION_FACTOR = Math.PI * (DriveConstants.WHEEL_SIZE_INCHES / DriveConstants.DRIVETRAIN_RATIO);
 
         leftEncoder = left1.getEncoder(); 
-        leftEncoder.setPositionConversionFactor(POSITION_CONVERSION_FACTOR);
+        leftEncoder.setPositionConversionFactor(DriveConstants.DRIVE_ENCODER_POSITION_FACTOR);
+        leftEncoder.setVelocityConversionFactor(DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR);
 
         rightEncoder = right1.getEncoder();
-        rightEncoder.setPositionConversionFactor(POSITION_CONVERSION_FACTOR);
+        rightEncoder.setPositionConversionFactor(DriveConstants.DRIVE_ENCODER_POSITION_FACTOR);
+        rightEncoder.setVelocityConversionFactor(DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR);
 
 
         leftPID = left1.getPIDController();
@@ -131,8 +133,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        odometry.update(pigeon.getRotation2d(), Units.inchesToMeters(leftEncoder.getPosition()),
-                Units.inchesToMeters(rightEncoder.getPosition()));
+        odometry.update(pigeon.getRotation2d(), leftEncoder.getPosition(),
+                rightEncoder.getPosition());
         field.setRobotPose(odometry.getPoseMeters());
     }
 
