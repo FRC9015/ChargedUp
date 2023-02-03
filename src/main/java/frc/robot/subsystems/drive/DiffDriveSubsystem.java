@@ -9,12 +9,14 @@ import com.pathplanner.lib.commands.PPRamseteCommand;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
@@ -58,7 +60,6 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
     private final CANSparkMax left1, left2;
     private final CANSparkMax right1, right2;
-    private final DifferentialDrive drive;
     private final RelativeEncoder leftEncoder, rightEncoder;
     private final SparkMaxPIDController leftPID, rightPID;
     private final RamseteController trajRamsete;
@@ -103,10 +104,6 @@ public class DiffDriveSubsystem extends SubsystemBase {
         // Properly invert motors
         left1.setInverted(DriveConstants.LEFT_INVERTED);
         right1.setInverted(DriveConstants.RIGHT_INVERTED);
-
-        // Instantiate the drive class
-        drive = new DifferentialDrive(left1, right1);
-        addChild("DiffDrive", drive);
 
         leftEncoder = left1.getEncoder();
         leftEncoder.setPositionConversionFactor(DriveConstants.DRIVE_ENCODER_POSITION_FACTOR);
@@ -168,10 +165,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
 
     public void arcadeDrive(double fwd, double turn) {
-        fwd = accelRateLimit1.calculate(fwd);
-        turn = accelRateLimit2.calculate(turn);
-
-        drive.arcadeDrive(calcSpeed(fwd), calcSpeed(turn));
+        arcadeDriveRaw(fwd, turn, true);
     }
 
     public void tankDrive(double left, double right) {
@@ -188,7 +182,12 @@ public class DiffDriveSubsystem extends SubsystemBase {
         fwd = rateLimited ? accelRateLimit1.calculate(fwd) : fwd;
         turn = rateLimited ? accelRateLimit2.calculate(turn) : turn;
 
-        drive.arcadeDrive(fwd, turn);
+        double fwdSpeed = calcMetersPerSecond(fwd);
+        double turnSpeed = calcRadiansPerSecond(turn);
+
+        DifferentialDriveWheelSpeeds wheelSpeeds = DriveConstants.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(fwdSpeed, 0, turnSpeed));
+
+        setSpeeds(wheelSpeeds);
     }
 
     /**
@@ -211,8 +210,10 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
 
     private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-        leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity, DriveConstants.VELOCITY_PID_SLOT);
-        rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity, DriveConstants.VELOCITY_PID_SLOT);
+        leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity,
+                DriveConstants.VELOCITY_PID_SLOT);
+        rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity,
+                DriveConstants.VELOCITY_PID_SLOT);
     }
 
     public void setBrakeMode(IdleMode newBrakeMode) {
@@ -223,7 +224,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
 
     public void stop() {
-        drive.tankDrive(0, 0);
+        leftPID.setReference(0, CANSparkMax.ControlType.kVelocity, DriveConstants.VELOCITY_PID_SLOT);
+        rightPID.setReference(0, CANSparkMax.ControlType.kVelocity, DriveConstants.VELOCITY_PID_SLOT);
     }
 
     public void brakeStop() {
@@ -260,12 +262,15 @@ public class DiffDriveSubsystem extends SubsystemBase {
                  * SparkMax's built in PID and Feedforward
                  * functionality
                  */
-                new PPRamseteCommand(traj, this::getPose, trajRamsete, DriveConstants.KINEMATICS, ramseteOutputBiConsumer,
+                new PPRamseteCommand(traj, this::getPose, trajRamsete, DriveConstants.KINEMATICS,
+                        ramseteOutputBiConsumer,
                         this));
     }
 
     /**
-     * Takes in a joystick input and converts it to meters per second, taking into account slow mode
+     * Takes in a joystick input and converts it to meters per second, taking into
+     * account slow mode
+     * 
      * @param input Joystick input, within range [-1, 1]
      * @return meters per second
      */
@@ -279,6 +284,16 @@ public class DiffDriveSubsystem extends SubsystemBase {
         // If the robot should be running in slow mode, reduce speed by the multiplier
         // (set in dashboard)
         return isSlowed ? inputMetersPerSecond * speedMultiplier : inputMetersPerSecond;
+    }
+
+    private double calcRadiansPerSecond(double input) {
+        boolean isSlowed = RobotState.getSlowedSmart();
+
+        double inputRadiansPerSecond = input * DriveConstants.MAX_ANGULAR_VELOCITY;
+
+        double speedMultiplier = Dashboard.getInstance().drive.getSpeedMultiplier();
+
+        return isSlowed ? inputRadiansPerSecond * speedMultiplier : inputRadiansPerSecond;
     }
 
     private void resetEncoders() {
