@@ -6,18 +6,18 @@ import frc.robot.subsystems.ArmSubsystem;
 
 import java.util.Set;
 
-public class ArmDown implements Command {
+public class ArmInCommand implements Command {
     private final ArmSubsystem armSubsystem;
     private final Set<Subsystem> subsystems;
 
-    public ArmDown(ArmSubsystem myArmSubsystem) {
+    public ArmInCommand(ArmSubsystem myArmSubsystem) {
         this.armSubsystem = myArmSubsystem;
         this.subsystems = Set.of(this.armSubsystem);
     }
 
     @Override
     public void initialize() {
-        armSubsystem.rotateArm(-0.2);
+        armSubsystem.telescopeArm(-0.95);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class ArmDown implements Command {
 
     @Override
     public void end(boolean interrupted) {
-        armSubsystem.rotateArm(0);
+        armSubsystem.telescopeArm(0);
     }
 
     @Override

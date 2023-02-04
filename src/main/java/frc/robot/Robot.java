@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Dashboard.CurrentTab;
+import frc.robot.controllers.DriverController;
 
 
 
@@ -98,6 +99,7 @@ public class Robot extends TimedRobot
     public void teleopInit()
     {
        // Dashboard.getInstance().setCurrentTab(CurrentTab.TeleOp);
+        //Dashboard.getInstance().setCurrentTab(CurrentTab.TeleOp);
         
         // On teleop init, make sure that the dashboard does not continue to show the robot as AutoBalanced
         Dashboard.getInstance().balance.setAutoBalanced(false);
