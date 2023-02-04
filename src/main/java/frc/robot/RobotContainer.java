@@ -18,7 +18,9 @@ import frc.robot.commands.ArmUp;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.CloseIntakeCommand;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.GoToPointCommand;
 import frc.robot.commands.OpenIntakeCommand;
+import frc.robot.commands.PointToTagCommand;
 import frc.robot.commands.SwitchSpeed;
 import frc.robot.commands.WeightBackCommand;
 import frc.robot.commands.WeightCalibrationCommand;
@@ -30,6 +32,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CounterweightPIDSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeNewmaticSubsystem;
+import frc.robot.subsystems.LimelightSubsytem;
 import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
 
@@ -54,6 +57,7 @@ public class RobotContainer {
     DiffDriveSubsystem driveSubsystem = DiffDriveSubsystem.getInstance();
     PigeonSubsystem pigeonSubsystem = PigeonSubsystem.getInstance();
     ArmSubsystem armSubsystem= ArmSubsystem.getInstance();
+    LimelightSubsytem limelightSubsytem = LimelightSubsytem.getInstance();
     //CounterweightSubsystem counterweightSubsystem = CounterweightSubsystem.getInstance();
     CounterweightPIDSubsystem counterweightPIDSubsystem = CounterweightPIDSubsystem.getInstance();
     private final Command autoCommand = new ExampleCommand(exampleSubsystem);
@@ -84,9 +88,9 @@ public class RobotContainer {
 
     private void init() {
         if (driver == null) driver = new DriverController(new XboxController(0));
-        //Dashboard.getInstance().putData("Driver", driver);
+        Dashboard.getInstance().putSendable("Driver", driver);
         if (operator == null) operator = new OperatorController(new XboxController(1));
-        //Dashboard.getInstance().putData("Operator", operator);
+        Dashboard.getInstance().putSendable("Operator", operator);
     }
     
     
@@ -125,6 +129,9 @@ public class RobotContainer {
 
         driver.getX().onTrue(new OpenIntakeCommand(intakeNewmaticSubsystem));
         driver.getY().onTrue(new CloseIntakeCommand(intakeNewmaticSubsystem));
+
+        driver.getLB().whileTrue(new PointToTagCommand(limelightSubsytem, driveSubsystem));
+        driver.getRB().onTrue(new GoToPointCommand(limelightSubsytem));
 
 
     }

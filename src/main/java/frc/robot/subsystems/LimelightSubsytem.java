@@ -5,12 +5,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimelightSubsytem extends SubsystemBase {
 
+
+    private final static LimelightSubsytem INSTANCE = new LimelightSubsytem();
+
     NetworkTable limelight;
-    NetworkTableEntry tx, ty, ta, tv, tid;
+    NetworkTableEntry tx, ty, ta, tv, tid, botpose;
 
     public static enum CamMode {
         VISION, // Vision processor
         DRIVER  // Driver Camera (Increases exposure, disables vision processing)
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public static LimelightSubsytem getInstance() {
+        return INSTANCE;
     }
 
     public LimelightSubsytem() {
@@ -20,6 +28,8 @@ public class LimelightSubsytem extends SubsystemBase {
         ta = limelight.getEntry("ta");
         tv = limelight.getEntry("tv");
         tid = limelight.getEntry("tid");
+        botpose = limelight.getEntry("botpose");
+
     }
 
     /** 
@@ -38,7 +48,7 @@ public class LimelightSubsytem extends SubsystemBase {
      * Get the ID of the detected primary AprilTag
      */
     public int getPrimaryAprilTag() {
-        double rawTagId = tid.getDouble(0);
+        double rawTagId = tid.getDouble(-1);
         return (int) rawTagId;
     }
 
@@ -52,6 +62,13 @@ public class LimelightSubsytem extends SubsystemBase {
         } else if (newMode == CamMode.DRIVER) {
             numMode.setNumber(1);
         }
+    }
+    public double getTx(){
+        return tx.getDouble(0.0);
+    }
+
+    public double[] getBotpose(){
+        return botpose.getDoubleArray(new double[6]);
     }
 
     @Override

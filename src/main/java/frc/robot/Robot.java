@@ -93,7 +93,7 @@ public class Robot extends TimedRobot
     @Override
     public void teleopInit()
     {
-        Dashboard.getInstance().setCurrentTab(CurrentTab.TeleOp);
+        //Dashboard.getInstance().setCurrentTab(CurrentTab.TeleOp);
         
         // On teleop init, make sure that the dashboard does not continue to show the robot as AutoBalanced
         Dashboard.getInstance().balance.setAutoBalanced(false);
