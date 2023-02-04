@@ -171,8 +171,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
         System.out.println(odometry.getPoseMeters().getY());
         System.out.println(odometry.getPoseMeters().getRotation().getDegrees());
 
-        //arcadeDriveRaw(fwd, turn, false);
-        drive.arcadeDrive(fwd, turn);
+        arcadeDriveRaw(fwd, turn, false);
+        //drive.arcadeDrive(fwd, turn);
     }
 
     public void tankDrive(double left, double right) {
