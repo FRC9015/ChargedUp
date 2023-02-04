@@ -112,7 +112,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
         rightEncoder = right1.getEncoder();
         rightEncoder.setPositionConversionFactor(DriveConstants.DRIVE_ENCODER_POSITION_FACTOR);
         rightEncoder.setVelocityConversionFactor(DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR);
-
+        leftEncoder.setPosition(0);
+        rightEncoder.setPosition(0);
         leftPID = left1.getPIDController();
         leftPID.setOutputRange(-1, 1, DriveConstants.VELOCITY_PID_SLOT);
         rightPID = right1.getPIDController();
@@ -165,7 +166,12 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
 
     public void arcadeDrive(double fwd, double turn) {
-        arcadeDriveRaw(fwd, turn, true);
+        System.out.print(odometry.getPoseMeters().getX());
+        System.out.print(" , ");
+        System.out.println(odometry.getPoseMeters().getY());
+        System.out.println(odometry.getPoseMeters().getRotation().getDegrees());
+
+        arcadeDriveRaw(fwd, turn, false);
     }
 
     public void tankDrive(double left, double right) {
@@ -184,8 +190,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         double fwdSpeed = calcMetersPerSecond(fwd);
         double turnSpeed = calcRadiansPerSecond(turn);
-
-        DifferentialDriveWheelSpeeds wheelSpeeds = DriveConstants.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(fwdSpeed, 0, turnSpeed));
+        DifferentialDriveWheelSpeeds wheelSpeeds = DriveConstants.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(fwd, 0, turn));
 
         setSpeeds(wheelSpeeds);
     }
@@ -210,10 +215,12 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
 
     private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-        leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity,
-                DriveConstants.VELOCITY_PID_SLOT);
-        rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity,
-                DriveConstants.VELOCITY_PID_SLOT);
+        left1.set(speeds.leftMetersPerSecond);
+        right1.set(speeds.rightMetersPerSecond);
+        //leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity,
+        //        DriveConstants.VELOCITY_PID_SLOT);
+        //rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity,
+        //        DriveConstants.VELOCITY_PID_SLOT);
     }
 
     public void setBrakeMode(IdleMode newBrakeMode) {
