@@ -20,7 +20,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -67,6 +67,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private final PIDFConstants velocityPIDFConstants;
 
     private final Field2d field;
+    private final SimpleWidget leftSpeedDebug = Dashboard.getInstance().putNumber("Left Speed m/s:", 0), rightSpeedDebug = Dashboard.getInstance().putNumber("Right Speed m/s:", 0);
+
 
     /**
      * BiConsumer function that accepts a left and right double values for meters
@@ -209,6 +211,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
 
     private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+        leftSpeedDebug.getEntry().setDouble(speeds.leftMetersPerSecond);
+        rightSpeedDebug.getEntry().setDouble(speeds.rightMetersPerSecond);
         leftPID.setReference(speeds.leftMetersPerSecond, ControlType.kVelocity);
         rightPID.setReference(speeds.rightMetersPerSecond, ControlType.kVelocity);
     }
