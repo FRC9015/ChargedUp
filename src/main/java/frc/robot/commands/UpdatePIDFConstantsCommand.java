@@ -13,24 +13,22 @@ public class UpdatePIDFConstantsCommand extends InstantCommand {
 
   private final PIDFConstants constants;
   private final SparkMaxPIDController[] controllers;
-  private final int slotID;
 
   /**
    * 
    * @param constants Constants object to use for updating the controllers
    * @param controllers The controllers to update
    */
-  public UpdatePIDFConstantsCommand(PIDFConstants constants, int slotID, SparkMaxPIDController... controllers) {
+  public UpdatePIDFConstantsCommand(PIDFConstants constants, SparkMaxPIDController... controllers) {
     this.constants = constants;
     this.controllers = controllers;
-    this.slotID = slotID;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     for(SparkMaxPIDController controller : controllers) {
-      constants.updateSparkMax(controller, slotID);
+      constants.updateSparkMax(controller);
     }
   }
 }

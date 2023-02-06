@@ -64,7 +64,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private final SparkMaxPIDController leftPID, rightPID;
     private final RamseteController trajRamsete;
     private final DifferentialDriveOdometry odometry;
-    private final PIDFConstants velocityPIDFConstants, positionPIDFConstants;
+    private final PIDFConstants velocityPIDFConstants;
+
     private final Field2d field;
 
     /**
@@ -114,21 +115,19 @@ public class DiffDriveSubsystem extends SubsystemBase {
         rightEncoder.setVelocityConversionFactor(DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR);
 
         leftPID = left1.getPIDController();
-        leftPID.setOutputRange(-1, 1, DriveConstants.VELOCITY_PID_SLOT);
+        left1.burnFlash();
+        leftPID.setOutputRange(-1, 1);
         rightPID = right1.getPIDController();
-        rightPID.setOutputRange(-1, 1, DriveConstants.VELOCITY_PID_SLOT);
+        right1.burnFlash();
+        rightPID.setOutputRange(-1, 1);
 
         // Create a new PIDFConstants object for the drive, using the PIDF controller
         // from the left side as a source of truth
-        velocityPIDFConstants = new PIDFConstants(leftPID, DriveConstants.VELOCITY_PID_SLOT);
-        positionPIDFConstants = new PIDFConstants(leftPID, DriveConstants.POSITION_PID_SLOT);
+        velocityPIDFConstants = new PIDFConstants(6e-5, 0, 0, 0, 0.00015);
 
         addChild("Drive Velocity PIDF Constants", velocityPIDFConstants);
-        addChild("Drive Position PIDF Constants", positionPIDFConstants);
-        addChild("Update Velocity PIDF Constants", new UpdatePIDFConstantsCommand(velocityPIDFConstants,
-                DriveConstants.VELOCITY_PID_SLOT, leftPID, rightPID));
-        addChild("Update Position PIDF Constants", new UpdatePIDFConstantsCommand(positionPIDFConstants,
-                DriveConstants.POSITION_PID_SLOT, leftPID, rightPID));
+        addChild("Update Velocity PIDF Constants",
+                new UpdatePIDFConstantsCommand(velocityPIDFConstants, leftPID, rightPID));
 
         odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(),
                 Units.inchesToMeters(leftEncoder.getPosition()), Units.inchesToMeters(rightEncoder.getPosition()));
@@ -147,8 +146,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
         trajRamsete = new RamseteController(DriveConstants.RAMSETE_B, DriveConstants.RAMSETE_ZETA);
 
         ramseteOutputBiConsumer = (left, right) -> {
-            leftPID.setReference(left, CANSparkMax.ControlType.kVelocity, DriveConstants.VELOCITY_PID_SLOT);
-            rightPID.setReference(right, CANSparkMax.ControlType.kVelocity, DriveConstants.VELOCITY_PID_SLOT);
+            setSpeeds(new DifferentialDriveWheelSpeeds(left, right));
         };
     }
 
@@ -185,7 +183,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
         double fwdSpeed = calcMetersPerSecond(fwd);
         double turnSpeed = calcRadiansPerSecond(turn);
 
-        DifferentialDriveWheelSpeeds wheelSpeeds = DriveConstants.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(fwdSpeed, 0, turnSpeed));
+        DifferentialDriveWheelSpeeds wheelSpeeds = DriveConstants.KINEMATICS
+                .toWheelSpeeds(new ChassisSpeeds(fwdSpeed, 0, turnSpeed));
 
         setSpeeds(wheelSpeeds);
     }
@@ -210,10 +209,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
 
     private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-        leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity,
-                DriveConstants.VELOCITY_PID_SLOT);
-        rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity,
-                DriveConstants.VELOCITY_PID_SLOT);
+        leftPID.setReference(speeds.leftMetersPerSecond, ControlType.kVelocity);
+        rightPID.setReference(speeds.rightMetersPerSecond, ControlType.kVelocity);
     }
 
     public void setBrakeMode(IdleMode newBrakeMode) {
@@ -224,8 +221,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
 
     public void stop() {
-        leftPID.setReference(0, CANSparkMax.ControlType.kVelocity, DriveConstants.VELOCITY_PID_SLOT);
-        rightPID.setReference(0, CANSparkMax.ControlType.kVelocity, DriveConstants.VELOCITY_PID_SLOT);
+        setSpeeds(new DifferentialDriveWheelSpeeds(0, 0));
     }
 
     public void brakeStop() {
