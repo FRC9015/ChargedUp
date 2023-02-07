@@ -123,9 +123,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
         right1.burnFlash();
         rightPID.setOutputRange(-1, 1);
 
-        // Create a new PIDFConstants object for the drive, using the PIDF controller
-        // from the left side as a source of truth
-        velocityPIDFConstants = new PIDFConstants(6e-5, 0, 0, 0, 0.00015);
+        // Create a new PIDFConstants object for the drive
+        velocityPIDFConstants = new PIDFConstants(0, 0, 0, 0, 0);
 
         addChild("Drive Velocity PIDF Constants", velocityPIDFConstants);
         addChild("Update Velocity PIDF Constants",
