@@ -1,69 +1,46 @@
 {
-  "HALProvider": {
-    "Other Devices": {
-      "Pigeon 2[6]": {
-        "header": {
-          "open": true
-        }
-      },
-      "window": {
-        "visible": false
-      }
-    }
-  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/LiveWindow/DiffDriveSubsystem": "Subsystem",
-      "/LiveWindow/DiffDriveSubsystem/DiffDrive": "DifferentialDrive",
-      "/LiveWindow/DiffDriveSubsystem/Field": "Field2d",
-      "/LiveWindow/PigeonSubsystem/pigeon": "Gyro",
-      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
-      "/LiveWindow/Ungrouped/Scheduler": "Scheduler"
+      "/Shuffleboard/Autonomous/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/PPRamseteCommand_field": "Field2d",
+      "/SmartDashboard/field": "Field2d"
+    },
+    "windows": {
+      "/SmartDashboard/field": {
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables": {
-    "persistent": {
-      "Shuffleboard": {
-        "TeleOp": {
-          "Drive": {
-            "open": true
-          },
-          "open": true
-        },
-        "open": true
-      }
+    "Retained Values": {
+      "open": false
     },
     "transitory": {
-      "FMSInfo": {
-        "open": true
-      },
-      "LiveWindow": {
-        "Ungrouped": {
-          "open": true
-        },
-        "open": true
-      },
       "Shuffleboard": {
         "Autonomous": {
           "Balance": {
-            "open": true
+            "open": false
           }
         },
         "TeleOp": {
-          "Balance": {
-            "open": true
-          },
-          "Drive": {
-            "open": true
-          },
           "RobotState": {
-            "open": true
-          },
+            "open": false
+          }
+        },
+        "open": true
+      },
+      "SmartDashboard": {
+        "field": {
           "open": true
         },
         "open": true
       }
     }
+  },
+  "NetworkTables Info": {
+    "visible": true
   }
 }

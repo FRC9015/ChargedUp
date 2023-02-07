@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 
@@ -40,6 +41,16 @@ public class RobotState implements Sendable {
 
     private synchronized void setSlowed(boolean isSlowed) {
         runningSlow = isSlowed;
+    }
+
+    private static Pose2d savedpoint = new Pose2d();
+
+    public static Pose2d getSavedPoint(){
+        return savedpoint;
+    }
+
+    public static void setSavedPoint(Pose2d newPoint){
+        savedpoint = newPoint;
     }
 
     @Override

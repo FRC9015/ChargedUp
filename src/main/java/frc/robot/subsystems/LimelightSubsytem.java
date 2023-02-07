@@ -68,7 +68,12 @@ public class LimelightSubsytem extends SubsystemBase {
     }
 
     public double[] getBotpose(){
-        return botpose.getDoubleArray(new double[6]);
+        if (hasTargets()){
+        return botpose.getDoubleArray(new double[6]);}
+        else{
+            
+            return new double[6];
+        }
     }
 
     @Override

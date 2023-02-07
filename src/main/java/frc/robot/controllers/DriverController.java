@@ -50,7 +50,7 @@ public class DriverController implements Sendable {
 
         start = new JoystickButton(controller, XboxController.Button.kStart.value);
         back = new JoystickButton(controller, XboxController.Button.kBack.value);
-
+        
         lTrig = new JoystickButton(controller, XboxController.Axis.kLeftTrigger.value);
         rTrig = new JoystickButton(controller, XboxController.Axis.kRightTrigger.value);
 

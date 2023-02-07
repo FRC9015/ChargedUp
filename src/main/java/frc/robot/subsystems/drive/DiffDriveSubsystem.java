@@ -1,6 +1,7 @@
 package frc.robot.subsystems.drive;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -14,16 +15,30 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotGearing;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotMotor;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotWheelSize;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -66,6 +81,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private final DifferentialDriveOdometry odometry;
     private final PIDFConstants velocityPIDFConstants, positionPIDFConstants;
     private final Field2d field;
+    private static final DifferentialDrivetrainSim myDrivetrainSim = DifferentialDrivetrainSim.createKitbotSim(KitbotMotor.kDoubleNEOPerSide, KitbotGearing.k10p71, KitbotWheelSize.kSixInch, null);
 
     /**
      * BiConsumer function that accepts a left and right double values for meters
@@ -134,8 +150,9 @@ public class DiffDriveSubsystem extends SubsystemBase {
         odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(),
                 Units.inchesToMeters(leftEncoder.getPosition()), Units.inchesToMeters(rightEncoder.getPosition()));
         field = new Field2d();
-        addChild("Field", field);
-
+        //addChild("Field", field);
+        //Dashboard.getInstance().putSendable("field", field);
+        SmartDashboard.putData("field",field);
         /**
          * Each input to be rate limited must have it's own filter. In any given drive,
          * we have two possible inputs, and thus two filters.
@@ -166,10 +183,13 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
 
     public void arcadeDrive(double fwd, double turn) {
-        //System.out.print(odometry.getPoseMeters().getX());
-        //System.out.print(" , ");
+        /* 
+        System.out.print(odometry.getPoseMeters().getX());
+        System.out.print(" , ");
         System.out.println(odometry.getPoseMeters().getY());
+        System.out.print("rot: ");
         System.out.println(odometry.getPoseMeters().getRotation().getDegrees());
+        */
 
         arcadeDriveRaw(fwd, turn, false);
         //drive.arcadeDrive(fwd, turn);
@@ -192,8 +212,10 @@ public class DiffDriveSubsystem extends SubsystemBase {
         double fwdSpeed = calcMetersPerSecond(fwd);
         double turnSpeed = calcRadiansPerSecond(turn);
         DifferentialDriveWheelSpeeds wheelSpeeds = DriveConstants.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(fwd, 0, turn));
+        myDrivetrainSim.setInputs(wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond);
+        myDrivetrainSim.update(0.02);
 
-        setSpeeds(wheelSpeeds);
+        //setSpeeds(wheelSpeeds);
     }
 
     /**
@@ -214,6 +236,9 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         setSpeeds(wheelSpeeds);
     }
+
+
+    
 
     private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
         left1.set(speeds.leftMetersPerSecond);
@@ -242,7 +267,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
         stop();
         setBrakeMode(prevBrakeMode);
     }
-
+    
     public void resetOdometry(Pose2d initPose) {
         resetEncoders();
         odometry.resetPosition(pigeon.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition(), initPose);
@@ -256,6 +281,36 @@ public class DiffDriveSubsystem extends SubsystemBase {
         return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(), rightEncoder.getVelocity());
     }
 
+
+
+
+    public void runRamseteCommand(Pose2d start, Pose2d end,DiffDriveSubsystem m_diffDriveSubsystem) {
+        
+    
+        // Create config for trajectory
+        TrajectoryConfig config =
+            new TrajectoryConfig(0.5, 0.5);
+        Translation2d idk = new Translation2d();
+        List<Translation2d> waypoints = new ArrayList<>();
+        waypoints.add(idk);
+        // An example trajectory to follow.  All units in meters.
+        Trajectory trajectorytogo =
+            TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(),
+                new Pose2d(3, 0, new Rotation2d(0)),
+                config);
+    
+        RamseteCommand ramseteCommand =
+            new RamseteCommand(trajectorytogo,odometry::getPoseMeters,new RamseteController(),DriveConstants.KINEMATICS,ramseteOutputBiConsumer,m_diffDriveSubsystem);
+    
+        // Reset odometry to the starting pose of the trajectory.
+        System.out.println("ramseteCommand");
+    
+        // Run path following command, then stop at the end.
+        ramseteCommand.schedule();
+      }
+    
     public Command getTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
         return new SequentialCommandGroup(new InstantCommand(() -> {
             if (isFirstPath) {
@@ -274,7 +329,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
                         ramseteOutputBiConsumer,
                         this));
     }
-
+    
     /**
      * Takes in a joystick input and converts it to meters per second, taking into
      * account slow mode
@@ -292,6 +347,9 @@ public class DiffDriveSubsystem extends SubsystemBase {
         // If the robot should be running in slow mode, reduce speed by the multiplier
         // (set in dashboard)
         return isSlowed ? inputMetersPerSecond * speedMultiplier : inputMetersPerSecond;
+    }
+
+    public void simulationPeriodic(){
     }
 
     private double calcRadiansPerSecond(double input) {
