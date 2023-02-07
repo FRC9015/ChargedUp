@@ -81,7 +81,6 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private final DifferentialDriveOdometry odometry;
     private final PIDFConstants velocityPIDFConstants, positionPIDFConstants;
     private final Field2d field;
-    private static final DifferentialDrivetrainSim myDrivetrainSim = DifferentialDrivetrainSim.createKitbotSim(KitbotMotor.kDoubleNEOPerSide, KitbotGearing.k10p71, KitbotWheelSize.kSixInch, null);
 
     /**
      * BiConsumer function that accepts a left and right double values for meters
@@ -212,10 +211,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
         double fwdSpeed = calcMetersPerSecond(fwd);
         double turnSpeed = calcRadiansPerSecond(turn);
         DifferentialDriveWheelSpeeds wheelSpeeds = DriveConstants.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(fwd, 0, turn));
-        myDrivetrainSim.setInputs(wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond);
-        myDrivetrainSim.update(0.02);
 
-        //setSpeeds(wheelSpeeds);
+        setSpeeds(wheelSpeeds);
     }
 
     /**
