@@ -66,21 +66,6 @@ public class PIDFConstants implements Sendable {
      * Update a SparkMaxPIDController with the values in this object. Useful for tuning from the dashboard. <p>
      * <b>IMPORTANT:</b> These settings will not persist unless the {@link com.revrobotics.CANSparkMax#burnFlash() CANSparkMax.burnFlash()} method is called.
      * @param toUpdate {@link SparkMaxPIDController} to update  
-     * @param slotID PID Slot to update
-     */
-    public synchronized void updateSparkMax(SparkMaxPIDController toUpdate, int slotID) {
-        // Method is synchronized to prevent simultaneous updates
-        if (toUpdate.getP() != kP) toUpdate.setP(kP, slotID);
-        if (toUpdate.getI() != kI) toUpdate.setI(kI, slotID);
-        if (toUpdate.getD() != kD) toUpdate.setD(kD, slotID);
-        if (toUpdate.getIZone() != kIZone) toUpdate.setIZone(kIZone, slotID);
-        if (toUpdate.getFF() != kFF) toUpdate.setFF(kFF, slotID);
-    }
-
-    /**
-     * Update a SparkMaxPIDController with the values in this object. Useful for tuning from the dashboard. <p>
-     * <b>IMPORTANT:</b> These settings will not persist unless the {@link com.revrobotics.CANSparkMax#burnFlash() CANSparkMax.burnFlash()} method is called.
-     * @param toUpdate {@link SparkMaxPIDController} to update  
      */
     public synchronized void updateSparkMax(SparkMaxPIDController toUpdate) {
         // Method is synchronized to prevent simultaneous updates
