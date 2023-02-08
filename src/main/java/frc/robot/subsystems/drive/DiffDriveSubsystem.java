@@ -79,7 +79,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private final SparkMaxPIDController leftPID, rightPID;
     private final RamseteController trajRamsete;
     private final DifferentialDriveOdometry odometry;
-    private final PIDFConstants velocityPIDFConstants, positionPIDFConstants;
+    //private final PIDFConstants velocityPIDFConstants, positionPIDFConstants;
     private final Field2d field;
 
     /**
@@ -95,6 +95,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private ArrayList<CANSparkMax> allMotors = new ArrayList<CANSparkMax>();
 
     private PigeonSubsystem pigeon = PigeonSubsystem.getInstance();
+
+    public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
 
     /**
      * Creates a new instance of this DiffDriveSubsystem. This constructor
@@ -116,6 +118,9 @@ public class DiffDriveSubsystem extends SubsystemBase {
         right2.follow(right1);
         allMotors.add(right2);
 
+        left1.restoreFactoryDefaults();
+        right1.restoreFactoryDefaults();
+
         // Properly invert motors
         left1.setInverted(DriveConstants.LEFT_INVERTED);
         right1.setInverted(DriveConstants.RIGHT_INVERTED);
@@ -130,21 +135,45 @@ public class DiffDriveSubsystem extends SubsystemBase {
         leftEncoder.setPosition(0);
         rightEncoder.setPosition(0);
         leftPID = left1.getPIDController();
-        leftPID.setOutputRange(-1, 1, DriveConstants.VELOCITY_PID_SLOT);
+        //leftPID.setOutputRange(-1, 1, DriveConstants.VELOCITY_PID_SLOT);
         rightPID = right1.getPIDController();
-        rightPID.setOutputRange(-1, 1, DriveConstants.VELOCITY_PID_SLOT);
+        //rightPID.setOutputRange(-1, 1, DriveConstants.VELOCITY_PID_SLOT);
 
         // Create a new PIDFConstants object for the drive, using the PIDF controller
         // from the left side as a source of truth
-        velocityPIDFConstants = new PIDFConstants(leftPID, DriveConstants.VELOCITY_PID_SLOT);
-        positionPIDFConstants = new PIDFConstants(leftPID, DriveConstants.POSITION_PID_SLOT);
+        //velocityPIDFConstants = new PIDFConstants(leftPID, DriveConstants.VELOCITY_PID_SLOT);
+        //positionPIDFConstants = new PIDFConstants(leftPID, DriveConstants.POSITION_PID_SLOT);
 
-        addChild("Drive Velocity PIDF Constants", velocityPIDFConstants);
-        addChild("Drive Position PIDF Constants", positionPIDFConstants);
-        addChild("Update Velocity PIDF Constants", new UpdatePIDFConstantsCommand(velocityPIDFConstants,
-                DriveConstants.VELOCITY_PID_SLOT, leftPID, rightPID));
-        addChild("Update Position PIDF Constants", new UpdatePIDFConstantsCommand(positionPIDFConstants,
-                DriveConstants.POSITION_PID_SLOT, leftPID, rightPID));
+        //addChild("Drive Velocity PIDF Constants", velocityPIDFConstants);
+        //addChild("Drive Position PIDF Constants", positionPIDFConstants);
+        //addChild("Update Velocity PIDF Constants", new UpdatePIDFConstantsCommand(velocityPIDFConstants,
+         //       DriveConstants.VELOCITY_PID_SLOT, leftPID, rightPID));
+        //addChild("Update Position PIDF Constants", new UpdatePIDFConstantsCommand(positionPIDFConstants,
+        //        DriveConstants.POSITION_PID_SLOT, leftPID, rightPID));
+        // PID coefficients
+        kP = 0.2; 
+        kI = 0;
+        kD = 0; 
+        kIz = 0; 
+        kFF = 0.000015; 
+        kMaxOutput = 1; 
+        kMinOutput = -1;
+        maxRPM = 5700;
+
+        // set PID coefficients
+        leftPID.setP(kP);
+        leftPID.setI(kI);
+        leftPID.setD(kD);
+        leftPID.setIZone(kIz);
+        leftPID.setFF(kFF);
+        leftPID.setOutputRange(kMinOutput, kMaxOutput);
+
+        rightPID.setP(kP);
+        rightPID.setI(kI);
+        rightPID.setD(kD);
+        rightPID.setIZone(kIz);
+        rightPID.setFF(kFF);
+        rightPID.setOutputRange(kMinOutput, kMaxOutput);
 
         odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(),
                 Units.inchesToMeters(leftEncoder.getPosition()), Units.inchesToMeters(rightEncoder.getPosition()));
@@ -164,8 +193,10 @@ public class DiffDriveSubsystem extends SubsystemBase {
         trajRamsete = new RamseteController(DriveConstants.RAMSETE_B, DriveConstants.RAMSETE_ZETA);
 
         ramseteOutputBiConsumer = (left, right) -> {
-            leftPID.setReference(left, CANSparkMax.ControlType.kVelocity, DriveConstants.VELOCITY_PID_SLOT);
-            rightPID.setReference(right, CANSparkMax.ControlType.kVelocity, DriveConstants.VELOCITY_PID_SLOT);
+            //left1.set(left);
+            //right1.set(right);
+            leftPID.setReference(left, CANSparkMax.ControlType.kVelocity);
+            rightPID.setReference(right, CANSparkMax.ControlType.kVelocity);
         };
     }
 
@@ -238,12 +269,10 @@ public class DiffDriveSubsystem extends SubsystemBase {
     
 
     private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-        left1.set(speeds.leftMetersPerSecond);
-        right1.set(speeds.rightMetersPerSecond);
-        //leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity,
-        //        DriveConstants.VELOCITY_PID_SLOT);
-        //rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity,
-        //        DriveConstants.VELOCITY_PID_SLOT);
+        //left1.set(speeds.leftMetersPerSecond);
+        //right1.set(speeds.rightMetersPerSecond);
+        leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity);
+        rightPID.setReference(speeds.rightMetersPerSecond,CANSparkMax.ControlType.kVelocity);
     }
 
     public void setBrakeMode(IdleMode newBrakeMode) {
@@ -286,25 +315,23 @@ public class DiffDriveSubsystem extends SubsystemBase {
     
         // Create config for trajectory
         TrajectoryConfig config =
-            new TrajectoryConfig(0.5, 0.5);
+            new TrajectoryConfig(0.2, 0.5);
         Translation2d idk = new Translation2d();
         List<Translation2d> waypoints = new ArrayList<>();
         waypoints.add(idk);
         // An example trajectory to follow.  All units in meters.
         Trajectory trajectorytogo =
             TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
+                start,
                 List.of(),
-                new Pose2d(3, 0, new Rotation2d(0)),
+                end,
                 config);
     
         RamseteCommand ramseteCommand =
             new RamseteCommand(trajectorytogo,odometry::getPoseMeters,new RamseteController(),DriveConstants.KINEMATICS,ramseteOutputBiConsumer,m_diffDriveSubsystem);
     
-        // Reset odometry to the starting pose of the trajectory.
         System.out.println("ramseteCommand");
     
-        // Run path following command, then stop at the end.
         ramseteCommand.schedule();
       }
     
