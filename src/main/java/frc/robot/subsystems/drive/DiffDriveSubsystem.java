@@ -9,7 +9,6 @@ import com.pathplanner.lib.commands.PPRamseteCommand;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -19,7 +18,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -66,9 +64,9 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private final DifferentialDriveOdometry odometry;
     private final PIDFConstants velocityPIDFConstants;
 
-    private final Field2d field;
-    private final SimpleWidget leftSpeedDebug = Dashboard.getInstance().putNumber("Left Speed m/s:", 0), rightSpeedDebug = Dashboard.getInstance().putNumber("Right Speed m/s:", 0);
+    private final Dashboard dash = Dashboard.getInstance();
 
+    private final Field2d field;
 
     /**
      * BiConsumer function that accepts a left and right double values for meters
@@ -91,18 +89,22 @@ public class DiffDriveSubsystem extends SubsystemBase {
      */
     private DiffDriveSubsystem() {
 
+        CANSparkMax.enableExternalUSBControl(true);
+
         MotorType motorType = MotorType.kBrushless;
         left1 = new CANSparkMax(DriveConstants.LEFT_FRONT_MOTOR_ID, motorType);
         allMotors.add(left1);
         left2 = new CANSparkMax(DriveConstants.LEFT_BACK_MOTOR_ID, motorType);
-        left2.follow(left1);
         allMotors.add(left2);
 
         right1 = new CANSparkMax(DriveConstants.RIGHT_FRONT_MOTOR_ID, motorType);
         allMotors.add(right1);
         right2 = new CANSparkMax(DriveConstants.RIGHT_BACK_MOTOR_ID, motorType);
-        right2.follow(right1);
         allMotors.add(right2);
+
+        left2.follow(left1);
+
+        right2.follow(right1);
 
         // Properly invert motors
         left1.setInverted(DriveConstants.LEFT_INVERTED);
@@ -117,39 +119,28 @@ public class DiffDriveSubsystem extends SubsystemBase {
         rightEncoder.setVelocityConversionFactor(DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR);
 
         leftPID = left1.getPIDController();
-        left1.burnFlash();
-        leftPID.setOutputRange(-1, 1);
+
         rightPID = right1.getPIDController();
-        right1.burnFlash();
-        rightPID.setOutputRange(-1, 1);
 
         // Create a new PIDFConstants object for the drive
-        velocityPIDFConstants = new PIDFConstants(0, 0, 0, 0, 0);
+        velocityPIDFConstants = new PIDFConstants(0.1, 0, 0, 0, 0.000015);
 
-        // velocityPIDFConstants.updateSparkMax(leftPID);
-        leftPID.setP(0);
-        leftPID.setI(0);
-        leftPID.setD(0);
-        leftPID.setIZone(0.000);
-        leftPID.setFF(0.5);
-        leftPID.setOutputRange(-1, 1);
-        left1.burnFlash();
-        left2.burnFlash();
-        // velocityPIDFConstants.updateSparkMax(rightPID);
-        leftPID.setP(0);
-        leftPID.setI(0);
-        leftPID.setD(0);
-        leftPID.setIZone(0.001);
-        leftPID.setFF(0.5);
-        rightPID.setOutputRange(-1, 1);
-        right1.burnFlash();
-        right2.burnFlash();
+        double kMaxOutput = 1;
+        double kMinOutput = -1;
+        
+        velocityPIDFConstants.updateSparkMax(leftPID);
+        leftPID.setOutputRange(kMinOutput, kMaxOutput);
+
+
+        velocityPIDFConstants.updateSparkMax(rightPID);
+        rightPID.setOutputRange(kMinOutput, kMaxOutput);
 
         Dashboard.getInstance().putSendable("Drive Velocity PIDF/Constants", velocityPIDFConstants);
-        Dashboard.getInstance().putSendable("Drive Velocity PIDF/Update", new UpdatePIDFConstantsCommand(velocityPIDFConstants, leftPID, rightPID));
+        Dashboard.getInstance().putSendable("Drive Velocity PIDF/Update",
+                new UpdatePIDFConstantsCommand(velocityPIDFConstants, leftPID, rightPID));
 
         odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(),
-                leftEncoder.getPosition(),rightEncoder.getPosition());
+                leftEncoder.getPosition(), rightEncoder.getPosition());
         field = new Field2d();
         addChild("Field", field);
 
@@ -171,14 +162,11 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+
         odometry.update(pigeon.getRotation2d(), leftEncoder.getPosition(),
                 rightEncoder.getPosition());
         field.setRobotPose(odometry.getPoseMeters());
-    }
 
-    @Override
-    public void setDefaultCommand(Command defaultCommand) {
-        super.setDefaultCommand(defaultCommand);
     }
 
     public void arcadeDrive(double fwd, double turn) {
@@ -228,13 +216,11 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
 
     private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-        leftSpeedDebug.getEntry().setDouble(speeds.leftMetersPerSecond);
-        rightSpeedDebug.getEntry().setDouble(speeds.rightMetersPerSecond);
-        leftPID.setReference(speeds.leftMetersPerSecond, ControlType.kVelocity);
-        rightPID.setReference(speeds.rightMetersPerSecond, ControlType.kVelocity);
+        leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity);
+        rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     }
 
-    public void setBrakeMode(IdleMode newBrakeMode) {
+    public synchronized void setBrakeMode(IdleMode newBrakeMode) {
         this.brakeMode = newBrakeMode;
         for (CANSparkMax controller : allMotors) {
             controller.setIdleMode(newBrakeMode);
