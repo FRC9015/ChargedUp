@@ -18,7 +18,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -64,7 +63,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private final DifferentialDriveOdometry odometry;
     private final PIDFConstants velocityPIDFConstants;
 
-    private final Dashboard dash = Dashboard.getInstance();
+    // private final Dashboard dash = Dashboard.getInstance();
 
     private final Field2d field;
 
@@ -162,7 +161,6 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-
         odometry.update(pigeon.getRotation2d(), leftEncoder.getPosition(),
                 rightEncoder.getPosition());
         field.setRobotPose(odometry.getPoseMeters());
