@@ -126,12 +126,30 @@ public class DiffDriveSubsystem extends SubsystemBase {
         // Create a new PIDFConstants object for the drive
         velocityPIDFConstants = new PIDFConstants(0, 0, 0, 0, 0);
 
-        addChild("Drive Velocity PIDF Constants", velocityPIDFConstants);
-        addChild("Update Velocity PIDF Constants",
-                new UpdatePIDFConstantsCommand(velocityPIDFConstants, leftPID, rightPID));
+        // velocityPIDFConstants.updateSparkMax(leftPID);
+        leftPID.setP(0);
+        leftPID.setI(0);
+        leftPID.setD(0);
+        leftPID.setIZone(0.000);
+        leftPID.setFF(0.5);
+        leftPID.setOutputRange(-1, 1);
+        left1.burnFlash();
+        left2.burnFlash();
+        // velocityPIDFConstants.updateSparkMax(rightPID);
+        leftPID.setP(0);
+        leftPID.setI(0);
+        leftPID.setD(0);
+        leftPID.setIZone(0.001);
+        leftPID.setFF(0.5);
+        rightPID.setOutputRange(-1, 1);
+        right1.burnFlash();
+        right2.burnFlash();
+
+        Dashboard.getInstance().putSendable("Drive Velocity PIDF/Constants", velocityPIDFConstants);
+        Dashboard.getInstance().putSendable("Drive Velocity PIDF/Update", new UpdatePIDFConstantsCommand(velocityPIDFConstants, leftPID, rightPID));
 
         odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(),
-                Units.inchesToMeters(leftEncoder.getPosition()), Units.inchesToMeters(rightEncoder.getPosition()));
+                leftEncoder.getPosition(),rightEncoder.getPosition());
         field = new Field2d();
         addChild("Field", field);
 
