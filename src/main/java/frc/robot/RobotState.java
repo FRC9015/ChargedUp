@@ -17,6 +17,13 @@ public class RobotState implements Sendable {
         return runningSlow;
     }
 
+    /**
+     * As compared to {@link #getSlowed()}, this method will not return true if the robot is in autonomous mode.
+     */
+    public static boolean getSlowedSmart() {
+        return runningSlow && !(edu.wpi.first.wpilibj.RobotState.isAutonomous());
+    }
+
     public static synchronized void setSlow() {
         runningSlow = true;
     }

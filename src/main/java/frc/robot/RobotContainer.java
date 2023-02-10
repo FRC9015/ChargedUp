@@ -5,7 +5,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
@@ -13,7 +12,6 @@ import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.SwitchSpeed;
-import frc.robot.commands.WeightCalibrationCommand;
 import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
 //import frc.robot.subsystems.CounterweightSubsystem;
@@ -48,6 +46,7 @@ public class RobotContainer {
     // private final Command driveCommand = new ArcadeDrive();
 
     public final RobotState robotState = RobotState.getInstance();
+    private AutoPaths autoPaths = AutoPaths.getInstance();
 
     private DriverController driver;
     private OperatorController operator;
@@ -66,7 +65,12 @@ public class RobotContainer {
     public void initRobot() {
         pigeonSubsystem.resetAngles();
         Dashboard.getInstance().putSendable("RobotState", robotState);
+
         init();
+
+        autoPaths.init();
+
+        Dashboard.getInstance().addAutoPathChooser(autoPaths.getChooser());
     }
 
     private void init() {
@@ -98,10 +102,6 @@ public class RobotContainer {
         // When the driver's left bumper is pressed, switch between low and high speed.
         driver.getSwitchSpeed().onTrue(new SwitchSpeed());
 
-
-        driver.getHomeWeightButton().onTrue(new WeightCalibrationCommand(counterweightPIDSubsystem));
-
-
     }
 
     public DriverController getDriver() {
@@ -117,8 +117,8 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand()
     {
-        // An ExampleCommand will run in autonomous
-        return autoCommand;
+        // Read the selected trajectory from the Dashboard and transform that into a Ramsete command
+        return driveSubsystem.getTrajectoryCommand(autoPaths.getSelectedTrajectory(), true);
     }
 
     /**

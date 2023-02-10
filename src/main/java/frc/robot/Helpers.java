@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.revrobotics.REVLibError;
+
 public class Helpers {
 
     /**
@@ -23,5 +25,41 @@ public class Helpers {
         }
 
         return result;
+    }
+
+    public static void logBox(String... msgs) {
+        int maxLength = Integer.MIN_VALUE;
+
+        for (String msg : msgs) {
+            if (maxLength < msg.length()) {
+                maxLength = msg.length();
+            }
+        } 
+
+        maxLength += 4;
+
+        String capString = "";
+
+        for (int i = 0; i <= maxLength; i++) {
+            capString += "*";
+        }
+        
+        System.out.println();
+        System.out.println(capString);
+
+        for (String msg : msgs) {
+            System.out.println("* " + msg);
+        }
+
+        System.out.println(capString);
+        System.out.println();
+    }
+
+    public static void handleRevError(REVLibError status, String yay) {
+        if(status == REVLibError.kOk) {
+            Helpers.logBox("YAY: "+yay);
+        } else {
+            throw new Error("FOLLOW ERROR: " + status.toString());
+        }
     }
 }
