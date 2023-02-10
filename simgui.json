@@ -5,13 +5,6 @@
       "/Shuffleboard/Autonomous/SendableChooser[0]": "String Chooser",
       "/SmartDashboard/PPRamseteCommand_field": "Field2d",
       "/SmartDashboard/field": "Field2d"
-    },
-    "windows": {
-      "/SmartDashboard/field": {
-        "window": {
-          "visible": true
-        }
-      }
     }
   },
   "NetworkTables": {
