@@ -10,6 +10,7 @@ import java.util.Map;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.*;
@@ -77,7 +78,16 @@ public class Dashboard {
         autoPath = new AutoPathData(autoPathLayout);
     }
 
+    /**
+     * Change the currently selected tab on the dashboard <p>
+     * IMPORTANT: This method only switches tabs if we are in a match. This is detected by checking if the FMS is attached.
+     * @param newTab The tab to switch to, represented by the {@link CurrentTab} enum
+     */
     public void setCurrentTab(CurrentTab newTab) {
+        // If the FMS is NOT attached, then we should not switch tabs
+        if (DriverStation.isFMSAttached() == false) return;
+
+
         if (newTab == CurrentTab.TeleOp) {
             currentTab = teleopTab;
             Shuffleboard.selectTab(DashboardConstants.TELEOP_TAB_NAME);

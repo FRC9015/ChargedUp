@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.revrobotics.REVLibError;
+
 public class Helpers {
 
     /**
@@ -51,5 +53,13 @@ public class Helpers {
 
         System.out.println(capString);
         System.out.println();
+    }
+
+    public static void handleRevError(REVLibError status, String yay) {
+        if(status == REVLibError.kOk) {
+            Helpers.logBox("YAY: "+yay);
+        } else {
+            throw new Error("FOLLOW ERROR: " + status.toString());
+        }
     }
 }

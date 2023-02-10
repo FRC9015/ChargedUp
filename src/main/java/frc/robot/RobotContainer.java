@@ -24,7 +24,6 @@ import frc.robot.commands.PointToTagCommand;
 import frc.robot.commands.RavisRamseteCommand;
 import frc.robot.commands.SwitchSpeed;
 import frc.robot.commands.WeightBackCommand;
-import frc.robot.commands.WeightCalibrationCommand;
 import frc.robot.commands.WeightForwardCommand;
 import frc.robot.commands.waypointCommand;
 import frc.robot.controllers.DriverController;
@@ -85,7 +84,8 @@ public class RobotContainer {
 
     public void initRobot() {
         pigeonSubsystem.resetAngles();
-        //Dashboard.getInstance().putData("RobotState",robotState);
+        Dashboard.getInstance().putSendable("RobotState", robotState);
+
         init();
 
         autoPaths.init();

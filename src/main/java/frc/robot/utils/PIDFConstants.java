@@ -44,12 +44,12 @@ public class PIDFConstants implements Sendable {
      * @param basePID {@link SparkMaxPIDController} that we should inherit initial values from
      * @param slotID PID Slot to read
      */
-    public PIDFConstants(SparkMaxPIDController basePID, int slotID) {
-        kP = basePID.getP(slotID);
-        kI = basePID.getI(slotID);
-        kD = basePID.getD(slotID);
-        kIZone = basePID.getIZone(slotID);
-        kFF = basePID.getFF(slotID);
+    public PIDFConstants(SparkMaxPIDController basePID) {
+        kP = basePID.getP();
+        kI = basePID.getI();
+        kD = basePID.getD();
+        kIZone = basePID.getIZone();
+        kFF = basePID.getFF();
     }
 
     @Override
@@ -66,15 +66,14 @@ public class PIDFConstants implements Sendable {
      * Update a SparkMaxPIDController with the values in this object. Useful for tuning from the dashboard. <p>
      * <b>IMPORTANT:</b> These settings will not persist unless the {@link com.revrobotics.CANSparkMax#burnFlash() CANSparkMax.burnFlash()} method is called.
      * @param toUpdate {@link SparkMaxPIDController} to update  
-     * @param slotID PID Slot to update
      */
-    public synchronized void updateSparkMax(SparkMaxPIDController toUpdate, int slotID) {
+    public synchronized void updateSparkMax(SparkMaxPIDController toUpdate) {
         // Method is synchronized to prevent simultaneous updates
-        if (toUpdate.getP() != kP) toUpdate.setP(kP, slotID);
-        if (toUpdate.getI() != kI) toUpdate.setI(kI, slotID);
-        if (toUpdate.getD() != kD) toUpdate.setD(kD, slotID);
-        if (toUpdate.getIZone() != kIZone) toUpdate.setIZone(kIZone, slotID);
-        if (toUpdate.getFF() != kFF) toUpdate.setFF(kFF, slotID);
+        if (toUpdate.getP() != kP) toUpdate.setP(kP);
+        if (toUpdate.getI() != kI) toUpdate.setI(kI);
+        if (toUpdate.getD() != kD) toUpdate.setD(kD);
+        if (toUpdate.getIZone() != kIZone) toUpdate.setIZone(kIZone);
+        if (toUpdate.getFF() != kFF) toUpdate.setFF(kFF);
     }
 
     public double getP() {
