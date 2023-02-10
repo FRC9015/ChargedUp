@@ -17,6 +17,8 @@ import frc.robot.commands.ArmOutCommand;
 import frc.robot.commands.ArmUp;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.CloseIntakeCommand;
+import frc.robot.commands.*;
+
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.SyncLimelightPose;
 import frc.robot.commands.OpenIntakeCommand;
