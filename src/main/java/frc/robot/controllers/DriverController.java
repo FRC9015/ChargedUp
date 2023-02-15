@@ -15,12 +15,20 @@ import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import lombok.Getter;
 
 public class DriverController implements Sendable {
 
     private final GenericHID rawController;
-    private final DoubleSupplier tankLeft, tankRight, arcadeFwd, arcadeTurn, lTrigger, rTrigger;
+
+    private final DoubleSupplier tankLeft, tankRight, arcadeFwd, arcadeTurn;
+
+    @Getter
+    private final DoubleSupplier lTrigger, rTrigger;
+
+    @Getter
     private final JoystickButton a, b, x, y, start, back, ls, rs, lb, rb, lTrig, rTrig;
+
     private final POVButton up, down, left, right;
 
     public DriverController(XboxController controller) {
@@ -90,46 +98,6 @@ public class DriverController implements Sendable {
         return arcadeTurn.getAsDouble();
     }
 
-    public JoystickButton getA(){
-        return a;
-    }
-
-    public JoystickButton getB(){
-        return b;
-    }
-
-    public JoystickButton getX() {
-        return x;
-    }
-
-    public JoystickButton getY() {
-        return y;
-    }
-
-    public JoystickButton getStart(){
-        return start;
-    }
-
-    public JoystickButton getBack(){
-        return back;
-    }
-
-    public JoystickButton getLS(){
-        return ls;
-    }
-
-    public JoystickButton getRS(){
-        return rs;
-    }
-
-    public JoystickButton getRB(){
-        return rb;
-    }
-
-    public JoystickButton getLB(){
-        return lb;
-    }
-
     public JoystickButton getLTrigAsButton(){
         return lTrig;
     }
@@ -144,14 +112,6 @@ public class DriverController implements Sendable {
             }
             
         });
-    }
-
-    public double getLTrigger(){
-        return lTrigger.getAsDouble();
-    }
-
-    public double getRTrigger(){
-        return rTrigger.getAsDouble();
     }
 
     public void setRumble(GenericHID.RumbleType rumble, double value) {

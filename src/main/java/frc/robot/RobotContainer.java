@@ -123,7 +123,7 @@ public class RobotContainer {
         driver.getA().toggleOnTrue(new RepeatCommand(new BalanceCommand(pigeonSubsystem, driveSubsystem)));
 
         // When the driver's left bumper is pressed, switch between low and high speed.
-        driver.getLB().onTrue(new SwitchSpeed());
+        driver.getLb().onTrue(new SwitchSpeed());
 
 
         driver.getB().onTrue(new WeightCalibrationCommand(counterweightPIDSubsystem));
@@ -138,11 +138,11 @@ public class RobotContainer {
         driver.getRightDpad().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
 
         driver.getRTrigAsButton().whileTrue(new WeightBackCommand(counterweightPIDSubsystem));
-        driver.getRB().onTrue(new InstantCommand(() -> intakeNewmaticSubsystem.switchIntake(), intakeNewmaticSubsystem));
+        driver.getRb().onTrue(new InstantCommand(() -> intakeNewmaticSubsystem.switchIntake(), intakeNewmaticSubsystem));
         driver.getX().onTrue(new OpenIntakeCommand(intakeNewmaticSubsystem));
         driver.getY().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
 
-        driver.getLB().whileTrue(new PointToTagCommand(limelightSubsytem, driveSubsystem));
+        driver.getLb().whileTrue(new PointToTagCommand(limelightSubsytem, driveSubsystem));
         //driver.getRB().whileTrue(new SyncLimelightPose(limelightSubsytem, driveSubsystem));
         
         driver.getStart().onTrue(new waypointCommand(limelightSubsytem, driveSubsystem));
