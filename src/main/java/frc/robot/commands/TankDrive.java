@@ -16,7 +16,7 @@ public class TankDrive extends CommandBase {
 
     @Override
     public void execute() {
-        diffDriveSubsystem.tankDrive(driver.getArcadeFwd(), driver.getArcadeTurn());
+        diffDriveSubsystem.tankDrive(driver.getTankLeft(), driver.getTankRight());
     }
 
     @Override
