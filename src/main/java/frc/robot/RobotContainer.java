@@ -5,11 +5,9 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ArmDown;
@@ -18,17 +16,10 @@ import frc.robot.commands.ArmOutCommand;
 import frc.robot.commands.ArmUp;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.CloseIntakeCommand;
-import frc.robot.commands.*;
 
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.SyncLimelightPose;
 import frc.robot.commands.OpenIntakeCommand;
-import frc.robot.commands.PointToTagCommand;
-import frc.robot.commands.RavisRamseteCommand;
 import frc.robot.commands.SwitchSpeed;
-import frc.robot.commands.WeightBackCommand;
-import frc.robot.commands.WeightForwardCommand;
-import frc.robot.commands.waypointCommand;
 import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
 //import frc.robot.subsystems.CounterweightSubsystem;
@@ -126,7 +117,6 @@ public class RobotContainer {
         driver.getLb().onTrue(new SwitchSpeed());
 
 
-        driver.getB().onTrue(new WeightCalibrationCommand(counterweightPIDSubsystem));
 
         driver.getUpDpad().whileTrue(new ArmUp(armSubsystem));
         driver.getDownDpad().whileTrue(new ArmDown(armSubsystem));
@@ -134,21 +124,9 @@ public class RobotContainer {
         driver.getY().whileTrue(new ArmInCommand(armSubsystem));
         driver.getX().whileTrue(new ArmOutCommand(armSubsystem));
 
-        driver.getLeftDpad().whileTrue(new WeightBackCommand(counterweightPIDSubsystem));
-        driver.getRightDpad().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
 
-        driver.getRTrigAsButton().whileTrue(new WeightBackCommand(counterweightPIDSubsystem));
         driver.getRb().onTrue(new InstantCommand(() -> intakeNewmaticSubsystem.switchIntake(), intakeNewmaticSubsystem));
         driver.getX().onTrue(new OpenIntakeCommand(intakeNewmaticSubsystem));
-        driver.getY().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
-
-        driver.getLb().whileTrue(new PointToTagCommand(limelightSubsytem, driveSubsystem));
-        //driver.getRB().whileTrue(new SyncLimelightPose(limelightSubsytem, driveSubsystem));
-        
-        driver.getStart().onTrue(new waypointCommand(limelightSubsytem, driveSubsystem));
-        //RamseteCommand drivRamseteCommand = driveSubsystem.getRamseteCommand(driveSubsystem.getPose(), RobotState.getSavedPoint(), driveSubsystem);
-        driver.getBack().onTrue(new RavisRamseteCommand(driveSubsystem));
-
     }
 
     public DriverController getDriver() {
