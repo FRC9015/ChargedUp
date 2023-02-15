@@ -134,8 +134,16 @@ public class DriverController implements Sendable {
         return lTrig;
     }
 
-    public JoystickButton getRTrigAsButton(){
-        return rTrig;
+    public Trigger getRTrigAsButton(){
+        return new Trigger(new BooleanSupplier() {
+
+            @Override
+            public boolean getAsBoolean() {
+                // TODO Auto-generated method stub
+                return  rTrigger.getAsDouble()>0.3;
+            }
+            
+        });
     }
 
     public double getLTrigger(){

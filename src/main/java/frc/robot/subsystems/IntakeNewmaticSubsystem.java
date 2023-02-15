@@ -9,10 +9,11 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 public class IntakeNewmaticSubsystem implements Subsystem{
 
     private final static IntakeNewmaticSubsystem INSTANCE = new IntakeNewmaticSubsystem();
-    
+    private boolean forward;
     @SuppressWarnings("WeakerAccess")
     public static IntakeNewmaticSubsystem getInstance() {
         return INSTANCE;
+        
     }
 
 
@@ -21,7 +22,8 @@ public class IntakeNewmaticSubsystem implements Subsystem{
     //PneumaticHub pHub;
 
     private IntakeNewmaticSubsystem(){
-        intake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
+        intake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
+        forward = false;
     }
 
     public void openIntake(){
@@ -32,7 +34,16 @@ public class IntakeNewmaticSubsystem implements Subsystem{
         intake.set(DoubleSolenoid.Value.kReverse);
     }
 
+    public void switchIntake(){
+        if(forward){       
+             intake.set(DoubleSolenoid.Value.kReverse);
+             forward = false;
 
+        }else{
+            intake.set(DoubleSolenoid.Value.kForward);
+            forward = true;
+        }
+    }
 
 
 }

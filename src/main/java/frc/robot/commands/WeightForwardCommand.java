@@ -20,7 +20,7 @@ public class WeightForwardCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    counterweightPIDSubsystem.setMotor(0.2);
+    counterweightPIDSubsystem.setMotor(0.9);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

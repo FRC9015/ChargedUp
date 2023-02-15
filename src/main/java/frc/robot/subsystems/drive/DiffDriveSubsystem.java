@@ -213,8 +213,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
      * @param rateLimited Should the inputs be rate limited?
      */
     public void arcadeDriveRaw(double fwd, double turn, boolean rateLimited) {
-        fwd = rateLimited ? accelRateLimit1.calculate(fwd) : fwd;
-        turn = rateLimited ? accelRateLimit2.calculate(turn) : turn;
+        //fwd = rateLimited ? accelRateLimit1.calculate(fwd) : fwd;
+        //turn = rateLimited ? accelRateLimit2.calculate(turn) : turn;
 
         double fwdSpeed = calcMetersPerSecond(fwd);
         double turnSpeed = calcRadiansPerSecond(turn);
@@ -245,6 +245,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
 
     private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+        
         leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity);
         rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     }
@@ -288,7 +289,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     
         // Create config for trajectory
         TrajectoryConfig config =
-            new TrajectoryConfig(0.2, 0.5);
+            new TrajectoryConfig(1, 0.5);
         Translation2d idk = new Translation2d();
         List<Translation2d> waypoints = new ArrayList<>();
         waypoints.add(idk);

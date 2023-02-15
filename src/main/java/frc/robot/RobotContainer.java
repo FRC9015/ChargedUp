@@ -8,6 +8,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.ArcadeDrive;
@@ -136,11 +137,13 @@ public class RobotContainer {
         driver.getLeftDpad().whileTrue(new WeightBackCommand(counterweightPIDSubsystem));
         driver.getRightDpad().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
 
+        driver.getRTrigAsButton().whileTrue(new WeightBackCommand(counterweightPIDSubsystem));
+        driver.getRB().onTrue(new InstantCommand(() -> intakeNewmaticSubsystem.switchIntake(), intakeNewmaticSubsystem));
         driver.getX().onTrue(new OpenIntakeCommand(intakeNewmaticSubsystem));
-        driver.getY().onTrue(new CloseIntakeCommand(intakeNewmaticSubsystem));
+        driver.getY().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
 
         driver.getLB().whileTrue(new PointToTagCommand(limelightSubsytem, driveSubsystem));
-        driver.getRB().whileTrue(new SyncLimelightPose(limelightSubsytem, driveSubsystem));
+        //driver.getRB().whileTrue(new SyncLimelightPose(limelightSubsytem, driveSubsystem));
         
         driver.getStart().onTrue(new waypointCommand(limelightSubsytem, driveSubsystem));
         //RamseteCommand drivRamseteCommand = driveSubsystem.getRamseteCommand(driveSubsystem.getPose(), RobotState.getSavedPoint(), driveSubsystem);

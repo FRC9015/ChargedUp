@@ -1,7 +1,7 @@
 plugins {
     id "java"
     id "org.jetbrains.kotlin.jvm" version "1.7.10"
-    id "edu.wpi.first.GradleRIO" version "2023.2.1"
+    id "edu.wpi.first.GradleRIO" version "2023.3.2"
 }
 
 def javaVersion = JavaVersion.VERSION_11

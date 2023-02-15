@@ -23,7 +23,7 @@ public class PointToTagCommand extends CommandBase {
     this.diffDriveSubsystem = diffDriveSubsystem;
     this.limelightSubsytem = limelightSubsytem;
     this.subsystems = Set.of(this.diffDriveSubsystem, this.limelightSubsytem);
-    pid = new PIDController(0.03, 0.08, 0.001);
+    pid = new PIDController(0.002, 0.08, 0.001);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
