@@ -1,18 +1,9 @@
-// Copyright (c) FIRST and other WPILib contributors.
-
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Dashboard.CurrentTab;
-import frc.robot.controllers.DriverController;
-
-
 
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
@@ -25,9 +16,7 @@ public class Robot extends TimedRobot
     private Command autonomousCommand;
     private Command teleopCommand;
     
-    private RobotContainer robotContainer;
-    private AutoPaths autoPaths;
-    
+    private RobotContainer robotContainer;    
     
     /**
      * This method is run when the robot is first started up and should be used for any
@@ -42,7 +31,6 @@ public class Robot extends TimedRobot
 
         robotContainer.initRobot();
         
-        autoPaths = AutoPaths.getInstance();
     }
     
     
