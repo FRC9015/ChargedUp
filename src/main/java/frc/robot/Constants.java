@@ -9,6 +9,7 @@ import com.pathplanner.lib.PathConstraints;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import frc.robot.utils.DoubleSolenoidConstants;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -80,9 +81,19 @@ public final class Constants {
         public static final int ENDSTOP_SWITCH_PORT = 0;
         public static final int[] ENCODER_DIO_PINS = {1, 2}; // Encoder wired into DIO pins 1 & 2 on the roboRIO
     }
-    public static final class ArmConstants {
-        public static final int ROTATE_CAN_ID=42;
-        public static final int TELESCOPE_CAN_ID=20;
+    public static final class IntakeConstants {
+        public static final int ARM_LIFT_CAN_ID=42;
+        public static final int ARM_TELESCOPE_CAN_ID=20;
+
+        private static final int INTAKE_OPEN_PORT = 0;
+        private static final int INTAKE_CLOSE_PORT = 1;
+        public static final DoubleSolenoidConstants INTAKE_OPEN_CLOSE = new DoubleSolenoidConstants(INTAKE_OPEN_PORT, INTAKE_CLOSE_PORT);
+    }
+
+    public static final class PneumaticConstants {
+        // CAN ID for CTRE PCM / Rev PCH
+        public static final int P_HUB_CAN_ID = 0;
+
     }
 
 }

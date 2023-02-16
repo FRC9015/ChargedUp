@@ -6,7 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.IntakeConstants;
 
 
 
@@ -26,8 +26,8 @@ public class ArmSubsystem implements Subsystem
     // Creates a new ArmSubsystem.
     private ArmSubsystem() 
     {
-        rotateArm = new CANSparkMax(ArmConstants.ROTATE_CAN_ID, MotorType.kBrushless);
-        telescopeArm = new TalonSRX(ArmConstants.TELESCOPE_CAN_ID);
+        rotateArm = new CANSparkMax(IntakeConstants.ARM_LIFT_CAN_ID, MotorType.kBrushless);
+        telescopeArm = new TalonSRX(IntakeConstants.ARM_TELESCOPE_CAN_ID);
     }
 
     public void rotateArm(double motorspeed){
