@@ -17,12 +17,11 @@ public class ArmDown implements Command {
 
     @Override
     public void initialize() {
-        armSubsystem.rotateArm(-0.2);
+        armSubsystem.rotateArm(-0.4);
     }
 
     @Override
     public void execute() {
-        System.out.println("HHDJF FJhdjkFHJKDFHSDHF");
     }
 
     @Override

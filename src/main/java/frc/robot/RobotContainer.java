@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ArmDown;
 import frc.robot.commands.ArmInCommand;
@@ -123,8 +125,8 @@ public class RobotContainer {
         driver.getA().toggleOnTrue(new RepeatCommand(new BalanceCommand(pigeonSubsystem, driveSubsystem)));
 
         // When the driver's left bumper is pressed, switch between low and high speed.
-        driver.getLB().onTrue(new SwitchSpeed());
-
+        driver.getLB().whileTrue(new StartEndCommand(() -> armSubsystem.SetActivatePID(true),() -> armSubsystem.SetActivatePID(true), armSubsystem));
+        driver.getBack().whileTrue(new RunCommand(() -> armSubsystem.setPID(), armSubsystem));
 
         driver.getB().onTrue(new WeightCalibrationCommand(counterweightPIDSubsystem));
 
@@ -137,7 +139,7 @@ public class RobotContainer {
         driver.getLeftDpad().whileTrue(new WeightBackCommand(counterweightPIDSubsystem));
         driver.getRightDpad().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
 
-        driver.getRTrigAsButton().whileTrue(new WeightBackCommand(counterweightPIDSubsystem));
+        driver.getRTrigAsButton().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
         driver.getRB().onTrue(new InstantCommand(() -> intakeNewmaticSubsystem.switchIntake(), intakeNewmaticSubsystem));
         driver.getX().onTrue(new OpenIntakeCommand(intakeNewmaticSubsystem));
         driver.getY().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
@@ -147,7 +149,7 @@ public class RobotContainer {
         
         driver.getStart().onTrue(new waypointCommand(limelightSubsytem, driveSubsystem));
         //RamseteCommand drivRamseteCommand = driveSubsystem.getRamseteCommand(driveSubsystem.getPose(), RobotState.getSavedPoint(), driveSubsystem);
-        driver.getBack().onTrue(new RavisRamseteCommand(driveSubsystem));
+        //driver.getBack().onTrue(new RavisRamseteCommand(driveSubsystem));
 
     }
 

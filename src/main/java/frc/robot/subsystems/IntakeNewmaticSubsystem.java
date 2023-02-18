@@ -22,7 +22,7 @@ public class IntakeNewmaticSubsystem implements Subsystem{
     //PneumaticHub pHub;
 
     private IntakeNewmaticSubsystem(){
-        intake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
+        intake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
         forward = false;
     }
 

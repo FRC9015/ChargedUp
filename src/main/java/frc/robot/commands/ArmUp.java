@@ -17,12 +17,11 @@ public class ArmUp implements Command {
 
     @Override
     public void initialize() {
-        armSubsystem.rotateArm(0.2);
+        armSubsystem.rotateArm(0.4);
     }
 
     @Override
     public void execute() {
-        System.out.println("jljljfds lkfdjs lfjsdlf jdsl;f j");
     }
 
     @Override

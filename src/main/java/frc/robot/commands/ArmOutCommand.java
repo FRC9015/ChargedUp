@@ -22,7 +22,6 @@ public class ArmOutCommand implements Command {
 
     @Override
     public void execute() {
-        System.out.println("HHDJF FJhdjkFHJKDFHSDHF");
     }
 
     @Override

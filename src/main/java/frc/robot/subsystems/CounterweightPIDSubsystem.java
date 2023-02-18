@@ -4,6 +4,8 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Counter;
@@ -16,7 +18,7 @@ public class CounterweightPIDSubsystem extends PIDSubsystem {
     private final static CounterweightPIDSubsystem INSTANCE = new CounterweightPIDSubsystem();
     DigitalInput limit = new DigitalInput(0);
 
-    private final TalonSRX counterWeightMotor= new TalonSRX(7);
+    private final CANSparkMax counterWeightMotor= new CANSparkMax(42, MotorType.kBrushless);
 
     private static double kP = 0;
     private static double kI = 0;
@@ -31,9 +33,9 @@ public class CounterweightPIDSubsystem extends PIDSubsystem {
 
     private CounterweightPIDSubsystem(){
         super(new PIDController(kP, kI, kD));
-        counterWeightMotor.getSelectedSensorPosition();
-        counterWeightMotor.set(TalonSRXControlMode.PercentOutput,0);
-        counterWeightMotor.setNeutralMode(NeutralMode.Brake);
+        //counterWeightMotor.getSelectedSensorPosition();
+        //counterWeightMotor.set(TalonSRXControlMode.PercentOutput,0);
+        //counterWeightMotor.setNeutralMode(NeutralMode.Brake);
     }
     
     public boolean getSwitch(){
@@ -41,14 +43,15 @@ public class CounterweightPIDSubsystem extends PIDSubsystem {
     }
 
     public void setMotor(double speed){
-        counterWeightMotor.set(TalonSRXControlMode.PercentOutput, speed);
+        counterWeightMotor.set(speed);
         
     }
     public void setEncoder(double encoderValue){
-        counterWeightMotor.setSelectedSensorPosition(encoderValue);
+        //counterWeightMotor.setSelectedSensorPosition(encoderValue);
     }
     public double getEncoder(){
-        return counterWeightMotor.getSelectedSensorPosition();
+        //return counterWeightMotor.getSelectedSensorPosition();
+        return 0;
     }
 
     public void setPIDsetPoint(double setpoint){

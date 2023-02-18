@@ -76,12 +76,12 @@ public final class Constants {
     }
 
     public static final class CounterweightConstants {
-        public static final int DRIVE_MOTOR_CAN_ID = 7;
+        public static final int DRIVE_MOTOR_CAN_ID = 42;
         public static final int ENDSTOP_SWITCH_PORT = 0;
         public static final int[] ENCODER_DIO_PINS = {1, 2}; // Encoder wired into DIO pins 1 & 2 on the roboRIO
     }
     public static final class ArmConstants {
-        public static final int ROTATE_CAN_ID=42;
+        public static final int ROTATE_CAN_ID=19;
         public static final int TELESCOPE_CAN_ID=20;
     }
 
