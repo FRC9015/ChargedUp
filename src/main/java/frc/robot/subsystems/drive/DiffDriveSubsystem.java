@@ -5,49 +5,23 @@ import java.util.function.BiConsumer;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPRamseteCommand;
-import java.util.List;
-import java.util.function.BiConsumer;
-
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPRamseteCommand;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotGearing;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotMotor;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotWheelSize;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -173,7 +147,9 @@ public class DiffDriveSubsystem extends SubsystemBase {
         field = new Field2d();
         //addChild("Field", field);
         //Dashboard.getInstance().putSendable("field", field);
+
         SmartDashboard.putData("field",field);
+        
         /**
          * Each input to be rate limited must have it's own filter. In any given drive,
          * we have two possible inputs, and thus two filters.
@@ -244,12 +220,6 @@ public class DiffDriveSubsystem extends SubsystemBase {
         setSpeeds(wheelSpeeds);
     }
 
-    private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-        
-        leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity);
-        rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity);
-    }
-
     public synchronized void setBrakeMode(IdleMode newBrakeMode) {
         this.brakeMode = newBrakeMode;
         for (CANSparkMax controller : allMotors) {
@@ -280,34 +250,6 @@ public class DiffDriveSubsystem extends SubsystemBase {
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(), rightEncoder.getVelocity());
     }
-
-
-
-
-    public void runRamseteCommand(Pose2d start, Pose2d end,DiffDriveSubsystem m_diffDriveSubsystem) {
-        
-    
-        // Create config for trajectory
-        TrajectoryConfig config =
-            new TrajectoryConfig(1, 0.5);
-        Translation2d idk = new Translation2d();
-        List<Translation2d> waypoints = new ArrayList<>();
-        waypoints.add(idk);
-        // An example trajectory to follow.  All units in meters.
-        Trajectory trajectorytogo =
-            TrajectoryGenerator.generateTrajectory(
-                start,
-                List.of(),
-                end,
-                config);
-    
-        RamseteCommand ramseteCommand =
-            new RamseteCommand(trajectorytogo,odometry::getPoseMeters,new RamseteController(),DriveConstants.KINEMATICS,ramseteOutputBiConsumer,m_diffDriveSubsystem);
-    
-        System.out.println("ramseteCommand");
-    
-        ramseteCommand.schedule();
-      }
     
     public Command getTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
         return new SequentialCommandGroup(new InstantCommand(() -> {
@@ -327,7 +269,10 @@ public class DiffDriveSubsystem extends SubsystemBase {
                         ramseteOutputBiConsumer,
                         this));
     }
-    
+
+
+    // ----------------- PRIVATE HELPER METHODS ----------------- //
+
     /**
      * Takes in a joystick input and converts it to meters per second, taking into
      * account slow mode
@@ -347,9 +292,6 @@ public class DiffDriveSubsystem extends SubsystemBase {
         return isSlowed ? inputMetersPerSecond * speedMultiplier : inputMetersPerSecond;
     }
 
-    public void simulationPeriodic(){
-    }
-
     private double calcRadiansPerSecond(double input) {
         boolean isSlowed = RobotState.getSlowedSmart();
 
@@ -358,6 +300,11 @@ public class DiffDriveSubsystem extends SubsystemBase {
         double speedMultiplier = Dashboard.getInstance().drive.getSpeedMultiplier();
 
         return isSlowed ? inputRadiansPerSecond * speedMultiplier : inputRadiansPerSecond;
+    }
+
+    private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+        leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity);
+        rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     }
 
     private void resetEncoders() {
