@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.Drive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.controllers.DriverController;
@@ -16,7 +16,7 @@ public class TankDrive extends CommandBase {
 
     @Override
     public void execute() {
-        diffDriveSubsystem.tankDrive(driver.getArcadeFwd(), driver.getArcadeTurn());
+        diffDriveSubsystem.tankDrive(driver.getTankLeft(), driver.getTankRight());
     }
 
     @Override

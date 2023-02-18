@@ -1,16 +1,9 @@
-// Copyright (c) FIRST and other WPILib contributors.
-
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Dashboard.CurrentTab;
-
-
 
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
@@ -23,9 +16,7 @@ public class Robot extends TimedRobot
     private Command autonomousCommand;
     private Command teleopCommand;
     
-    private RobotContainer robotContainer;
-    private AutoPaths autoPaths;
-    
+    private RobotContainer robotContainer;    
     
     /**
      * This method is run when the robot is first started up and should be used for any
@@ -40,7 +31,6 @@ public class Robot extends TimedRobot
 
         robotContainer.initRobot();
         
-        autoPaths = AutoPaths.getInstance();
     }
     
     
@@ -97,7 +87,8 @@ public class Robot extends TimedRobot
     @Override
     public void teleopInit()
     {
-        Dashboard.getInstance().setCurrentTab(CurrentTab.TeleOp);
+       // Dashboard.getInstance().setCurrentTab(CurrentTab.TeleOp);
+        //Dashboard.getInstance().setCurrentTab(CurrentTab.TeleOp);
         
         // On teleop init, make sure that the dashboard does not continue to show the robot as AutoBalanced
         Dashboard.getInstance().balance.setAutoBalanced(false);
@@ -137,4 +128,25 @@ public class Robot extends TimedRobot
     /** This method is called periodically during test mode. */
     @Override
     public void testPeriodic() {}
+
+
+
+    @Override
+    public void simulationInit(){
+        Dashboard.getInstance().balance.setAutoBalanced(false);
+        
+        // This makes sure that the autonomous stops running when
+        // teleop starts running. If you want the autonomous to
+        // continue until interrupted by another command, remove
+        // this line or comment it out.
+        if (autonomousCommand != null)
+        {
+            autonomousCommand.cancel();
+        }
+
+        if (teleopCommand != null)
+        {
+            teleopCommand.schedule();
+        }
+    }
 }

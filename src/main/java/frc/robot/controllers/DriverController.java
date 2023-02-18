@@ -1,61 +1,80 @@
 package frc.robot.controllers;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import lombok.Getter;
+
 public class DriverController implements Sendable {
 
-    private final DoubleSupplier tankLeft, tankRight, arcadeFwd, arcadeTurn;
-    private final JoystickButton balanceButton, switchSpeed, homeWeightButton;
     private final GenericHID rawController;
 
-    /** Create a driver controller with two standard Joysticks */
-    public DriverController(Joystick joystick1, Joystick joystick2) {
-        tankLeft = joystick1::getY;
-        tankRight = joystick2::getY;
-        arcadeFwd = joystick1::getY;
-        arcadeTurn = joystick1::getX;
+    private final DoubleSupplier tankLeft, tankRight, arcadeFwd, arcadeTurn;
 
-        homeWeightButton = new JoystickButton(joystick1, XboxController.Button.kB.value);
+    @Getter
+    private final DoubleSupplier lTrigger, rTrigger;
 
-        balanceButton = null;
-        switchSpeed = new JoystickButton(joystick1, Joystick.ButtonType.kTrigger.value);
-        rawController = joystick1;
-    }
+    @Getter
+    private final JoystickButton a, b, x, y, start, back, ls, rs, lb, rb, lTrig, rTrig;
 
-    /** Create a driver controller with an XboxController */
+    private final POVButton up, down, left, right;
+
     public DriverController(XboxController controller) {
         tankLeft = controller::getLeftY;
         tankRight = controller::getRightY;
         arcadeFwd = controller::getLeftY;
         arcadeTurn = controller::getRightX;
 
-        balanceButton = new JoystickButton(controller, XboxController.Button.kA.value);
-        homeWeightButton = new JoystickButton(controller, XboxController.Button.kB.value);
-        switchSpeed = new JoystickButton(controller, XboxController.Button.kLeftBumper.value);
+        lTrigger = controller::getLeftTriggerAxis;
+        rTrigger = controller::getRightTriggerAxis;
+
+        up = new POVButton(controller, 0);
+        down = new POVButton(controller, 180);
+        left = new POVButton(controller, 270);
+        right = new POVButton(controller, 90);
+
+        a = new JoystickButton(controller, XboxController.Button.kA.value);
+        b = new JoystickButton(controller, XboxController.Button.kB.value);
+        x = new JoystickButton(controller, XboxController.Button.kX.value);
+        y = new JoystickButton(controller, XboxController.Button.kY.value);
+
+        lb = new JoystickButton(controller, XboxController.Button.kLeftBumper.value);
+        rb = new JoystickButton(controller, XboxController.Button.kRightBumper.value);
+
+        ls = new JoystickButton(controller, XboxController.Button.kLeftStick.value);
+        rs = new JoystickButton(controller, XboxController.Button.kRightStick.value);
+
+        start = new JoystickButton(controller, XboxController.Button.kStart.value);
+        back = new JoystickButton(controller, XboxController.Button.kBack.value);
+        
+        lTrig = new JoystickButton(controller, XboxController.Axis.kLeftTrigger.value);
+        rTrig = new JoystickButton(controller, XboxController.Axis.kRightTrigger.value);
+
 
         rawController = controller;
     }
 
-    /** Create a driver controller with a PS4Controller */
-    public DriverController(PS4Controller controller) {
-        tankLeft = controller::getLeftY;
-        tankRight = controller::getRightY;
-        arcadeFwd = controller::getLeftY;
-        arcadeTurn = controller::getRightX;
+    public Trigger getUpDpad() {
+        return up;
+    }
 
-        homeWeightButton = new JoystickButton(controller, XboxController.Button.kB.value);
+    public Trigger getDownDpad() {
+        return down;
+    }
 
-        balanceButton = new JoystickButton(controller, PS4Controller.Button.kTriangle.value);
-        switchSpeed = new JoystickButton(controller, PS4Controller.Button.kL3.value); // Left Joystick button
+    public Trigger getLeftDpad() {
+        return left;
+    }
 
-        rawController = controller;
+    public Trigger getRightDpad() {
+        return right;
     }
 
     public double getTankLeft() {
@@ -74,23 +93,28 @@ public class DriverController implements Sendable {
         return arcadeTurn.getAsDouble();
     }
 
-    public JoystickButton getBalanceButton() {
-        return balanceButton;
+    public JoystickButton getLTrigAsButton(){
+        return lTrig;
     }
 
-    public JoystickButton getHomeWeightButton(){
-        return homeWeightButton;
-    }
-    
-    public JoystickButton getSwitchSpeed() {
-        return switchSpeed;
+    public Trigger getRTrigAsButton(){
+        return new Trigger(new BooleanSupplier() {
+
+            @Override
+            public boolean getAsBoolean() {
+                // TODO Auto-generated method stub
+                return  rTrigger.getAsDouble()>0.3;
+            }
+            
+        });
     }
 
     public void setRumble(GenericHID.RumbleType rumble, double value) {
         rawController.setRumble(rumble, value);
     }
-    
-    // This allows us to send this DriverController to the Dashboard and read all of its values
+
+    // This allows us to send this DriverController to the Dashboard and read all of
+    // its values
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("DriverController");
@@ -98,7 +122,8 @@ public class DriverController implements Sendable {
         builder.addDoubleProperty("arcadeTurn", arcadeTurn, null);
         builder.addDoubleProperty("tankLeft", tankLeft, null);
         builder.addDoubleProperty("tankLeft", tankRight, null);
-        builder.addBooleanProperty("balanceButton", balanceButton::getAsBoolean, null);
+        builder.addBooleanProperty("ltrigger",lTrig,null);
+        //builder.addBooleanProperty("balanceButton", balanceButton::getAsBoolean, null);
     }
 
 }

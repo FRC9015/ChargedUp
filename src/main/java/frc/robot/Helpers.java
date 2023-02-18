@@ -2,6 +2,9 @@ package frc.robot;
 
 import com.revrobotics.REVLibError;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class Helpers {
 
     /**

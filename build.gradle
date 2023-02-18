@@ -1,7 +1,7 @@
 plugins {
     id "java"
     id "org.jetbrains.kotlin.jvm" version "1.7.10"
-    id "edu.wpi.first.GradleRIO" version "2023.2.1"
+    id "edu.wpi.first.GradleRIO" version "2023.3.2"
 }
 
 def javaVersion = JavaVersion.VERSION_11
@@ -61,6 +61,7 @@ repositories {
     maven {
         url "https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix-frc2022-latest.json"
     }
+    mavenCentral()
 }
 
 dependencies {
@@ -85,6 +86,12 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api"
     testImplementation "org.junit.jupiter:junit-jupiter-params"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+
+    compileOnly 'org.projectlombok:lombok:1.18.26'
+	annotationProcessor 'org.projectlombok:lombok:1.18.26'
+	
+	testCompileOnly 'org.projectlombok:lombok:1.18.26'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
 }
 
 // Simulation configuration (e.g. environment variables).

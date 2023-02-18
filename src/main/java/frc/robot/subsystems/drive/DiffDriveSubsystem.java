@@ -19,10 +19,12 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 
 import frc.robot.Dashboard;
 import frc.robot.RobotState;
@@ -80,6 +82,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private ArrayList<CANSparkMax> allMotors = new ArrayList<CANSparkMax>();
 
     private PigeonSubsystem pigeon = PigeonSubsystem.getInstance();
+
+    public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
 
     /**
      * Creates a new instance of this DiffDriveSubsystem. This constructor
@@ -141,7 +145,10 @@ public class DiffDriveSubsystem extends SubsystemBase {
         odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(),
                 leftEncoder.getPosition(), rightEncoder.getPosition());
         field = new Field2d();
-        addChild("Field", field);
+        //addChild("Field", field);
+        //Dashboard.getInstance().putSendable("field", field);
+
+        SmartDashboard.putData("field",field);
 
         /**
          * Each input to be rate limited must have it's own filter. In any given drive,
@@ -213,11 +220,6 @@ public class DiffDriveSubsystem extends SubsystemBase {
         setSpeeds(wheelSpeeds);
     }
 
-    private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-        leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity);
-        rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity);
-    }
-
     public synchronized void setBrakeMode(IdleMode newBrakeMode) {
         this.brakeMode = newBrakeMode;
         for (CANSparkMax controller : allMotors) {
@@ -235,7 +237,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
         stop();
         setBrakeMode(prevBrakeMode);
     }
-
+    
     public void resetOdometry(Pose2d initPose) {
         resetEncoders();
         odometry.resetPosition(pigeon.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition(), initPose);
@@ -248,7 +250,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(), rightEncoder.getVelocity());
     }
-
+    
     public Command getTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
         return new SequentialCommandGroup(new InstantCommand(() -> {
             if (isFirstPath) {
@@ -267,6 +269,9 @@ public class DiffDriveSubsystem extends SubsystemBase {
                         ramseteOutputBiConsumer,
                         this));
     }
+
+
+    // ----------------- PRIVATE HELPER METHODS ----------------- //
 
     /**
      * Takes in a joystick input and converts it to meters per second, taking into
@@ -295,6 +300,11 @@ public class DiffDriveSubsystem extends SubsystemBase {
         double speedMultiplier = Dashboard.getInstance().drive.getSpeedMultiplier();
 
         return isSlowed ? inputRadiansPerSecond * speedMultiplier : inputRadiansPerSecond;
+    }
+
+    private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+        leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity);
+        rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     }
 
     private void resetEncoders() {
