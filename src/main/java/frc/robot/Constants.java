@@ -85,6 +85,8 @@ public final class Constants {
         public static final int ARM_LIFT_CAN_ID=42;
         public static final int ARM_TELESCOPE_CAN_ID=20;
 
+        public static final int INTAKE_DRIVE_CAN_ID = 7;
+
         private static final int INTAKE_OPEN_PORT = 0;
         private static final int INTAKE_CLOSE_PORT = 1;
         public static final DoubleSolenoidConstants INTAKE_OPEN_CLOSE = new DoubleSolenoidConstants(INTAKE_OPEN_PORT, INTAKE_CLOSE_PORT);
