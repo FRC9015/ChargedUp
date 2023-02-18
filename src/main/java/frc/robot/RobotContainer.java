@@ -48,16 +48,11 @@ public class RobotContainer {
         return INSTANCE;
     }
     // The robot's subsystems and commands are defined here...
-    private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     DiffDriveSubsystem driveSubsystem = DiffDriveSubsystem.getInstance();
     PigeonSubsystem pigeonSubsystem = PigeonSubsystem.getInstance();
-    ArmSubsystem armSubsystem= ArmSubsystem.getInstance();
+    ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     LimelightSubsytem limelightSubsytem = LimelightSubsytem.getInstance();
-    //CounterweightSubsystem counterweightSubsystem = CounterweightSubsystem.getInstance();
     CounterweightPIDSubsystem counterweightPIDSubsystem = CounterweightPIDSubsystem.getInstance();
-    private final Command autoCommand = new ExampleCommand(exampleSubsystem);
-    IntakeSubsystem intakeNewmaticSubsystem = IntakeSubsystem.getInstance();
-    // private final Command driveCommand = new ArcadeDrive();
 
     public final RobotState robotState = RobotState.getInstance();
     private AutoPaths autoPaths = AutoPaths.getInstance();
