@@ -9,24 +9,24 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import frc.robot.commands.ArcadeDrive;
-import frc.robot.commands.ArmDown;
-import frc.robot.commands.ArmInCommand;
-import frc.robot.commands.ArmOutCommand;
-import frc.robot.commands.ArmUp;
 import frc.robot.commands.BalanceCommand;
-import frc.robot.commands.CloseIntakeCommand;
-
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.OpenIntakeCommand;
-import frc.robot.commands.SwitchSpeed;
+import frc.robot.commands.Arm.ArmDownCommand;
+import frc.robot.commands.Arm.ArmInCommand;
+import frc.robot.commands.Arm.ArmOutCommand;
+import frc.robot.commands.Arm.ArmUpCommand;
+import frc.robot.commands.Drive.ArcadeDrive;
+import frc.robot.commands.Drive.SwitchSpeed;
+import frc.robot.commands.Intake.CloseIntakeCommand;
+import frc.robot.commands.Intake.OpenIntakeCommand;
+import frc.robot.commands.Intake.ToggleIntakeCommand;
 import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
 //import frc.robot.subsystems.CounterweightSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CounterweightPIDSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.IntakeNewmaticSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsytem;
 import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
@@ -56,7 +56,7 @@ public class RobotContainer {
     //CounterweightSubsystem counterweightSubsystem = CounterweightSubsystem.getInstance();
     CounterweightPIDSubsystem counterweightPIDSubsystem = CounterweightPIDSubsystem.getInstance();
     private final Command autoCommand = new ExampleCommand(exampleSubsystem);
-    IntakeNewmaticSubsystem intakeNewmaticSubsystem = IntakeNewmaticSubsystem.getInstance();
+    IntakeSubsystem intakeNewmaticSubsystem = IntakeSubsystem.getInstance();
     // private final Command driveCommand = new ArcadeDrive();
 
     public final RobotState robotState = RobotState.getInstance();
@@ -116,17 +116,15 @@ public class RobotContainer {
         // When the driver's left bumper is pressed, switch between low and high speed.
         driver.getLb().onTrue(new SwitchSpeed());
 
+        driver.getUpDpad().whileTrue(new ArmUpCommand());
+        driver.getDownDpad().whileTrue(new ArmDownCommand());
+
+        driver.getY().whileTrue(new ArmInCommand());
+        driver.getX().whileTrue(new ArmOutCommand());
 
 
-        driver.getUpDpad().whileTrue(new ArmUp(armSubsystem));
-        driver.getDownDpad().whileTrue(new ArmDown(armSubsystem));
-
-        driver.getY().whileTrue(new ArmInCommand(armSubsystem));
-        driver.getX().whileTrue(new ArmOutCommand(armSubsystem));
-
-
-        driver.getRb().onTrue(new InstantCommand(() -> intakeNewmaticSubsystem.switchIntake(), intakeNewmaticSubsystem));
-        driver.getX().onTrue(new OpenIntakeCommand(intakeNewmaticSubsystem));
+        driver.getRb().onTrue(new ToggleIntakeCommand());
+        driver.getX().onTrue(new OpenIntakeCommand());
     }
 
     public DriverController getDriver() {
