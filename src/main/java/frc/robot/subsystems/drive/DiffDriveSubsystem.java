@@ -149,7 +149,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
         //Dashboard.getInstance().putSendable("field", field);
 
         SmartDashboard.putData("field",field);
-        
+
         /**
          * Each input to be rate limited must have it's own filter. In any given drive,
          * we have two possible inputs, and thus two filters.
@@ -189,8 +189,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
      * @param rateLimited Should the inputs be rate limited?
      */
     public void arcadeDriveRaw(double fwd, double turn, boolean rateLimited) {
-        //fwd = rateLimited ? accelRateLimit1.calculate(fwd) : fwd;
-        //turn = rateLimited ? accelRateLimit2.calculate(turn) : turn;
+        fwd = rateLimited ? accelRateLimit1.calculate(fwd) : fwd;
+        turn = rateLimited ? accelRateLimit2.calculate(turn) : turn;
 
         double fwdSpeed = calcMetersPerSecond(fwd);
         double turnSpeed = calcRadiansPerSecond(turn);
