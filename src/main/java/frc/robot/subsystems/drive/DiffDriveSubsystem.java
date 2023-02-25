@@ -3,6 +3,7 @@ package frc.robot.subsystems.drive;
 import java.util.ArrayList;
 import java.util.function.BiConsumer;
 
+import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPRamseteCommand;
 import java.util.List;
@@ -136,8 +137,12 @@ public class DiffDriveSubsystem extends SubsystemBase {
         right2.follow(right1);
 
         // Properly invert motors
-        left1.setInverted(DriveConstants.LEFT_INVERTED);
-        right1.setInverted(DriveConstants.RIGHT_INVERTED);
+        left1.setInverted(true);
+        right1.setInverted(false);
+
+        left1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        right2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
 
         leftEncoder = left1.getEncoder();
         leftEncoder.setPositionConversionFactor(DriveConstants.DRIVE_ENCODER_POSITION_FACTOR);
@@ -213,16 +218,14 @@ public class DiffDriveSubsystem extends SubsystemBase {
      * @param rateLimited Should the inputs be rate limited?
      */
     public void arcadeDriveRaw(double fwd, double turn, boolean rateLimited) {
-        //fwd = rateLimited ? accelRateLimit1.calculate(fwd) : fwd;
+        fwd = rateLimited ? accelRateLimit1.calculate(fwd) : fwd;
         //turn = rateLimited ? accelRateLimit2.calculate(turn) : turn;
 
-        double fwdSpeed = calcMetersPerSecond(fwd);
-        double turnSpeed = calcRadiansPerSecond(turn);
+        //double fwdSpeed = calcMetersPerSecond(fwd);
+        //double turnSpeed = calcRadiansPerSecond(turn);
 
-        DifferentialDriveWheelSpeeds wheelSpeeds = DriveConstants.KINEMATICS
-                .toWheelSpeeds(new ChassisSpeeds(fwdSpeed, 0, turnSpeed));
 
-        setSpeeds(wheelSpeeds);
+        setSpeedsRaw(fwd-turn,fwd+turn);
     }
 
     /**
@@ -243,11 +246,19 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         setSpeeds(wheelSpeeds);
     }
+    //issue: the left is just folowing the right
 
     private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
         
         leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity);
         rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity);
+    }
+
+    private void setSpeedsRaw(double left, double right) {
+        
+        left1.set(left);
+        right1.set(right);
+
     }
 
     public synchronized void setBrakeMode(IdleMode newBrakeMode) {

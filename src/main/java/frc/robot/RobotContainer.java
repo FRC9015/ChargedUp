@@ -13,24 +13,7 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import frc.robot.commands.ArcadeDrive;
-import frc.robot.commands.ArmDown;
-import frc.robot.commands.ArmInCommand;
-import frc.robot.commands.ArmOutCommand;
-import frc.robot.commands.ArmUp;
-import frc.robot.commands.BalanceCommand;
-import frc.robot.commands.CloseIntakeCommand;
 import frc.robot.commands.*;
-
-import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.SyncLimelightPose;
-import frc.robot.commands.OpenIntakeCommand;
-import frc.robot.commands.PointToTagCommand;
-import frc.robot.commands.RavisRamseteCommand;
-import frc.robot.commands.SwitchSpeed;
-import frc.robot.commands.WeightBackCommand;
-import frc.robot.commands.WeightForwardCommand;
-import frc.robot.commands.waypointCommand;
 import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
 //import frc.robot.subsystems.CounterweightSubsystem;
@@ -66,7 +49,6 @@ public class RobotContainer {
     LimelightSubsytem limelightSubsytem = LimelightSubsytem.getInstance();
     //CounterweightSubsystem counterweightSubsystem = CounterweightSubsystem.getInstance();
     CounterweightPIDSubsystem counterweightPIDSubsystem = CounterweightPIDSubsystem.getInstance();
-    private final Command autoCommand = new ExampleCommand(exampleSubsystem);
     IntakeNewmaticSubsystem intakeNewmaticSubsystem = IntakeNewmaticSubsystem.getInstance();
     // private final Command driveCommand = new ArcadeDrive();
 
@@ -122,11 +104,13 @@ public class RobotContainer {
 
         */
         // Toggle the balance command on and off when the driver's A button is pressed
-        driver.getA().toggleOnTrue(new RepeatCommand(new BalanceCommand(pigeonSubsystem, driveSubsystem)));
+        driver.getA().toggleOnTrue(new BalanceCommand(pigeonSubsystem, driveSubsystem));
 
         // When the driver's left bumper is pressed, switch between low and high speed.
-        driver.getLB().whileTrue(new StartEndCommand(() -> armSubsystem.SetActivatePID(true),() -> armSubsystem.SetActivatePID(true), armSubsystem));
-        driver.getBack().whileTrue(new RunCommand(() -> armSubsystem.setPID(), armSubsystem));
+        //driver.getLB().whileTrue(new StartEndCommand(() -> armSubsystem.SetActivatePID(true),() -> armSubsystem.SetActivatePID(true), armSubsystem));
+        driver.getBack().whileTrue(new armpidCommand(armSubsystem, -100));
+        
+        driver.getLB().onTrue(new InstantCommand(()-> intakeNewmaticSubsystem.switchIntake(), intakeNewmaticSubsystem));
 
         driver.getB().onTrue(new WeightCalibrationCommand(counterweightPIDSubsystem));
 
@@ -139,12 +123,19 @@ public class RobotContainer {
         driver.getLeftDpad().whileTrue(new WeightBackCommand(counterweightPIDSubsystem));
         driver.getRightDpad().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
 
-        driver.getRTrigAsButton().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
-        driver.getRB().onTrue(new InstantCommand(() -> intakeNewmaticSubsystem.switchIntake(), intakeNewmaticSubsystem));
+        driver.getRTrigAsButton().whileTrue(new StartEndCommand(
+            () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.8), 
+            ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+            intakeNewmaticSubsystem));
+            
+        driver.getRB().whileTrue(new StartEndCommand(
+            () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.8), 
+            ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+            intakeNewmaticSubsystem));
         driver.getX().onTrue(new OpenIntakeCommand(intakeNewmaticSubsystem));
         driver.getY().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
 
-        driver.getLB().whileTrue(new PointToTagCommand(limelightSubsytem, driveSubsystem));
+        //driver.getLB().whileTrue(new PointToTagCommand(limelightSubsytem, driveSubsystem));
         //driver.getRB().whileTrue(new SyncLimelightPose(limelightSubsytem, driveSubsystem));
         
         driver.getStart().onTrue(new waypointCommand(limelightSubsytem, driveSubsystem));

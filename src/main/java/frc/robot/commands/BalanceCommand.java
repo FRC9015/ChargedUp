@@ -16,7 +16,7 @@ public class BalanceCommand extends CommandBase {
   private PigeonSubsystem pigeon;
   private DiffDriveSubsystem drive;
 
-  private double kP = 0.5, kI = 0, kD = 0;
+  private double kP = 0.007, kI = 0, kD = 0.001;
   private PIDController balancePID = new PIDController(kP, kI, kD);
 
   private MedianFilter angleFilter;
@@ -40,7 +40,7 @@ public class BalanceCommand extends CommandBase {
     drive.setBrakeMode(IdleMode.kBrake);
 
     balancePID.setSetpoint(0.0); // 0 degrees is obviously balanced
-    balancePID.setTolerance(4.0); // Allow for 2 degrees of error in either direction
+    balancePID.setTolerance(2.0); // Allow for 1 degrees of error in either direction
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -56,7 +56,7 @@ public class BalanceCommand extends CommandBase {
 
     if (Math.abs(moveSpeed) <= 0.01) {
       // If the PID is calculating below a certain threshold, we can safely assume that we're balanced
-      finished = true;
+      //finished = true;
     } 
   }
 

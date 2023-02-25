@@ -17,7 +17,7 @@ public class ArmUp implements Command {
 
     @Override
     public void initialize() {
-        armSubsystem.rotateArm(0.4);
+        armSubsystem.rotateArm(0.5);
     }
 
     @Override

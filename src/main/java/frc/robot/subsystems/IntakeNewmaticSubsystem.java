@@ -1,10 +1,14 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants.IntakeConstants;
 
 public class IntakeNewmaticSubsystem implements Subsystem{
 
@@ -17,11 +21,13 @@ public class IntakeNewmaticSubsystem implements Subsystem{
     }
 
 
-
+    CANSparkMax intakeMotor;
     DoubleSolenoid intake;
     //PneumaticHub pHub;
 
     private IntakeNewmaticSubsystem(){
+        intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_CAN_ID, MotorType.kBrushless);
+        intakeMotor.setSmartCurrentLimit(20, 30);
         intake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
         forward = false;
     }
@@ -32,6 +38,10 @@ public class IntakeNewmaticSubsystem implements Subsystem{
 
     public void closeIntake(){
         intake.set(DoubleSolenoid.Value.kReverse);
+    }
+    
+    public void setIntakeMotorSpeed(double speed){
+        intakeMotor.set(speed);
     }
 
     public void switchIntake(){

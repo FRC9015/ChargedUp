@@ -67,6 +67,12 @@ public class ArmSubsystem implements Subsystem
         activatePID = active;
     }
 
+    public double getRotEncoderPos(){
+        return rotateEncoder.getPosition();
+    }
+
+    
+
     public void setPID(){
         System.out.print(rotateEncoder.getPosition());
         System.out.println(pidSetpoint);
@@ -80,7 +86,7 @@ public class ArmSubsystem implements Subsystem
     
     public void periodic()
     {
-        
+        System.out.println(rotateEncoder.getPosition());
     }
     
     

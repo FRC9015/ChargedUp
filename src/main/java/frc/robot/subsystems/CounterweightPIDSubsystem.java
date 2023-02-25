@@ -18,7 +18,7 @@ public class CounterweightPIDSubsystem extends PIDSubsystem {
     private final static CounterweightPIDSubsystem INSTANCE = new CounterweightPIDSubsystem();
     DigitalInput limit = new DigitalInput(0);
 
-    private final CANSparkMax counterWeightMotor= new CANSparkMax(42, MotorType.kBrushless);
+    private final CANSparkMax counterWeightMotor= new CANSparkMax(69, MotorType.kBrushless);
 
     private static double kP = 0;
     private static double kI = 0;
