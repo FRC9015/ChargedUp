@@ -27,7 +27,7 @@ public class armpidCommand extends CommandBase {
   public armpidCommand(ArmSubsystem myArmSubsystem,double setpoint) {
     myPidController = new PIDController(0.02, 0, 0);
     myPidController.setSetpoint(setpoint);
-    myPidController.setTolerance(1);
+    myPidController.setTolerance(0);
         
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
@@ -43,6 +43,12 @@ public class armpidCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+
+  @Override
+  public void end(boolean interrupted){
+    armSubsystem.rotateArm(0);
   }
 
   @Override
