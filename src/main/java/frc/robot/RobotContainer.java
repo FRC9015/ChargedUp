@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -157,6 +158,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand()
     {
+        
         // Read the selected trajectory from the Dashboard and transform that into a Ramsete command
         return driveSubsystem.getTrajectoryCommand(autoPaths.getSelectedTrajectory(), true);
     }

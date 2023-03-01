@@ -157,7 +157,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
         rightPID = right1.getPIDController();
 
         // Create a new PIDFConstants object for the drive
-        velocityPIDFConstants = new PIDFConstants(0.1, 0, 0, 0, 0.000015);
+        velocityPIDFConstants = new PIDFConstants(0.05, 0, 0, 0, 0.000007);
 
         double kMaxOutput = 1;
         double kMinOutput = -1;
@@ -321,6 +321,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
       }
     
     public Command getTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+        odometry.resetPosition(pigeon.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition(), new Pose2d());
         return new SequentialCommandGroup(new InstantCommand(() -> {
             if (isFirstPath) {
                 resetOdometry(traj.getInitialPose());
