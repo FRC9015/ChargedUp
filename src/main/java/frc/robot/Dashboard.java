@@ -110,7 +110,7 @@ public class Dashboard {
         // check if the sendable with the given name has already been sent
         int indexExists = dataInstances.indexOf(name);
         if (indexExists < 0) {
-            //debugTab.add(name, send);
+            debugTab.add(name, send);
             dataInstances.add(name);
         }
         
