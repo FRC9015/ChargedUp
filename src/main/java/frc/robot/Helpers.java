@@ -30,6 +30,14 @@ public class Helpers {
         return result;
     }
 
+    public double calcDeadzone(double input, double dz) {
+        if (Math.abs(input) <= dz) {
+            return 0;
+        } else {
+            return input;
+        }
+    }
+
     public static void logBox(String... msgs) {
         int maxLength = Integer.MIN_VALUE;
 
