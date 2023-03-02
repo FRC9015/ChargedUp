@@ -102,7 +102,6 @@ public class DriverController implements Sendable {
 
             @Override
             public boolean getAsBoolean() {
-                // TODO Auto-generated method stub
                 return  rTrigger.getAsDouble()>0.3;
             }
             

@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PneumaticConstants;
@@ -18,10 +17,10 @@ public class PneumaticHubSubsystem extends SubsystemBase {
         return INSTANCE;
     }
 
-    private PneumaticsControlModule pHub;
+    private PneumaticHub pHub;
 
     private PneumaticHubSubsystem() {
-        pHub = new PneumaticsControlModule(PneumaticConstants.P_HUB_CAN_ID);
+        pHub = new PneumaticHub(PneumaticConstants.P_HUB_CAN_ID);
     }
 
     public Solenoid getDoubleSolenoid(int channel) {
