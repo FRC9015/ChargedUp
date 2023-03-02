@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 import frc.robot.Dashboard;
+import frc.robot.Helpers;
 import frc.robot.RobotState;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.UpdatePIDFConstantsCommand;
@@ -57,8 +58,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
         return INSTANCE;
     }
 
-    private final CANSparkMax left1, left2;
-    private final CANSparkMax right1, right2;
+    private final CANSparkMax leftFront, leftBack;
+    private final CANSparkMax rightFront, rightBack;
     private final RelativeEncoder leftEncoder, rightEncoder;
     private final SparkMaxPIDController leftPID, rightPID;
     private final RamseteController trajRamsete;
@@ -83,57 +84,52 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
     private PigeonSubsystem pigeon = PigeonSubsystem.getInstance();
 
-    public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
-
     /**
      * Creates a new instance of this DiffDriveSubsystem. This constructor
      * is private since this class is a Singleton. Code should use
      * the {@link #getInstance()} method to get the singleton instance.
      */
     private DiffDriveSubsystem() {
-
-        CANSparkMax.enableExternalUSBControl(true);
+        CANSparkMax.enableExternalUSBControl(false);
 
         MotorType motorType = MotorType.kBrushless;
-        left1 = new CANSparkMax(DriveConstants.LEFT_FRONT_MOTOR_ID, motorType);
-        allMotors.add(left1);
-        left2 = new CANSparkMax(DriveConstants.LEFT_BACK_MOTOR_ID, motorType);
-        allMotors.add(left2);
+        leftFront = new CANSparkMax(DriveConstants.LEFT_FRONT_MOTOR_ID, motorType);
+        allMotors.add(leftFront);
+        leftBack = new CANSparkMax(DriveConstants.LEFT_BACK_MOTOR_ID, motorType);
+        allMotors.add(leftFront);
 
-        right1 = new CANSparkMax(DriveConstants.RIGHT_FRONT_MOTOR_ID, motorType);
-        allMotors.add(right1);
-        right2 = new CANSparkMax(DriveConstants.RIGHT_BACK_MOTOR_ID, motorType);
-        allMotors.add(right2);
+        rightFront = new CANSparkMax(DriveConstants.RIGHT_FRONT_MOTOR_ID, motorType);
+        allMotors.add(rightFront);
+        rightBack = new CANSparkMax(DriveConstants.RIGHT_BACK_MOTOR_ID, motorType);
+        allMotors.add(rightBack);
 
-        left2.follow(left1);
-
-        right2.follow(right1);
+        leftBack.follow(leftFront);
+        rightBack.follow(rightFront);
 
         // Properly invert motors
-        left1.setInverted(DriveConstants.LEFT_INVERTED);
-        right1.setInverted(DriveConstants.RIGHT_INVERTED);
+        leftFront.setInverted(DriveConstants.LEFT_INVERTED);
+        rightFront.setInverted(DriveConstants.RIGHT_INVERTED);
 
-        leftEncoder = left1.getEncoder();
+        leftEncoder = leftFront.getEncoder();
         leftEncoder.setPositionConversionFactor(DriveConstants.DRIVE_ENCODER_POSITION_FACTOR);
         leftEncoder.setVelocityConversionFactor(DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR);
 
-        rightEncoder = right1.getEncoder();
+        rightEncoder = rightFront.getEncoder();
         rightEncoder.setPositionConversionFactor(DriveConstants.DRIVE_ENCODER_POSITION_FACTOR);
         rightEncoder.setVelocityConversionFactor(DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR);
 
-        leftPID = left1.getPIDController();
+        leftPID = leftFront.getPIDController();
 
-        rightPID = right1.getPIDController();
+        rightPID = rightFront.getPIDController();
 
         // Create a new PIDFConstants object for the drive
-        velocityPIDFConstants = new PIDFConstants(0.1, 0, 0, 0, 0.000015);
+        velocityPIDFConstants = new PIDFConstants(0.75, 0, 0, 0, 1);
 
         double kMaxOutput = 1;
         double kMinOutput = -1;
         
         velocityPIDFConstants.updateSparkMax(leftPID);
         leftPID.setOutputRange(kMinOutput, kMaxOutput);
-
 
         velocityPIDFConstants.updateSparkMax(rightPID);
         rightPID.setOutputRange(kMinOutput, kMaxOutput);
@@ -283,6 +279,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private double calcMetersPerSecond(double input) {
         boolean isSlowed = RobotState.getSlowedSmart();
 
+        input = Helpers.calcDeadzone(input, 0.05);
+
         double inputMetersPerSecond = (input * DriveConstants.MAX_RPM) * DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR;
 
         double speedMultiplier = Dashboard.getInstance().drive.getSpeedMultiplier();
@@ -294,6 +292,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
     private double calcRadiansPerSecond(double input) {
         boolean isSlowed = RobotState.getSlowedSmart();
+
+        input = Helpers.calcDeadzone(input, 0.05);
 
         double inputRadiansPerSecond = input * DriveConstants.MAX_ANGULAR_VELOCITY;
 
