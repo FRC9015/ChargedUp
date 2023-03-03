@@ -18,14 +18,14 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-
+import edu.wpi.first.wpilibj2.command.TrapezoidProfileCommand;
 import frc.robot.Dashboard;
 import frc.robot.Helpers;
 import frc.robot.RobotState;
@@ -127,7 +127,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         double kMaxOutput = 1;
         double kMinOutput = -1;
-        
+
         velocityPIDFConstants.updateSparkMax(leftPID);
         leftPID.setOutputRange(kMinOutput, kMaxOutput);
 
@@ -141,10 +141,10 @@ public class DiffDriveSubsystem extends SubsystemBase {
         odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(),
                 leftEncoder.getPosition(), rightEncoder.getPosition());
         field = new Field2d();
-        //addChild("Field", field);
-        //Dashboard.getInstance().putSendable("field", field);
+        // addChild("Field", field);
+        // Dashboard.getInstance().putSendable("field", field);
 
-        SmartDashboard.putData("field",field);
+        SmartDashboard.putData("field", field);
 
         /**
          * Each input to be rate limited must have it's own filter. In any given drive,
@@ -233,7 +233,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
         stop();
         setBrakeMode(prevBrakeMode);
     }
-    
+
     public void resetOdometry(Pose2d initPose) {
         resetEncoders();
         odometry.resetPosition(pigeon.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition(), initPose);
@@ -250,7 +250,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     public ChassisSpeeds getChassisSpeeds() {
         return DriveConstants.KINEMATICS.toChassisSpeeds(getWheelSpeeds());
     }
-    
+
     public Command getTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
         return new SequentialCommandGroup(new InstantCommand(() -> {
             if (isFirstPath) {
@@ -270,6 +270,17 @@ public class DiffDriveSubsystem extends SubsystemBase {
                         this));
     }
 
+    public Command getDriveDistanceCommand(double distanceMeters) {
+        return new TrapezoidProfileCommand(new TrapezoidProfile(
+            // The motion profile constraints
+            new TrapezoidProfile.Constraints(DriveConstants.kPathConstraints.maxVelocity, DriveConstants.kPathConstraints.maxAcceleration),
+            // Goal state
+            new TrapezoidProfile.State(distanceMeters, 0),
+            // Initial state
+            new TrapezoidProfile.State(0, this.getChassisSpeeds().vyMetersPerSecond)), (state) -> {
+                this.setSpeeds(new DifferentialDriveWheelSpeeds(state.velocity, state.velocity));
+            }, this);
+    }
 
     // ----------------- PRIVATE HELPER METHODS ----------------- //
 
