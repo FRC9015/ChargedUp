@@ -246,6 +246,10 @@ public class DiffDriveSubsystem extends SubsystemBase {
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(), rightEncoder.getVelocity());
     }
+
+    public ChassisSpeeds getChassisSpeeds() {
+        return DriveConstants.KINEMATICS.toChassisSpeeds(getWheelSpeeds());
+    }
     
     public Command getTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
         return new SequentialCommandGroup(new InstantCommand(() -> {
