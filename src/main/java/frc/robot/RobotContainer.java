@@ -104,7 +104,7 @@ public class RobotContainer {
 
         */
         // Toggle the balance command on and off when the driver's A button is pressed
-        driver.getA().toggleOnTrue(new RepeatCommand(new BalanceCommand(pigeonSubsystem, driveSubsystem)));
+        driver.getA().toggleOnTrue(new RepeatCommand(new BalanceCommand()));
 
         // When the driver's left bumper is pressed, switch between low and high speed.
         driver.getLb().onTrue(new SwitchSpeed());
