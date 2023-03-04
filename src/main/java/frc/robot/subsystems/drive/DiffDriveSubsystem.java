@@ -20,6 +20,8 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.DifferentialDriveWheelVoltages;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -101,6 +103,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
      * per second
      */
     private BiConsumer<Double, Double> ramseteOutputBiConsumer;
+
+    private BiConsumer<Double,Double> voltageBiConsumer;
 
     private IdleMode brakeMode = IdleMode.kCoast;
 
@@ -192,6 +196,11 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         ramseteOutputBiConsumer = (left, right) -> {
             setSpeeds(new DifferentialDriveWheelSpeeds(left, right));
+        };
+
+        voltageBiConsumer = (left,right) -> {
+            left1.setVoltage(left);
+            right1.setVoltage(right);
         };
     }
 
@@ -324,25 +333,29 @@ public class DiffDriveSubsystem extends SubsystemBase {
     
         ramseteCommand.schedule();
       }
-    
-    public Command getTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-        odometry.resetPosition(pigeon.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition(), new Pose2d());
-        return new SequentialCommandGroup(new InstantCommand(() -> {
-            if (isFirstPath) {
-                resetOdometry(traj.getInitialPose());
+    public void outputVolts(DifferentialDriveWheelVoltages volts){
+        left1.setVoltage(volts.left);
+        right1.setVoltage(volts.right);
+    }
+      // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
+    public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+        return new SequentialCommandGroup(
+            new InstantCommand(() -> {
+            // Reset odometry for the first path you run during auto
+            if(isFirstPath){
+                this.resetOdometry(traj.getInitialPose());
             }
-        }),
-                /*
-                 * Note: currently does not perform transforms based on Alliance Color
-                 *
-                 * We do not supply PIDControllers or Feedforwards, instead we take the
-                 * velocity output from the RamseteController which is then processed by the
-                 * SparkMax's built in PID and Feedforward
-                 * functionality
-                 */
-                new PPRamseteCommand(traj, this::getPose, trajRamsete, DriveConstants.KINEMATICS,
-                        ramseteOutputBiConsumer,
-                        this));
+            }),
+            new PPRamseteCommand(
+                traj, 
+                this::getPose, // Pose supplier
+                new RamseteController(),
+                DriveConstants.KINEMATICS, // DifferentialDriveKinematics
+                //this::voltageBiConsumer, // Voltage biconsumer
+                ramseteOutputBiConsumer,
+                this // Requires this drive subsystem
+            )
+        ).andThen(new InstantCommand(() -> this.arcadeDrive(0, 0), this));
     }
     
     /**

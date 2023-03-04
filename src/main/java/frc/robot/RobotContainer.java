@@ -156,12 +156,7 @@ public class RobotContainer {
     /**
      * @return the command to run in autonomous
      */
-    public Command getAutonomousCommand()
-    {
-        
-        // Read the selected trajectory from the Dashboard and transform that into a Ramsete command
-        return driveSubsystem.getTrajectoryCommand(autoPaths.getSelectedTrajectory(), true);
-    }
+
 
     /**
      * @return the command to run in teleop

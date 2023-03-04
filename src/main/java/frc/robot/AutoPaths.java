@@ -64,11 +64,8 @@ public class AutoPaths {
      * @return instance of a {@link PathPlannerTrajectory} that was selected on the dashboard
      */
     public PathPlannerTrajectory getSelectedTrajectory(){
-        PathPlannerTrajectory selectedTraj = paths.getSelected();
-        if (selectedTraj == null) {
-            return PathPlanner.loadPath(pathNames.get(0), DriveConstants.kPathConstraints);
-        } else {
-            return selectedTraj;
-        }
+        
+            return PathPlanner.loadPath("90", DriveConstants.kPathConstraints);
+    
     }
 }

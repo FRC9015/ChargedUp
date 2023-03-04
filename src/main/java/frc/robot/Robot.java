@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Dashboard.CurrentTab;
 import frc.robot.controllers.DriverController;
+import frc.robot.subsystems.drive.DiffDriveSubsystem;
 
 
 
@@ -23,6 +24,7 @@ import frc.robot.controllers.DriverController;
 public class Robot extends TimedRobot
 {
     private Command autonomousCommand;
+
     private Command teleopCommand;
     
     private RobotContainer robotContainer;
@@ -79,8 +81,7 @@ public class Robot extends TimedRobot
     public void autonomousInit()
     {
         Dashboard.getInstance().setCurrentTab(CurrentTab.Auto);
-
-        autonomousCommand = robotContainer.getAutonomousCommand();
+        autonomousCommand = DiffDriveSubsystem.getInstance().followTrajectoryCommand(autoPaths.getSelectedTrajectory(), isAutonomous());
         
         // schedule the autonomous command (example)
         if (autonomousCommand != null)
