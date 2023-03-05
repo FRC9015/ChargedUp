@@ -65,7 +65,7 @@ public class AutoPaths {
      */
     public PathPlannerTrajectory getSelectedTrajectory(){
         
-            return PathPlanner.loadPath("90", DriveConstants.kPathConstraints);
+            return PathPlanner.loadPath("forward", DriveConstants.kPathConstraints);
     
     }
 }

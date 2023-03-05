@@ -5,10 +5,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Dashboard.CurrentTab;
 import frc.robot.controllers.DriverController;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
@@ -80,8 +83,12 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousInit()
     {
+
+
+        DiffDriveSubsystem.getInstance().resetOdometry(new Pose2d());
+        //DiffDriveSubsystem.getInstance().runRamseteCommand(new Pose2d(0, 0, new Rotation2d()), new Pose2d(0, 1, new Rotation2d()), DiffDriveSubsystem.getInstance());
         Dashboard.getInstance().setCurrentTab(CurrentTab.Auto);
-        autonomousCommand = DiffDriveSubsystem.getInstance().followTrajectoryCommand(autoPaths.getSelectedTrajectory(), isAutonomous());
+        autonomousCommand = DiffDriveSubsystem.getInstance().followTrajectoryCommand(autoPaths.getSelectedTrajectory(), true);
         
         // schedule the autonomous command (example)
         if (autonomousCommand != null)
@@ -146,7 +153,7 @@ public class Robot extends TimedRobot
 
     @Override
     public void simulationInit(){
-        Dashboard.getInstance().balance.setAutoBalanced(false);
+        Dashboard.getInstance().balance.setAutoBalanced(true);
         
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to

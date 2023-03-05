@@ -39,7 +39,12 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotGearing;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotMotor;
@@ -104,7 +109,6 @@ public class DiffDriveSubsystem extends SubsystemBase {
      */
     private BiConsumer<Double, Double> ramseteOutputBiConsumer;
 
-    private BiConsumer<Double,Double> voltageBiConsumer;
 
     private IdleMode brakeMode = IdleMode.kCoast;
 
@@ -114,7 +118,20 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
     private PigeonSubsystem pigeon = PigeonSubsystem.getInstance();
 
-    public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
+
+    private static final double kP_default = 0.0;
+    private static final double kI_default = 0.0;
+    private static final double kD_default = 0.0;
+    private static final double iZone_default = 0.0;
+    private static final double kF_default = 0.0;
+
+    private double kP = kP_default;
+    private double kI = kI_default;
+    private double kD = kD_default;
+    private double iZone = iZone_default;
+    private double kF = kF_default;
+
+
 
     /**
      * Creates a new instance of this DiffDriveSubsystem. This constructor
@@ -141,7 +158,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
         right2.follow(right1);
 
         // Properly invert motors
-        left1.setInverted(true);
+        left1.setInverted(false);
         right1.setInverted(false);
 
         left1.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -160,8 +177,57 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         rightPID = right1.getPIDController();
 
+
+
+
+
+        ShuffleboardTab tuningTab = Shuffleboard.getTab("Tuning");
+
+        // Add widgets to the Shuffleboard tab for editing the PIDF constants
+        
+        // Create a Sendable object that represents the PIDF constants
+        Sendable pidfConstantsSendable = new Sendable() {
+            @Override
+            public void initSendable(SendableBuilder builder) {
+                builder.setSmartDashboardType("PIDFConstants");
+                builder.addDoubleProperty("kP", () -> kP, val -> {
+                    kP = val;
+                    leftPID.setP(kP);
+                    rightPID.setP(kP);
+
+                });
+                builder.addDoubleProperty("kI", () -> kI, val -> {
+                    kI = val;
+                    leftPID.setI(kI);
+                    rightPID.setI(kI);
+                });
+                builder.addDoubleProperty("kD", () -> kD, val -> {
+                    kD = val;
+                    leftPID.setD(kD);
+                    rightPID.setD(kD);
+                });
+                builder.addDoubleProperty("iZone", () -> iZone, val -> {
+                    iZone = val;
+                    leftPID.setIZone(iZone);
+                    rightPID.setIZone(iZone);
+                });
+                builder.addDoubleProperty("kF", () -> kF, val -> {
+                    kF = val;
+                    leftPID.setFF(kF);
+                    rightPID.setFF(kF);
+                });
+            }
+        };
+
+        // Add the PIDF constants Sendable to Shuffleboard
+        Shuffleboard.getTab("Tuning").add("micahs pidf",pidfConstantsSendable).withSize(2, 5).withPosition(2, 0);
+    
+
+
+
+
         // Create a new PIDFConstants object for the drive
-        velocityPIDFConstants = new PIDFConstants(0.05, 0, 0, 0, 0.000007);
+        velocityPIDFConstants = new PIDFConstants(0, 0, 0, 0, 0.2);
 
         double kMaxOutput = 1;
         double kMinOutput = -1;
@@ -195,29 +261,28 @@ public class DiffDriveSubsystem extends SubsystemBase {
         trajRamsete = new RamseteController(DriveConstants.RAMSETE_B, DriveConstants.RAMSETE_ZETA);
 
         ramseteOutputBiConsumer = (left, right) -> {
-            setSpeeds(new DifferentialDriveWheelSpeeds(left, right));
+            setSpeeds(new DifferentialDriveWheelSpeeds(left/3.281, right/3.281));
         };
 
-        voltageBiConsumer = (left,right) -> {
-            left1.setVoltage(left);
-            right1.setVoltage(right);
-        };
+ 
     }
 
     @Override
     public void periodic() {
-        odometry.update(pigeon.getRotation2d(), leftEncoder.getPosition(),
+        //odometry.update(pigeon.getRotation2d(), -leftEncoder.getPosition(),
+        //        rightEncoder.getPosition());
+        odometry.update(pigeon.getRotation2d().unaryMinus() , -leftEncoder.getPosition(),
                 rightEncoder.getPosition());
         field.setRobotPose(odometry.getPoseMeters());
+        System.out.println(odometry.getPoseMeters());
+        
 
     }
 
     public void arcadeDrive(double fwd, double turn) {
-        if(Math.abs(fwd)<0.03 & Math.abs(turn)<0.03){
-            arcadeDriveRaw(fwd, turn, false);
-        }else{
+
         arcadeDriveRaw(fwd, turn, true);
-        }
+        
     }
 
     public void tankDrive(double left, double right) {
@@ -235,11 +300,13 @@ public class DiffDriveSubsystem extends SubsystemBase {
         fwd = rateLimited ? accelRateLimit1.calculate(fwd) : fwd;
         turn = rateLimited ? accelRateLimit2.calculate(turn) : turn;
 
-        //double fwdSpeed = calcMetersPerSecond(fwd);
-        //double turnSpeed = calcRadiansPerSecond(turn);
+        double fwdspeed = calcMetersPerSecond(fwd);
+        double turnspeed = calcMetersPerSecond(turn);
+
+        DifferentialDriveWheelSpeeds WheelSpeeds = DriveConstants.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(fwdspeed,0,turnspeed));
 
 
-        setSpeedsRaw(fwd-turn,fwd+turn);
+        setSpeeds(WheelSpeeds);
     }
 
     /**
@@ -295,7 +362,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     
     public void resetOdometry(Pose2d initPose) {
         resetEncoders();
-        odometry.resetPosition(pigeon.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition(), initPose);
+        odometry.resetPosition(pigeon.getRotation2d().unaryMinus(), leftEncoder.getPosition(), rightEncoder.getPosition(), initPose);
     }
 
     public Pose2d getPose() {
@@ -314,7 +381,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     
         // Create config for trajectory
         TrajectoryConfig config =
-            new TrajectoryConfig(1, 0.5);
+            new TrajectoryConfig(0.1, 0.05);
         Translation2d idk = new Translation2d();
         List<Translation2d> waypoints = new ArrayList<>();
         waypoints.add(idk);
@@ -343,12 +410,13 @@ public class DiffDriveSubsystem extends SubsystemBase {
             new InstantCommand(() -> {
             // Reset odometry for the first path you run during auto
             if(isFirstPath){
-                this.resetOdometry(traj.getInitialPose());
+                this.resetOdometry(new Pose2d());
+                
             }
             }),
             new PPRamseteCommand(
                 traj, 
-                this::getPose, // Pose supplier
+                odometry::getPoseMeters, // Pose supplier
                 new RamseteController(),
                 DriveConstants.KINEMATICS, // DifferentialDriveKinematics
                 //this::voltageBiConsumer, // Voltage biconsumer

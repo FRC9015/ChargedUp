@@ -34,6 +34,11 @@ public class PigeonSubsystem extends SubsystemBase {
 
     public Rotation2d getRotation2d() {
         return pigeonSensor.getRotation2d();
+
+    }
+
+    public double getAngle(){
+        return pigeonSensor.getAngle();
     }
 
     public void resetAngles() {

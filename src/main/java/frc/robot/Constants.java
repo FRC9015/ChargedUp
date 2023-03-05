@@ -36,11 +36,11 @@ public final class Constants {
         
         public static final double ACCEL_RATE_LIMIT = 2.0;
 
-        public static final double WHEEL_SIZE_INCHES = 4.0;
-        public static final double DRIVETRAIN_RATIO = 8.45; // Represents KOP-included 8.45:1 gear ratio
-        public static final double DRIVE_TRACKWIDTH_INCHES = 14.75; // Rough distance between wheels
+        public static final double WHEEL_SIZE_INCHES = 6.0;
+        public static final double DRIVETRAIN_RATIO = 12.75; // Represents KOP-included 8.45:1 gear ratio
+        public static final double DRIVE_TRACKWIDTH_INCHES = 16; // Rough distance between wheels
         public static final double MAX_RPM = 5500.0; // Max allowed RPM of the NEO motors (yes its actually 5700 but we're being conservative)
-        public static final double MAX_ANGULAR_VELOCITY = 4 * ( 2 * Math.PI); // 4 * 2pi radians per second a.k.a. 4 rotation per second
+        public static final double MAX_ANGULAR_VELOCITY = 10 * ( 2 * Math.PI); // 4 * 2pi radians per second a.k.a. 4 rotation per second
 
         public static final double RAMSETE_B = 2.0; // Ramsete B constant, 2.0 is the default WPILib value
         public static final double RAMSETE_ZETA = 0.7; // Ramsete Zeta constant, 0.7 is the default WPILib value
@@ -57,7 +57,7 @@ public final class Constants {
         public static final double DRIVE_ENCODER_VELOCITY_FACTOR = DRIVE_ENCODER_POSITION_FACTOR / 60.0;
 
         // Global constraints object for PathPlanner Trajectories
-        public static final PathConstraints kPathConstraints = new PathConstraints(1, 1);
+        public static final PathConstraints kPathConstraints = new PathConstraints(0.5, 0.5);
 
     }
 
