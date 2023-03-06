@@ -19,7 +19,7 @@ import frc.robot.Constants.ArmConstants;
 public class ArmSubsystem implements Subsystem
 {
     private final static ArmSubsystem INSTANCE = new ArmSubsystem();
-    
+
     @SuppressWarnings("WeakerAccess")
     public static ArmSubsystem getInstance() {
         return INSTANCE;
