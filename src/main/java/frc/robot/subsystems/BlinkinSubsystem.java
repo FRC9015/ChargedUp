@@ -9,21 +9,16 @@ import com.revrobotics.CANSparkMax.IdleMode;
 public class BlinkinSubsystem implements Subsystem{
   private final CANSparkMax LED;
   private final Servo ledServo;
- 
-  
   private final int blinkinChannel;
-  private final double MinLEDPulseWidth;
-  private final double MaxLEDPulseWidth;
   
-  //PID 
-  public BlinkinSubsystem(int motorId, int blinkinChannel, int servoId, double MinLEDPulseWidth, double MaxLEDPulseWidth) {
+  //Connect to Blinkin and set ServoID
+  public BlinkinSubsystem(int motorId, int blinkinChannel, int servoId) {
     LED = new CANSparkMax(motorId, MotorType.kBrushless);
     LED.setIdleMode(IdleMode.kCoast);
     
     ledServo = new Servo(servoId);
     this.blinkinChannel = blinkinChannel;
-    this.MinLEDPulseWidth = MinLEDPulseWidth; 
-    this.MaxLEDPulseWidth = MaxLEDPulseWidth;
+   
   }
   
   public void setLED(double value) {
