@@ -246,8 +246,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
         odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(),
                 leftEncoder.getPosition(), rightEncoder.getPosition());
         field = new Field2d();
-        //addChild("Field", field);
-        //Dashboard.getInstance().putSendable("field", field);
+        addChild("Field", field);
+        Dashboard.getInstance().putSendable("field", field);
         SmartDashboard.putData("field",field);
         /**
          * Each input to be rate limited must have it's own filter. In any given drive,
@@ -271,10 +271,9 @@ public class DiffDriveSubsystem extends SubsystemBase {
     public void periodic() {
         //odometry.update(pigeon.getRotation2d(), -leftEncoder.getPosition(),
         //        rightEncoder.getPosition());
-        odometry.update(pigeon.getRotation2d().unaryMinus() , -leftEncoder.getPosition(),
+        odometry.update(pigeon.getRotation2d() , -leftEncoder.getPosition(),
                 rightEncoder.getPosition());
         field.setRobotPose(odometry.getPoseMeters());
-        System.out.println(odometry.getPoseMeters());
         
 
     }
@@ -410,10 +409,11 @@ public class DiffDriveSubsystem extends SubsystemBase {
             new InstantCommand(() -> {
             // Reset odometry for the first path you run during auto
             if(isFirstPath){
-                this.resetOdometry(new Pose2d());
-                
+                this.resetOdometry(traj.getInitialPose());
+                System.out.println(this.getPose());
+
             }
-            }),
+            },this),
             new PPRamseteCommand(
                 traj, 
                 odometry::getPoseMeters, // Pose supplier
