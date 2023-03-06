@@ -9,13 +9,14 @@ import com.revrobotics.CANSparkMax.IdleMode;
 public class BlinkinSubsystem implements Subsystem{
   private final CANSparkMax LED;
   private final Servo ledServo;
+  private final int blinkinChannel;
   
-  // Connect to Blinkin and set ServoID
-  public BlinkinSubsystem(int motorId, int BlinkinChannel, int servoId) {
+  //Connect to Blinkin and set ServoID
+  public BlinkinSubsystem(int motorId, int blinkinChannel, int servoId) {
     LED = new CANSparkMax(motorId, MotorType.kBrushless);
     LED.setIdleMode(IdleMode.kCoast);
-    
     ledServo = new Servo(servoId);
+    this.blinkinChannel = blinkinChannel;
    
   }
   
@@ -24,14 +25,14 @@ public class BlinkinSubsystem implements Subsystem{
   }
 
   public void setTeamColors(){
-    setLED(1005); // This value will be changed.
+    setLED(1005); //This value will be changed.
   }
   public void setCone(){
-    setLED(1005); // But rainbows are cool
+    setLED(1005); //But rainbows are cool
   }
 
   public void setCube(){
-    setLED(1005); // :)
+    setLED(1005); //:)
   }
   
 }
