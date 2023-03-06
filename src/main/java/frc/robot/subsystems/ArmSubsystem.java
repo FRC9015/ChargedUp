@@ -21,7 +21,7 @@ public class ArmSubsystem implements Subsystem
     }
 
 
-    private final CANSparkMax rotateArm; //rotateArm pivots the arm. 
+    private final CANSparkMax rotateArm, rotateArmSecond; //rotateArm pivots the arm. 
     private final TalonSRX telescopeArm; //telescopeArm moves the arm in and out.
 
     private final DoubleSolenoid rotateArmBrake;
@@ -30,7 +30,9 @@ public class ArmSubsystem implements Subsystem
     private ArmSubsystem() 
     {
         rotateArm = new CANSparkMax(IntakeConstants.ARM_LIFT_CAN_ID, MotorType.kBrushless);
-        telescopeArm = new TalonSRX(IntakeConstants.ARM_TELESCOPE_CAN_ID);
+        rotateArmSecond = new CANSparkMax(IntakeConstants.ARM_LIFT_2_CAN_ID, MotorType.kBrushless);
+
+        rotateArmSecond.follow(rotateArm);
 
         rotateArmBrake = PneumaticHubSubsystem.getInstance().getDoubleSolenoid(IntakeConstants.ARM_BRAKE_SOLENOID);
     }
