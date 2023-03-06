@@ -23,7 +23,7 @@ public class PneumaticHubSubsystem extends SubsystemBase {
         pHub = new PneumaticHub(PneumaticConstants.P_HUB_CAN_ID);
     }
 
-    public Solenoid getDoubleSolenoid(int channel) {
+    public Solenoid getSolenoid(int channel) {
         return pHub.makeSolenoid(channel);
     }
 
