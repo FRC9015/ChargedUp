@@ -114,7 +114,7 @@ public class RobotContainer {
         driver.getY().whileTrue(new ArmInCommand());
         driver.getX().whileTrue(new ArmOutCommand());
 
-        driver.getLTrigAsButton().onTrue(driveSubsystem.getDriveDistanceCommand(Units.inchesToMeters(18)));
+        driver.getA().onTrue(driveSubsystem.getDriveDistanceCommand(Units.inchesToMeters(18)));
 
         driver.getRb().onTrue(new ToggleIntakeCommand());
         driver.getX().onTrue(new OpenIntakeCommand());
