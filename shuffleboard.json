@@ -19,9 +19,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/limelight_PipelineName",
-              "_title": "limelight_PipelineName",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "limelight_PipelineName"
             }
           },
           "1,0": {
@@ -32,9 +30,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/limelight_Stream",
-              "_title": "limelight_Stream",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "limelight_Stream"
             }
           },
           "2,0": {
@@ -45,9 +41,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/limelight_Interface",
-              "_title": "limelight_Interface",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "limelight_Interface"
             }
           },
           "3,0": {
@@ -58,9 +52,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/PPRamseteCommand/xErrorMeters",
-              "_title": "PPRamseteCommand/xErrorMeters",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "PPRamseteCommand/xErrorMeters"
             }
           },
           "4,0": {
@@ -71,9 +63,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/PPRamseteCommand/yErrorMeters",
-              "_title": "PPRamseteCommand/yErrorMeters",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "PPRamseteCommand/yErrorMeters"
             }
           },
           "5,0": {
@@ -84,9 +74,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/PPRamseteCommand/rotationErrorDegrees",
-              "_title": "PPRamseteCommand/rotationErrorDegrees",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "PPRamseteCommand/rotationErrorDegrees"
             }
           },
           "6,0": {
@@ -98,9 +86,7 @@
               "_type": "Field",
               "_source0": "network_table:///SmartDashboard/field",
               "_title": "field",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Game/Game": "A2023_Charged_Up",
+              "Game/Game": "A2022_Rapid_React",
               "Visuals/Robot Icon Size": 50.0,
               "Visuals/Show Outside Circles": false
             }
@@ -128,16 +114,12 @@
               "_type": "Subsystem Layout",
               "_source0": "network_table:///LiveWindow/PigeonSubsystem",
               "_title": "PigeonSubsystem",
-              "_glyph": 149,
-              "_showGlyph": false,
               "Layout/Label position": "BOTTOM",
               "_children": [
                 {
                   "_type": "Gyro",
                   "_source0": "network_table:///LiveWindow/PigeonSubsystem/pigeon",
                   "_title": "pigeon",
-                  "_glyph": 148,
-                  "_showGlyph": false,
                   "Visuals/Major tick spacing": 45.0,
                   "Visuals/Starting angle": 180.0,
                   "Visuals/Show tick mark ring": true,
@@ -155,8 +137,6 @@
               "_type": "Differential Drivebase",
               "_source0": "network_table:///LiveWindow/DiffDriveSubsystem/DiffDrive",
               "_title": "DiffDriveSubsystem/DiffDrive",
-              "_glyph": 148,
-              "_showGlyph": false,
               "Wheels/Number of wheels": 4,
               "Wheels/Wheel diameter": 80.0,
               "Visuals/Show velocity vectors": true
@@ -171,23 +151,17 @@
               "_type": "Subsystem Layout",
               "_source0": "network_table:///LiveWindow/Ungrouped",
               "_title": "Ungrouped",
-              "_glyph": 149,
-              "_showGlyph": false,
               "Layout/Label position": "BOTTOM",
               "_children": [
                 {
                   "_type": "PID Controller",
                   "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[1]",
-                  "_title": "PIDController[1]",
-                  "_glyph": 148,
-                  "_showGlyph": false
+                  "_title": "PIDController[1]"
                 },
                 {
                   "_type": "Subsystem Layout",
                   "_source0": "network_table:///LiveWindow/Ungrouped/Scheduler/Ids",
                   "_title": "Scheduler/Ids",
-                  "_glyph": 149,
-                  "_showGlyph": false,
                   "Layout/Label position": "BOTTOM",
                   "_children": []
                 }
@@ -203,8 +177,6 @@
               "_type": "Field",
               "_source0": "network_table:///LiveWindow/DiffDriveSubsystem/Field",
               "_title": "DiffDriveSubsystem/Field",
-              "_glyph": 148,
-              "_showGlyph": false,
               "Game/Game": "A2022_Rapid_React",
               "Visuals/Robot Icon Size": 50.0,
               "Visuals/Show Outside Circles": false
@@ -232,44 +204,32 @@
             "content": {
               "_type": "List Layout",
               "_title": "Velocity PIDF Constant",
-              "_glyph": 149,
-              "_showGlyph": false,
               "Layout/Label position": "BOTTOM",
               "_children": [
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///Shuffleboard/Debug/Drive Velocity PIDF/Constants/P",
-                  "_title": "/Shuffleboard/Debug/Drive Velocity PIDF/Constants/P",
-                  "_glyph": 148,
-                  "_showGlyph": false
+                  "_title": "/Shuffleboard/Debug/Drive Velocity PIDF/Constants/P"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///Shuffleboard/Debug/Drive Velocity PIDF/Constants/I",
-                  "_title": "/Shuffleboard/Debug/Drive Velocity PIDF/Constants/I",
-                  "_glyph": 148,
-                  "_showGlyph": false
+                  "_title": "/Shuffleboard/Debug/Drive Velocity PIDF/Constants/I"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///Shuffleboard/Debug/Drive Velocity PIDF/Constants/IZone",
-                  "_title": "/Shuffleboard/Debug/Drive Velocity PIDF/Constants/IZone",
-                  "_glyph": 148,
-                  "_showGlyph": false
+                  "_title": "/Shuffleboard/Debug/Drive Velocity PIDF/Constants/IZone"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///Shuffleboard/Debug/Drive Velocity PIDF/Constants/D",
-                  "_title": "/Shuffleboard/Debug/Drive Velocity PIDF/Constants/D",
-                  "_glyph": 148,
-                  "_showGlyph": false
+                  "_title": "/Shuffleboard/Debug/Drive Velocity PIDF/Constants/D"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///Shuffleboard/Debug/Drive Velocity PIDF/Constants/FF",
-                  "_title": "/Shuffleboard/Debug/Drive Velocity PIDF/Constants/FF",
-                  "_glyph": 148,
-                  "_showGlyph": false
+                  "_title": "/Shuffleboard/Debug/Drive Velocity PIDF/Constants/FF"
                 }
               ]
             }
@@ -279,9 +239,9 @@
     }
   ],
   "windowGeometry": {
-    "x": 0.800000011920929,
-    "y": 0.800000011920929,
-    "width": 1534.4000244140625,
-    "height": 814.4000244140625
+    "x": -6.400000095367432,
+    "y": 0.0,
+    "width": 780.7999877929688,
+    "height": 822.4000244140625
   }
 }
