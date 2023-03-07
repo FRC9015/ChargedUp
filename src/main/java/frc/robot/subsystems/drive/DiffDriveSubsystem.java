@@ -19,6 +19,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -66,7 +67,10 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private final DifferentialDriveOdometry odometry;
     private final PIDFConstants velocityPIDFConstants;
 
-    // private final Dashboard dash = Dashboard.getInstance();
+    private final Dashboard dash = Dashboard.getInstance();
+
+    private final SimpleWidget leftSpeed = dash.putNumber("Speed/Left", 0), leftSpeedActual = dash.putNumber("Speed/LeftActual", 0);
+    private final SimpleWidget rightSpeed = dash.putNumber("Speed/Right", 0), rightSpeedActual = dash.putNumber("Speed/RightActual", 0);
 
     private final Field2d field;
 
@@ -123,7 +127,14 @@ public class DiffDriveSubsystem extends SubsystemBase {
         rightPID = rightFront.getPIDController();
 
         // Create a new PIDFConstants object for the drive
-        velocityPIDFConstants = new PIDFConstants(0.75, 0, 0, 0, 1);
+        velocityPIDFConstants = new PIDFConstants(0.05, 0.0, 0.0, 0, 0.099);
+
+        for (CANSparkMax ctrl : allMotors) {
+            ctrl.clearFaults();
+            System.out.println(ctrl.getStickyFaults());
+            ctrl.burnFlash();
+            ctrl.setIdleMode(brakeMode);
+        }
 
         double kMaxOutput = 1;
         double kMinOutput = -1;
@@ -152,8 +163,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
          * 1: used for the Left input (Tank) and the Forward input (Arcade)
          * 2: used for the Right input (Tank) and the Turn input (Arcade)
          */
-        accelRateLimit1 = new SlewRateLimiter(DriveConstants.ACCEL_RATE_LIMIT);
-        accelRateLimit2 = new SlewRateLimiter(DriveConstants.ACCEL_RATE_LIMIT);
+        accelRateLimit1 = new SlewRateLimiter(DriveConstants.ACCEL_RATE_LIMIT_1);
+        accelRateLimit2 = new SlewRateLimiter(DriveConstants.ACCEL_RATE_LIMIT_2);
 
         trajRamsete = new RamseteController(DriveConstants.RAMSETE_B, DriveConstants.RAMSETE_ZETA);
 
@@ -168,6 +179,12 @@ public class DiffDriveSubsystem extends SubsystemBase {
                 rightEncoder.getPosition());
         field.setRobotPose(odometry.getPoseMeters());
 
+        leftSpeedActual.getEntry().setDouble(leftEncoder.getVelocity());
+        rightSpeedActual.getEntry().setDouble(rightEncoder.getVelocity());
+    }
+
+    public Command getPIDFUpdateCommand() {
+        return new UpdatePIDFConstantsCommand(velocityPIDFConstants, leftPID, rightPID);
     }
 
     public void arcadeDrive(double fwd, double turn) {
@@ -294,7 +311,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private double calcMetersPerSecond(double input) {
         boolean isSlowed = RobotState.getSlowedSmart();
 
-        input = Helpers.calcDeadzone(input, 0.05);
+        input = Helpers.calcDeadzone(input, 0.1);
 
         double inputMetersPerSecond = (input * DriveConstants.MAX_RPM) * DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR;
 
@@ -308,7 +325,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private double calcRadiansPerSecond(double input) {
         boolean isSlowed = RobotState.getSlowedSmart();
 
-        input = Helpers.calcDeadzone(input, 0.05);
+        input = Helpers.calcDeadzone(input, 0.1);
 
         double inputRadiansPerSecond = input * DriveConstants.MAX_ANGULAR_VELOCITY;
 
@@ -320,6 +337,9 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
         leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity);
         rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity);
+
+        leftSpeed.getEntry().setDouble(speeds.leftMetersPerSecond);
+        rightSpeed.getEntry().setDouble(speeds.rightMetersPerSecond);
     }
 
     private void resetEncoders() {
