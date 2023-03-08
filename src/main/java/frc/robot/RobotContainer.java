@@ -139,7 +139,8 @@ public class RobotContainer {
 
         driver.getLB().whileTrue(new PointToTagCommand(limelightSubsytem, driveSubsystem));
         driver.getRB().onTrue(new GoToPointCommand(limelightSubsytem));
-
+        
+        driver.getStart().onTrue(new InstantCommand(()->blinkinSubsystem.setTeamColors(),blinkinSubsystem));
 
     }
 
