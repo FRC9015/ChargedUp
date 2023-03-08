@@ -24,13 +24,13 @@ public class BlinkinSubsystem implements Subsystem{
   }
 
   public void setTeamColors(){
-    setLED(1005); // This value will be changed.
+    setLED(1695); // Color 2 (Orange) sparkles on color 1 (Blue). The colors must be manually set on the Rev Blinkin.
   }
   public void setCone(){
-    setLED(1005); // But rainbows are cool.
+    setLED(1845); // Sets the color to yellow for the cone.
   }
 
   public void setCube(){
-    setLED(1005); // :)
+    setLED(1995); // Sets the color to violet for the cube.
   }
 }
