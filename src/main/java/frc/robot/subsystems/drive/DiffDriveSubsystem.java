@@ -123,7 +123,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private static final double kI_default = 0.0;
     private static final double kD_default = 0.0;
     private static final double iZone_default = 0.0;
-    private static final double kF_default = 0.0;
+    private static final double kF_default = 0.2;
 
     private double kP = kP_default;
     private double kI = kI_default;
@@ -227,7 +227,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
 
         // Create a new PIDFConstants object for the drive
-        velocityPIDFConstants = new PIDFConstants(0, 0, 0, 0, 0.2);
+        velocityPIDFConstants = new PIDFConstants(kP, kI, kD, iZone, kF);
 
         double kMaxOutput = 1;
         double kMinOutput = -1;
@@ -410,10 +410,10 @@ public class DiffDriveSubsystem extends SubsystemBase {
             // Reset odometry for the first path you run during auto
             if(isFirstPath){
                 this.resetOdometry(traj.getInitialPose());
-                System.out.println(this.getPose());
+                System.out.println(this.odometry.getPoseMeters());
 
             }
-            },this),
+            }),
             new PPRamseteCommand(
                 traj, 
                 odometry::getPoseMeters, // Pose supplier
