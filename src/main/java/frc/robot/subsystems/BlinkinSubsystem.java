@@ -15,7 +15,7 @@ public class BlinkinSubsystem implements Subsystem{
     return INSTANCE;
   }
   
-  //Variables 
+  // Variables
   private final CANSparkMax LED;
   private final Servo ledServo;
   // private final int blinkinChannel;
@@ -33,7 +33,7 @@ public class BlinkinSubsystem implements Subsystem{
 
   
   
-  //Methods
+  // Methods
   public void setLED(double value) {
     ledServo.set(value);
   }

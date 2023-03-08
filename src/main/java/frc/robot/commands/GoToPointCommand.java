@@ -9,20 +9,20 @@ import java.util.Set;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.LimelightSubsytem;
-import frc.robot.subsystems.LimelightSubsytem;
+import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
 
 public class GoToPointCommand extends CommandBase {
-  private final LimelightSubsytem limelightSubsytem;
+  private final LimelightSubsystem limelightSubsystem;
   //private final DiffDriveSubsystem diffDriveSubsystem;
   private final Set<Subsystem> subsystems;
   /** Creates a new PointToTagCommand. */
-  public GoToPointCommand(LimelightSubsytem limelightSubsytem)
+  public GoToPointCommand(LimelightSubsystem limelightSubsystem)
   {
     //this.diffDriveSubsystem = diffDriveSubsystem;
-    this.limelightSubsytem = limelightSubsytem;
-    this.subsystems = Set.of(this.limelightSubsytem);
+    this.limelightSubsystem = limelightSubsystem;
+    this.subsystems = Set.of(this.limelightSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -35,7 +35,7 @@ public class GoToPointCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double[] botpose = limelightSubsytem.getBotpose();
+    double[] botpose = limelightSubsystem.getBotpose();
     System.out.print(botpose[0]);
     System.out.print(botpose[1]);
     System.out.print(botpose[2]);

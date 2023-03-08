@@ -12,20 +12,20 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.LimelightSubsytem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
 
 public class SyncLimelightPose extends CommandBase {
-  private final LimelightSubsytem limelightSubsytem;
+  private final LimelightSubsystem limelightSubsystem;
   private final DiffDriveSubsystem diffDriveSubsystem;
   private final Set<Subsystem> subsystems;
   private boolean finished;
   /** Creates a new PointToTagCommand. */
-  public SyncLimelightPose(LimelightSubsytem limelightSubsytem, DiffDriveSubsystem diffDriveSubsystem)
+  public SyncLimelightPose(LimelightSubsystem limelightSubsystem, DiffDriveSubsystem diffDriveSubsystem)
   {
     this.diffDriveSubsystem = diffDriveSubsystem;
-    this.limelightSubsytem = limelightSubsytem;
-    this.subsystems = Set.of(this.limelightSubsytem,this.diffDriveSubsystem);
+    this.limelightSubsystem = limelightSubsystem;
+    this.subsystems = Set.of(this.limelightSubsystem,this.diffDriveSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
     finished = false;
   }
@@ -39,9 +39,9 @@ public class SyncLimelightPose extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(limelightSubsytem.hasTargets()){
+    if(limelightSubsystem.hasTargets()){
       try{
-    double[] botpose = limelightSubsytem.getBotpose();
+    double[] botpose = limelightSubsystem.getBotpose();
     diffDriveSubsystem.resetOdometry(new Pose2d(botpose[0], botpose[1], new Rotation2d(botpose[5]*(3.1415/180))));
 
     finished = true;

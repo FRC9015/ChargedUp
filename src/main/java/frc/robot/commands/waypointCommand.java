@@ -10,22 +10,22 @@ import java.util.Set;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.LimelightSubsytem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
 import frc.robot.Robot;
 import frc.robot.RobotState;
 
 
 public class waypointCommand extends CommandBase {
-  private final LimelightSubsytem limelightSubsytem;
+  private final LimelightSubsystem limelightSubsystem;
   private final DiffDriveSubsystem diffDriveSubsystem;
   private final Set<Subsystem> subsystems;
   /** Creates a new waypointCommand. */
-  public waypointCommand(LimelightSubsytem limelightSubsytem, DiffDriveSubsystem diffDriveSubsystem) {
+  public waypointCommand(LimelightSubsystem limelightSubsystem, DiffDriveSubsystem diffDriveSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.diffDriveSubsystem = diffDriveSubsystem;
-    this.limelightSubsytem = limelightSubsytem;
-    this.subsystems = Set.of(this.limelightSubsytem,this.diffDriveSubsystem);
+    this.limelightSubsystem = limelightSubsystem;
+    this.subsystems = Set.of(this.limelightSubsystem,this.diffDriveSubsystem);
   }
 
   // Called when the command is initially scheduled.

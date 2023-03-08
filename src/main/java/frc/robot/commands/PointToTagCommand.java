@@ -9,20 +9,20 @@ import java.util.Set;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.LimelightSubsytem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
 
 public class PointToTagCommand extends CommandBase {
-  private final LimelightSubsytem limelightSubsytem;
+  private final LimelightSubsystem limelightSubsystem;
   private final DiffDriveSubsystem diffDriveSubsystem;
   private final Set<Subsystem> subsystems;
   private final PIDController pid;
   /** Creates a new PointToTagCommand. */
-  public PointToTagCommand(LimelightSubsytem limelightSubsytem, DiffDriveSubsystem diffDriveSubsystem)
+  public PointToTagCommand(LimelightSubsystem limelightSubsystem, DiffDriveSubsystem diffDriveSubsystem)
   {
     this.diffDriveSubsystem = diffDriveSubsystem;
-    this.limelightSubsytem = limelightSubsytem;
-    this.subsystems = Set.of(this.diffDriveSubsystem, this.limelightSubsytem);
+    this.limelightSubsystem = limelightSubsystem;
+    this.subsystems = Set.of(this.diffDriveSubsystem, this.limelightSubsystem);
     pid = new PIDController(0.03, 0.08, 0.001);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -37,7 +37,7 @@ public class PointToTagCommand extends CommandBase {
   @Override
   public void execute() {
     
-    diffDriveSubsystem.arcadeDrive(0, -pid.calculate(limelightSubsytem.getTx(),0));
+    diffDriveSubsystem.arcadeDrive(0, -pid.calculate(limelightSubsystem.getTx(),0));
   }
 
   // Called once the command ends or is interrupted.
