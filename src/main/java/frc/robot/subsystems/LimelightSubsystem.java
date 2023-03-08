@@ -3,10 +3,10 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class LimelightSubsytem extends SubsystemBase {
+public class LimelightSubsystem extends SubsystemBase {
 
 
-    private final static LimelightSubsytem INSTANCE = new LimelightSubsytem();
+    private final static LimelightSubsystem INSTANCE = new LimelightSubsystem();
 
     NetworkTable limelight;
     NetworkTableEntry tx, ty, ta, tv, tid, botpose;
@@ -17,11 +17,11 @@ public class LimelightSubsytem extends SubsystemBase {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public static LimelightSubsytem getInstance() {
+    public static LimelightSubsystem getInstance() {
         return INSTANCE;
     }
 
-    public LimelightSubsytem() {
+    public LimelightSubsystem() {
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
         tx = limelight.getEntry("tx");
         ty = limelight.getEntry("ty");
