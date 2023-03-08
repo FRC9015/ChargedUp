@@ -5,6 +5,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.server.PathPlannerServer;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -62,8 +64,11 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer()
     {
+
         // Configure the button bindings
         configureButtonBindings();
+
+        PathPlannerServer.startServer(9015);
 
         init();
 

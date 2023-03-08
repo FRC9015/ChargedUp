@@ -361,7 +361,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     
     public void resetOdometry(Pose2d initPose) {
         resetEncoders();
-        odometry.resetPosition(pigeon.getRotation2d().unaryMinus(), leftEncoder.getPosition(), rightEncoder.getPosition(), initPose);
+        odometry.resetPosition(pigeon.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition(), initPose);
     }
 
     public Pose2d getPose() {
@@ -408,12 +408,15 @@ public class DiffDriveSubsystem extends SubsystemBase {
         return new SequentialCommandGroup(
             new InstantCommand(() -> {
             // Reset odometry for the first path you run during auto
-            if(isFirstPath){
-                this.resetOdometry(traj.getInitialPose());
+
+                this.setBrakeMode(IdleMode.kBrake);
+                System.out.println("reseting code here");
+                System.out.println(traj.getInitialPose());
+                this.resetOdometry(new Pose2d());
                 System.out.println(this.odometry.getPoseMeters());
 
-            }
-            }),
+            
+            },this),
             new PPRamseteCommand(
                 traj, 
                 odometry::getPoseMeters, // Pose supplier

@@ -18,6 +18,7 @@ public class PigeonSubsystem extends SubsystemBase {
     }
 
     private final WPI_Pigeon2 pigeonSensor;
+    
 
     private PigeonSubsystem() {
         pigeonSensor = new WPI_Pigeon2(SensorConstants.PIGEON_CAN_ID);
