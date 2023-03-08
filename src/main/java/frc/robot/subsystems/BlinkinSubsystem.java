@@ -7,18 +7,33 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 public class BlinkinSubsystem implements Subsystem{
+  
+  private final static BlinkinSubsystem INSTANCE = new BlinkinSubsystem(1,1,1); // The 1s are placeholder values.
+
+  @SuppressWarnings("WeakerAccess")
+  public static BlinkinSubsystem getInstance() {
+    return INSTANCE;
+  }
+  
+  //Variables 
   private final CANSparkMax LED;
   private final Servo ledServo;
   // private final int blinkinChannel;
   
-  // Connect to Blinkin and set ServoID.
-  public BlinkinSubsystem(int motorId, int blinkinChannel, int servoId) {
-    LED = new CANSparkMax(motorId, MotorType.kBrushless);
-    LED.setIdleMode(IdleMode.kCoast);
-    ledServo = new Servo(servoId);
-    // this.blinkinChannel = blinkinChannel;
+  
+  // Creates a new BlinkinSubsystem.
+  public BlinkinSubsystem(int motorId, int blinkinChannel, int servoId) 
+  {
+    // Connect to Blinkin and set ServoID.
+      LED = new CANSparkMax(motorId, MotorType.kBrushless);
+      LED.setIdleMode(IdleMode.kCoast);
+      ledServo = new Servo(servoId);
+      // this.blinkinChannel = blinkinChannel;
   }
 
+  
+  
+  //Methods
   public void setLED(double value) {
     ledServo.set(value);
   }
