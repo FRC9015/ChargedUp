@@ -5,6 +5,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.server.PathPlannerServer;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -67,6 +69,10 @@ public class RobotContainer {
 
         // Stops the DS from constantly yelling about the joystick being disconnected
         DriverStation.silenceJoystickConnectionWarning(true);
+
+        if (DriverStation.isFMSAttached() == false) {
+            PathPlannerServer.startServer(9015);
+        }
     }
 
     public void initRobot() {
