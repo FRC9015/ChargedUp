@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -175,7 +176,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        odometry.update(pigeon.getRotation2d(), leftEncoder.getPosition(),
+        Rotation2d rot2d = new Rotation2d(pigeon.getRotation2d().getRadians() - Math.PI);
+        odometry.update(rot2d, leftEncoder.getPosition(),
                 rightEncoder.getPosition());
         field.setRobotPose(odometry.getPoseMeters());
 
@@ -252,8 +254,16 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
     
     public void resetOdometry(Pose2d initPose) {
-        resetEncoders();
         odometry.resetPosition(pigeon.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition(), initPose);
+    }
+
+    public void logPosition(String name) {
+        Helpers.logBox(
+            "Note: " + name,
+            "Left Enc: " + leftEncoder.getPosition(), "Right Enc: " + rightEncoder.getPosition(),
+            "Rotation2D: " + pigeon.getRotation2d().getDegrees(),
+            "Pose2D: " + odometry.getPoseMeters()
+        );
     }
 
     public Pose2d getPose() {
@@ -266,8 +276,10 @@ public class DiffDriveSubsystem extends SubsystemBase {
     
     public Command getTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
         return new SequentialCommandGroup(new InstantCommand(() -> {
+            logPosition("BeforePPReset");
             if (isFirstPath) {
                 resetOdometry(traj.getInitialPose());
+                logPosition("AfterPPReset");
             }
         }),
                 /*
@@ -279,7 +291,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
                  * functionality
                  */
                 new PPRamseteCommand(traj, this::getPose, trajRamsete, DriveConstants.KINEMATICS,
-                        ramseteOutputBiConsumer,
+                        ramseteOutputBiConsumer, false,
                         this));
     }
 
