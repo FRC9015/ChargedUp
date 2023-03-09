@@ -71,4 +71,14 @@ public class AutoPaths {
             return selectedTraj;
         }
     }
+
+    public PathPlannerTrajectory getTrajectory(String name) {
+        PathPlannerTrajectory traj = PathPlanner.loadPath(name, DriveConstants.kPathConstraints);
+
+        if (traj == null) {
+            return PathPlanner.loadPath(pathNames.get(0), DriveConstants.kPathConstraints);
+        } else {
+            return traj;
+        }
+    }
 }
