@@ -150,7 +150,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
         Dashboard.getInstance().putSendable("Drive Velocity PIDF/Update",
                 new UpdatePIDFConstantsCommand(velocityPIDFConstants, leftPID, rightPID));
 
-        odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(),
+        odometry = new DifferentialDriveOdometry(new Rotation2d(pigeon.getRotation2d().getRadians() - Math.PI),
                 leftEncoder.getPosition(), rightEncoder.getPosition());
         field = new Field2d();
         //addChild("Field", field);
@@ -170,7 +170,10 @@ public class DiffDriveSubsystem extends SubsystemBase {
         trajRamsete = new RamseteController(DriveConstants.RAMSETE_B, DriveConstants.RAMSETE_ZETA);
 
         ramseteOutputBiConsumer = (left, right) -> {
-            setSpeeds(new DifferentialDriveWheelSpeeds(left, right));
+            ChassisSpeeds speeed =  DriveConstants.KINEMATICS.toChassisSpeeds(new DifferentialDriveWheelSpeeds(left, right));
+            ChassisSpeeds speeed2 = new ChassisSpeeds(speeed.vxMetersPerSecond, speeed.vyMetersPerSecond, -speeed.omegaRadiansPerSecond);
+            DifferentialDriveWheelSpeeds wheelspeeds = DriveConstants.KINEMATICS.toWheelSpeeds(speeed2);
+            setSpeeds(wheelspeeds);
         };
     }
 
@@ -254,14 +257,14 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
     
     public void resetOdometry(Pose2d initPose) {
-        odometry.resetPosition(pigeon.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition(), initPose);
+        odometry.resetPosition(new Rotation2d(pigeon.getRotation2d().getRadians() - Math.PI), leftEncoder.getPosition(), rightEncoder.getPosition(), initPose);
     }
 
     public void logPosition(String name) {
         Helpers.logBox(
             "Note: " + name,
             "Left Enc: " + leftEncoder.getPosition(), "Right Enc: " + rightEncoder.getPosition(),
-            "Rotation2D: " + pigeon.getRotation2d().getDegrees(),
+            "Rotation2D: " + new Rotation2d(pigeon.getRotation2d().getRadians() - Math.PI).getDegrees(),
             "Pose2D: " + odometry.getPoseMeters()
         );
     }
