@@ -17,7 +17,7 @@ import frc.robot.commands.ArmOutCommand;
 import frc.robot.commands.ArmUp;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.CloseIntakeCommand;
-//import frc.robot.commands.ExampleCommand;
+// Import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.GoToPointCommand;
 import frc.robot.commands.OpenIntakeCommand;
 import frc.robot.commands.PointToTagCommand;
@@ -27,7 +27,7 @@ import frc.robot.commands.WeightCalibrationCommand;
 import frc.robot.commands.WeightForwardCommand;
 import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
-//import frc.robokut.subsystems.CounterweightSubsystem;
+// Import frc.robokut.subsystems.CounterweightSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BlinkinSubsystem;
 import frc.robot.subsystems.CounterweightPIDSubsystem;
@@ -54,17 +54,17 @@ public class RobotContainer {
         return INSTANCE;
     }
     // The robot's subsystems and commands are defined here...
-    //private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
+    // Private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     DiffDriveSubsystem driveSubsystem = DiffDriveSubsystem.getInstance();
     PigeonSubsystem pigeonSubsystem = PigeonSubsystem.getInstance();
-    ArmSubsystem armSubsystem= ArmSubsystem.getInstance();
-    BlinkinSubsystem blinkinSubsystem= BlinkinSubsystem.getInstance();
-    LimelightSubsystem limelightSubsytem = LimelightSubsystem.getInstance();
-    //CounterweightSubsystem counterweightSubsystem = CounterweightSubsystem.getInstance();
+    ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+    BlinkinSubsystem blinkinSubsystem = BlinkinSubsystem.getInstance();
+    LimelightSubsystem limelightSubsystem = LimelightSubsystem.getInstance();
+    // CounterweightSubsystem counterweightSubsystem = CounterweightSubsystem.getInstance();
     CounterweightPIDSubsystem counterweightPIDSubsystem = CounterweightPIDSubsystem.getInstance();
-    //private final Command autoCommand = new ExampleCommand(exampleSubsystem);
+    // Private final Command autoCommand = new ExampleCommand(exampleSubsystem);
     IntakeNewmaticSubsystem intakeNewmaticSubsystem = IntakeNewmaticSubsystem.getInstance();
-    // private final Command driveCommand = new ArcadeDrive();
+    // Private final Command driveCommand = new ArcadeDrive();
 
     public final RobotState robotState = RobotState.getInstance();
     private AutoPaths autoPaths = AutoPaths.getInstance();
@@ -137,8 +137,8 @@ public class RobotContainer {
         driver.getX().onTrue(new OpenIntakeCommand(intakeNewmaticSubsystem));
         driver.getY().onTrue(new CloseIntakeCommand(intakeNewmaticSubsystem));
 
-        driver.getLB().whileTrue(new PointToTagCommand(limelightSubsytem, driveSubsystem));
-        driver.getRB().onTrue(new GoToPointCommand(limelightSubsytem));
+        driver.getLB().whileTrue(new PointToTagCommand(limelightSubsystem, driveSubsystem));
+        driver.getRB().onTrue(new GoToPointCommand(limelightSubsystem));
         
         driver.getStart().onTrue(new InstantCommand(()->blinkinSubsystem.setTeamColors(),blinkinSubsystem));
 
