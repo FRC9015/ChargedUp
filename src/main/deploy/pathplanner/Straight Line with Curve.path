@@ -73,5 +73,18 @@
   "maxVelocity": null,
   "maxAcceleration": null,
   "isReversed": false,
-  "markers": []
+  "markers": [
+    {
+      "position": 0.6909090909090909,
+      "names": [
+        "marker1"
+      ]
+    },
+    {
+      "position": 1.3999999999999984,
+      "names": [
+        "marker2"
+      ]
+    }
+  ]
 }

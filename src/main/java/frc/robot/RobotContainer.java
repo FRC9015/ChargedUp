@@ -5,11 +5,14 @@
 
 package frc.robot;
 
+import java.util.HashMap;
+
 import com.pathplanner.lib.server.PathPlannerServer;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.Arm.ArmDownCommand;
@@ -139,8 +142,13 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand()
     {
+
+        HashMap<String, Command> eventMap = new HashMap<>();
+        eventMap.put("marker1", new PrintCommand("Passed marker 1"));
+        eventMap.put("marker2", new PrintCommand("marker 2"));
+
         // Read the selected trajectory from the Dashboard and transform that into a Ramsete command
-        return driveSubsystem.getTrajectoryCommand(autoPaths.getSelectedTrajectory(), true);
+        return driveSubsystem.getAutCommandWithEvents(autoPaths.getSelectedTrajectory(), true,eventMap);
     }
 
     /**
