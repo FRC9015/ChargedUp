@@ -57,7 +57,7 @@ public final class Constants {
         public static final double DRIVE_ENCODER_VELOCITY_FACTOR = DRIVE_ENCODER_POSITION_FACTOR / 60.0;
 
         // Global constraints object for PathPlanner Trajectories
-        public static final PathConstraints kPathConstraints = new PathConstraints(0.5, 0.5);
+        public static final PathConstraints kPathConstraints = new PathConstraints(3, 1);
 
     }
 

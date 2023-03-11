@@ -88,7 +88,7 @@ public class Robot extends TimedRobot
         DiffDriveSubsystem.getInstance().resetOdometry(new Pose2d());
         //DiffDriveSubsystem.getInstance().runRamseteCommand(new Pose2d(0, 0, new Rotation2d()), new Pose2d(0, 1, new Rotation2d()), DiffDriveSubsystem.getInstance());
         Dashboard.getInstance().setCurrentTab(CurrentTab.Auto);
-        autonomousCommand = DiffDriveSubsystem.getInstance().followTrajectoryCommand(autoPaths.getSelectedTrajectory(), true);
+        autonomousCommand = RobotContainer.getInstance().getAutonomousCommand();
         
         // schedule the autonomous command (example)
         if (autonomousCommand != null)

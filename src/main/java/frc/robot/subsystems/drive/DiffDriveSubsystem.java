@@ -1,10 +1,12 @@
 package frc.robot.subsystems.drive;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.function.BiConsumer;
 
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPRamseteCommand;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -45,6 +47,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotGearing;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotMotor;
@@ -61,6 +64,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 import frc.robot.Dashboard;
+import frc.robot.Helpers;
 import frc.robot.RobotState;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.UpdatePIDFConstantsCommand;
@@ -99,7 +103,10 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private final DifferentialDriveOdometry odometry;
     private final PIDFConstants velocityPIDFConstants;
 
-    // private final Dashboard dash = Dashboard.getInstance();
+    private final Dashboard dash = Dashboard.getInstance();
+
+    private final SimpleWidget leftSpeed = dash.putNumber("Speed/Left", 0), leftSpeedActual = dash.putNumber("Speed/LeftActual", 0);
+    private final SimpleWidget rightSpeed = dash.putNumber("Speed/Right", 0), rightSpeedActual = dash.putNumber("Speed/RightActual", 0);
 
     private final Field2d field;
 
@@ -140,7 +147,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
      */
     private DiffDriveSubsystem() {
 
-        CANSparkMax.enableExternalUSBControl(true);
+        CANSparkMax.enableExternalUSBControl(false);
 
         MotorType motorType = MotorType.kBrushless;
         left1 = new CANSparkMax(DriveConstants.LEFT_FRONT_MOTOR_ID, motorType);
@@ -158,8 +165,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
         right2.follow(right1);
 
         // Properly invert motors
-        left1.setInverted(false);
-        right1.setInverted(false);
+        left1.setInverted(DriveConstants.LEFT_INVERTED);
+        right1.setInverted(DriveConstants.RIGHT_INVERTED);
 
         left1.setIdleMode(CANSparkMax.IdleMode.kBrake);
         right2.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -243,12 +250,14 @@ public class DiffDriveSubsystem extends SubsystemBase {
         Dashboard.getInstance().putSendable("Drive Velocity PIDF/Update",
                 new UpdatePIDFConstantsCommand(velocityPIDFConstants, leftPID, rightPID));
 
-        odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(),
-                leftEncoder.getPosition(), rightEncoder.getPosition());
+        odometry = new DifferentialDriveOdometry(new Rotation2d(pigeon.getRotation2d().getRadians() - Math.PI),
+            leftEncoder.getPosition(), rightEncoder.getPosition());
+
         field = new Field2d();
         addChild("Field", field);
         Dashboard.getInstance().putSendable("field", field);
         SmartDashboard.putData("field",field);
+
         /**
          * Each input to be rate limited must have it's own filter. In any given drive,
          * we have two possible inputs, and thus two filters.
@@ -261,7 +270,10 @@ public class DiffDriveSubsystem extends SubsystemBase {
         trajRamsete = new RamseteController(DriveConstants.RAMSETE_B, DriveConstants.RAMSETE_ZETA);
 
         ramseteOutputBiConsumer = (left, right) -> {
-            setSpeeds(new DifferentialDriveWheelSpeeds(left/3.281, right/3.281));
+            ChassisSpeeds speeed =  DriveConstants.KINEMATICS.toChassisSpeeds(new DifferentialDriveWheelSpeeds(left, right));
+            ChassisSpeeds speeed2 = new ChassisSpeeds(speeed.vxMetersPerSecond, speeed.vyMetersPerSecond, -speeed.omegaRadiansPerSecond);
+            DifferentialDriveWheelSpeeds wheelspeeds = DriveConstants.KINEMATICS.toWheelSpeeds(speeed2);
+            setSpeeds(wheelspeeds);
         };
 
  
@@ -269,13 +281,13 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        //odometry.update(pigeon.getRotation2d(), -leftEncoder.getPosition(),
-        //        rightEncoder.getPosition());
-        odometry.update(pigeon.getRotation2d() , -leftEncoder.getPosition(),
+        Rotation2d rot2d = new Rotation2d(pigeon.getRotation2d().getRadians() - Math.PI);
+        odometry.update(rot2d, leftEncoder.getPosition(),
                 rightEncoder.getPosition());
         field.setRobotPose(odometry.getPoseMeters());
-        
 
+        leftSpeedActual.getEntry().setDouble(leftEncoder.getVelocity());
+        rightSpeedActual.getEntry().setDouble(rightEncoder.getVelocity());
     }
 
     public void arcadeDrive(double fwd, double turn) {
@@ -360,8 +372,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
     
     public void resetOdometry(Pose2d initPose) {
-        resetEncoders();
-        odometry.resetPosition(pigeon.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition(), initPose);
+        odometry.resetPosition(new Rotation2d(pigeon.getRotation2d().getRadians() - Math.PI), leftEncoder.getPosition(), rightEncoder.getPosition(), initPose);
     }
 
     public Pose2d getPose() {
@@ -372,7 +383,14 @@ public class DiffDriveSubsystem extends SubsystemBase {
         return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(), rightEncoder.getVelocity());
     }
 
-
+    public void logPosition(String name) {
+        Helpers.logBox(
+            "Note: " + name,
+            "Left Enc: " + leftEncoder.getPosition(), "Right Enc: " + rightEncoder.getPosition(),
+            "Rotation2D: " + new Rotation2d(pigeon.getRotation2d().getRadians() - Math.PI).getDegrees(),
+            "Pose2D: " + odometry.getPoseMeters()
+        );
+    }
 
 
     public void runRamseteCommand(Pose2d start, Pose2d end,DiffDriveSubsystem m_diffDriveSubsystem) {
@@ -403,30 +421,41 @@ public class DiffDriveSubsystem extends SubsystemBase {
         left1.setVoltage(volts.left);
         right1.setVoltage(volts.right);
     }
+
       // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
-    public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-        return new SequentialCommandGroup(
-            new InstantCommand(() -> {
-            // Reset odometry for the first path you run during auto
+      public Command getTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+        return new SequentialCommandGroup(new InstantCommand(() -> {
+            logPosition("BeforePPReset");
+            if (isFirstPath) {
+                resetOdometry(traj.getInitialPose());
+                logPosition("AfterPPReset");
+            }
+        }),
+                /*
+                 * Note: currently does not perform transforms based on Alliance Color
+                 *
+                 * We do not supply PIDControllers or Feedforwards, instead we take the
+                 * velocity output from the RamseteController which is then processed by the
+                 * SparkMax's built in PID and Feedforward
+                 * functionality
+                 */
+                new PPRamseteCommand(traj, this::getPose, trajRamsete, DriveConstants.KINEMATICS,
+                        ramseteOutputBiConsumer, false,
+                        this));
+    }
 
-                this.setBrakeMode(IdleMode.kBrake);
-                System.out.println("reseting code here");
-                System.out.println(traj.getInitialPose());
-                this.resetOdometry(new Pose2d());
-                System.out.println(this.odometry.getPoseMeters());
 
-            
-            },this),
-            new PPRamseteCommand(
-                traj, 
-                odometry::getPoseMeters, // Pose supplier
-                new RamseteController(),
-                DriveConstants.KINEMATICS, // DifferentialDriveKinematics
-                //this::voltageBiConsumer, // Voltage biconsumer
-                ramseteOutputBiConsumer,
-                this // Requires this drive subsystem
-            )
-        ).andThen(new InstantCommand(() -> this.arcadeDrive(0, 0), this));
+    public Command getAutCommandWithEvents(PathPlannerTrajectory traj, boolean isFirstPath,HashMap<String, Command> hash){
+
+        // This is just an example event map. It would be better to have a constant, global event map
+        // in your code that will be used by all path following commands.
+
+
+        return (new FollowPathWithEvents(
+            getTrajectoryCommand(traj, isFirstPath),
+            traj.getMarkers(),
+            hash
+        ));
     }
     
     /**
