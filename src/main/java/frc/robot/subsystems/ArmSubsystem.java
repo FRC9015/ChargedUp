@@ -20,7 +20,7 @@ public class ArmSubsystem extends SubsystemBase
     }
 
 
-    private final CANSparkMax rotateArm, rotateArmSecond; // rotateArm pivots the arm. 
+    private final CANSparkMax rotateArm; // rotateArm pivots the arm. 
     private final RelativeEncoder rotateEncoder;
     private final SparkMaxPIDController rotatePID;
     private final PIDFConstants rotatePIDConstants;
@@ -36,14 +36,11 @@ public class ArmSubsystem extends SubsystemBase
     {
         // Set up stuff for the Arm rotating motors
         rotateArm = new CANSparkMax(IntakeConstants.ARM_LIFT_CAN_ID, MotorType.kBrushless);
-        rotateArmSecond = new CANSparkMax(IntakeConstants.ARM_LIFT_2_CAN_ID, MotorType.kBrushless);
-
-        rotateArmSecond.follow(rotateArm);
 
         rotateEncoder = rotateArm.getEncoder();
         rotatePID = rotateArm.getPIDController();
 
-        rotatePIDConstants = new PIDFConstants(0.1, 0, 0 , 0, 0.1); // THESE CONSTANTS MUST BE TUNED
+        rotatePIDConstants = new PIDFConstants(0.1, 0, 0 , 0, 0.1); // TODO: THESE CONSTANTS MUST BE TUNED
         rotatePIDConstants.updateSparkMax(rotatePID);
 
         // Initialize arm rotation brake and make sure it is released on boot
