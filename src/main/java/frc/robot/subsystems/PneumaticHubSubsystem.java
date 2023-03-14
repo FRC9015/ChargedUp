@@ -23,16 +23,16 @@ public class PneumaticHubSubsystem extends SubsystemBase {
         pHub = new PneumaticHub(PneumaticConstants.P_HUB_CAN_ID);
     }
 
-    public Solenoid getSolenoid(int channel) {
-        return pHub.makeSolenoid(channel);
+    public static Solenoid getSolenoid(int channel) {
+        return INSTANCE.pHub.makeSolenoid(channel);
     }
 
-    public DoubleSolenoid getDoubleSolenoid(int forwardChannel, int reverseChannel) {
-        return pHub.makeDoubleSolenoid(forwardChannel, reverseChannel);
+    public static DoubleSolenoid getDoubleSolenoid(int forwardChannel, int reverseChannel) {
+        return INSTANCE.pHub.makeDoubleSolenoid(forwardChannel, reverseChannel);
     }
 
-    public DoubleSolenoid getDoubleSolenoid(DoubleSolenoidConstants constants) {
-        return pHub.makeDoubleSolenoid(constants.getForwardChannel(), constants.getReverseChannel());
+    public static DoubleSolenoid getDoubleSolenoid(DoubleSolenoidConstants constants) {
+        return INSTANCE.pHub.makeDoubleSolenoid(constants.getForwardChannel(), constants.getReverseChannel());
     }
 
     @Override

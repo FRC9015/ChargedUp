@@ -44,7 +44,7 @@ public class ArmSubsystem extends SubsystemBase
         rotatePIDConstants.updateSparkMax(rotatePID);
 
         // Initialize arm rotation brake and make sure it is released on boot
-        rotateArmBrake = PneumaticHubSubsystem.getInstance().getDoubleSolenoid(IntakeConstants.ARM_BRAKE_SOLENOID);
+        rotateArmBrake = PneumaticHubSubsystem.getDoubleSolenoid(IntakeConstants.ARM_BRAKE_SOLENOID);
         rotateArmBrake.set(DoubleSolenoid.Value.kReverse);
 
         // Set up stuff for the Arm Telescoping motor
@@ -93,7 +93,7 @@ public class ArmSubsystem extends SubsystemBase
 
         if (Math.abs(currentVel) < 0.01) {
             rotateArmBrake.set(DoubleSolenoid.Value.kForward);
-            rotateArm.setIdleMode(IdleMode.kCoast);
+            rotateArm.setIdleMode(IdleMode.kBrake);
         }
     }
 
