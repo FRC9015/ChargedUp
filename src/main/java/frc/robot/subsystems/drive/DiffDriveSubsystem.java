@@ -393,19 +393,19 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
 
 
-    public void runRamseteCommand(Pose2d start, Pose2d end,DiffDriveSubsystem m_diffDriveSubsystem) {
+    public void runRamseteCommand( Pose2d end,DiffDriveSubsystem m_diffDriveSubsystem) {
         
     
         // Create config for trajectory
         TrajectoryConfig config =
-            new TrajectoryConfig(0.1, 0.05);
+            new TrajectoryConfig(1, 0.5);
         Translation2d idk = new Translation2d();
         List<Translation2d> waypoints = new ArrayList<>();
         waypoints.add(idk);
         // An example trajectory to follow.  All units in meters.
         Trajectory trajectorytogo =
             TrajectoryGenerator.generateTrajectory(
-                start,
+                odometry.getPoseMeters(),
                 List.of(),
                 end,
                 config);

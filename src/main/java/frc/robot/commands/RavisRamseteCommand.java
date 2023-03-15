@@ -53,7 +53,7 @@ public class RavisRamseteCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    diffDriveSubsystem.runRamseteCommand(diffDriveSubsystem.getPose(), frc.robot.RobotState.getSavedPoint(), diffDriveSubsystem);
+    diffDriveSubsystem.runRamseteCommand( frc.robot.RobotState.getSavedPoint(), diffDriveSubsystem);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

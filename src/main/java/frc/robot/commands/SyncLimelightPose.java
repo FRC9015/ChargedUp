@@ -6,8 +6,11 @@ package frc.robot.commands;
 
 import java.util.Set;
 
+import javax.swing.filechooser.FileFilter;
+
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI.SimDeviceInfo;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -40,14 +43,8 @@ public class SyncLimelightPose extends CommandBase {
   @Override
   public void execute() {
     if(limelightSubsytem.hasTargets()){
-      try{
-    double[] botpose = limelightSubsytem.getBotpose();
-    diffDriveSubsystem.resetOdometry(new Pose2d(botpose[0], botpose[1], new Rotation2d(botpose[5]*(3.1415/180))));
-
-    finished = true;
-      } catch(Exception e){
-        
-      }
+    //diffDriveSubsystem.resetOdometry(new Pose2d(botpose[0], botpose[1], new Rotation2d(botpose[5]*(3.1415/180))));
+    diffDriveSubsystem.resetOdometry(limelightSubsytem.getLimelightPose());
   }
     
   }

@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -10,6 +13,13 @@ public class LimelightSubsytem extends SubsystemBase {
 
     NetworkTable limelight;
     NetworkTableEntry tx, ty, ta, tv, tid, botpose;
+
+    LinearFilter xFilter = LinearFilter.singlePoleIIR(0.3, 0.02);
+    LinearFilter yFilter = LinearFilter.singlePoleIIR(0.3, 0.02);
+    LinearFilter rotFilter = LinearFilter.singlePoleIIR(0.3, 0.02);
+
+    double x,y,rot;
+
 
     public static enum CamMode {
         VISION, // Vision processor
@@ -76,9 +86,29 @@ public class LimelightSubsytem extends SubsystemBase {
         }
     }
 
+    public Pose2d getLimelightPose(){
+
+        if( hasTargets()){
+        return(new Pose2d(8.27+x, 4+y, new Rotation2d(y*(3.1415/180))));
+        }else{
+            return(null);
+        }
+
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        if(hasTargets()){
+            x= xFilter.calculate(getBotpose()[0]);
+            y= yFilter.calculate(getBotpose()[1]);
+            rot= rotFilter.calculate(getBotpose()[5]);
+        }else{
+            xFilter.reset();
+            yFilter.reset();
+            rotFilter.reset();
+            
+        }
 
     }
 
