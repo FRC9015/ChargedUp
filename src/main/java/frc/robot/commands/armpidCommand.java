@@ -19,15 +19,19 @@ import frc.robot.subsystems.ArmSubsystem;
 public class armpidCommand extends CommandBase {
   
 
-  private PIDController myPidController;
+  private PIDController rotPidController, telePidController;
   private final ArmSubsystem armSubsystem;
   private final Set<Subsystem> subsystems;
 
   /** Creates a new armpid. */
-  public armpidCommand(ArmSubsystem myArmSubsystem,double setpoint) {
-    myPidController = new PIDController(0.02, 0, 0);
-    myPidController.setSetpoint(setpoint);
-    myPidController.setTolerance(0);
+  public armpidCommand(ArmSubsystem myArmSubsystem,double rotsetpoint,double telesetpoint) {
+    rotPidController = new PIDController(0.02, 0, 0);
+    rotPidController.setSetpoint(rotsetpoint);
+    rotPidController.setTolerance(0);
+
+    telePidController = new PIDController(0.02, 0, 0);
+    telePidController.setSetpoint(telesetpoint);
+    telePidController.setTolerance(0);
         
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
@@ -36,7 +40,9 @@ public class armpidCommand extends CommandBase {
     
   }
   public void execute(){
-    armSubsystem.rotateArm( myPidController.calculate(armSubsystem.getRotEncoderPos()));
+    armSubsystem.rotateArm( rotPidController.calculate(armSubsystem.getRotEncoderPos()));
+    armSubsystem.telescopeArm( telePidController.calculate(armSubsystem.getTeleEncoderPos()));
+
   }
 
   // Returns true when the command should end.

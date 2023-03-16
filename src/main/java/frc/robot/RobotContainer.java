@@ -133,7 +133,7 @@ public class RobotContainer {
  
          // When the driver's left bumper is pressed, switch between low and high speed.
          //driver.getLB().whileTrue(new StartEndCommand(() -> armSubsystem.SetActivatePID(true),() -> armSubsystem.SetActivatePID(true), armSubsystem));
-         driver.getBack().whileTrue(new armpidCommand(armSubsystem, -100));
+         driver.getBack().whileTrue(new armpidCommand(armSubsystem, -100,0));
          
          driver.getLB().onTrue(new InstantCommand(()-> intakeNewmaticSubsystem.switchIntake(), intakeNewmaticSubsystem));
  
@@ -211,6 +211,7 @@ public class RobotContainer {
             ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
             intakeNewmaticSubsystem));
             
+        driver.getLTrigAsButton().onTrue(new SwitchSpeed());
 
         //driver.getX().onTrue(new OpenIntakeCommand(intakeNewmaticSubsystem));
       
@@ -222,10 +223,10 @@ public class RobotContainer {
 
 
 
-        operator.getA().onTrue(new armpidCommand(armSubsystem, 100));
-        operator.getB().onTrue(new armpidCommand(armSubsystem, 100));
-        operator.getX().onTrue(new armpidCommand(armSubsystem, 100));
-        operator.getY().onTrue(new armpidCommand(armSubsystem, 100));
+        operator.getA().onTrue(new armpidCommand(armSubsystem, 100,0));
+        operator.getB().onTrue(new armpidCommand(armSubsystem, 100,0));
+        operator.getX().onTrue(new armpidCommand(armSubsystem, 100,0));
+        operator.getY().onTrue(new armpidCommand(armSubsystem, 100,0));
 
 
     }
