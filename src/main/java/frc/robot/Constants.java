@@ -82,17 +82,17 @@ public final class Constants {
         public static final int[] ENCODER_DIO_PINS = {1, 2}; // Encoder wired into DIO pins 1 & 2 on the roboRIO
     }
     public static final class IntakeConstants {
-        public static final int ARM_LIFT_CAN_ID=19;
-        public static final int ARM_TELESCOPE_CAN_ID=20;
+        public static final int ARM_LIFT_CAN_ID = 19;
+        public static final int ARM_TELESCOPE_CAN_ID = 20;
 
         public static final int ARM_POSITION_FACTOR = 0;
 
-        public static final DoubleSolenoidConstants ARM_BRAKE_SOLENOID = new DoubleSolenoidConstants(2, 3);
+        public static final DoubleSolenoidConstants ARM_BRAKE_SOLENOID = new DoubleSolenoidConstants(11, 10);
 
         public static final int INTAKE_DRIVE_CAN_ID = 42;
 
-        private static final int INTAKE_OPEN_PORT = 0;
-        private static final int INTAKE_CLOSE_PORT = 1;
+        private static final int INTAKE_OPEN_PORT = 13;
+        private static final int INTAKE_CLOSE_PORT = 12;
         public static final DoubleSolenoidConstants INTAKE_OPEN_CLOSE = new DoubleSolenoidConstants(INTAKE_OPEN_PORT, INTAKE_CLOSE_PORT);
     }
 
@@ -100,6 +100,7 @@ public final class Constants {
         // CAN ID for CTRE PCM / Rev PCH
         public static final int P_HUB_CAN_ID = 1;
 
+        public static final DoubleSolenoidConstants LIFT_FEET_CONSTANTS = new DoubleSolenoidConstants(15, 14);
     }
 
 }
