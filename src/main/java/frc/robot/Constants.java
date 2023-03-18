@@ -22,9 +22,9 @@ import frc.robot.utils.DoubleSolenoidConstants;
 public final class Constants {
     public static final class DriveConstants {
 
-        public static final int LEFT_FRONT_MOTOR_ID = 13;
-        public static final int LEFT_BACK_MOTOR_ID = 15;
-        public static final int RIGHT_FRONT_MOTOR_ID = 16;
+        public static final int LEFT_FRONT_MOTOR_ID = 11;
+        public static final int LEFT_BACK_MOTOR_ID = 12;
+        public static final int RIGHT_FRONT_MOTOR_ID = 13;
         public static final int RIGHT_BACK_MOTOR_ID = 14;
 
         public static final boolean LEFT_INVERTED = true;
@@ -82,14 +82,14 @@ public final class Constants {
         public static final int[] ENCODER_DIO_PINS = {1, 2}; // Encoder wired into DIO pins 1 & 2 on the roboRIO
     }
     public static final class IntakeConstants {
-        public static final int ARM_LIFT_CAN_ID = 19;
-        public static final int ARM_TELESCOPE_CAN_ID = 20;
+        public static final int ARM_LIFT_CAN_ID = 24;
+        public static final int ARM_TELESCOPE_CAN_ID = 22;
 
         public static final int ARM_POSITION_FACTOR = 1;
 
-        public static final DoubleSolenoidConstants ARM_BRAKE_SOLENOID = new DoubleSolenoidConstants(11, 10);
+        public static final DoubleSolenoidConstants ARM_BRAKE_SOLENOID = new DoubleSolenoidConstants(15, 14);
 
-        public static final int INTAKE_DRIVE_CAN_ID = 42;
+        public static final int INTAKE_DRIVE_CAN_ID = 21;
 
         private static final int INTAKE_OPEN_PORT = 13;
         private static final int INTAKE_CLOSE_PORT = 12;
@@ -98,9 +98,9 @@ public final class Constants {
 
     public static final class PneumaticConstants {
         // CAN ID for CTRE PCM / Rev PCH
-        public static final int P_HUB_CAN_ID = 1;
+        public static final int P_HUB_CAN_ID = 4;
 
-        public static final DoubleSolenoidConstants LIFT_FEET_CONSTANTS = new DoubleSolenoidConstants(15, 14);
+        public static final DoubleSolenoidConstants LIFT_FEET_CONSTANTS = new DoubleSolenoidConstants(11, 10);
     }
 
 }
