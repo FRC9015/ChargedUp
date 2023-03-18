@@ -35,6 +35,22 @@ public class PneumaticHubSubsystem extends SubsystemBase {
         return INSTANCE.pHub.makeDoubleSolenoid(constants.getForwardChannel(), constants.getReverseChannel());
     }
 
+    public void enableCompressor() {
+        pHub.enableCompressorDigital();
+    }
+
+    public void disableCompressor() {
+        pHub.disableCompressor();
+    }
+
+    public boolean isCompressorRunning() {
+        return pHub.getCompressor();
+    }
+
+    public boolean isPressurized() {
+        return pHub.getCompressor() && pHub.getPressureSwitch();
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
