@@ -100,13 +100,14 @@ public class RobotContainer {
         Dashboard.getInstance().putSendable("Driver", driver);
         if (operator == null) operator = new OperatorController(new XboxController(1));
         Dashboard.getInstance().putSendable("Operator", operator);
-    }
     
+    }
+
     public Command getAutonomousCommand()
     {
 
         HashMap<String, Command> eventMap = new HashMap<>();
-        eventMap.put("marker1", new PrintCommand("Passed marker 1"));
+        eventMap.put("Balance", new BalanceCommand(pigeonSubsystem, driveSubsystem));
         eventMap.put("marker2", new PrintCommand("marker 2"));
         return driveSubsystem.getAutCommandWithEvents(autoPaths.getSelectedTrajectory(), true,eventMap);
     }
