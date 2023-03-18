@@ -40,13 +40,14 @@ import frc.robot.subsystems.drive.DiffDriveSubsystem;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    private static boolean hasInstantiate = false;
     private static RobotContainer INSTANCE = new RobotContainer();
 
-    @SuppressWarnings("WeakerAccess")
     public static RobotContainer getInstance() {
-        if (INSTANCE == null) {
+        if (INSTANCE == null && !hasInstantiate) {
             System.out.println("---------- CREATING NEW ROBOT-CONTAINER ----------");
             INSTANCE = new RobotContainer();
+            hasInstantiate = true;
         }
         return INSTANCE;
     }
@@ -80,7 +81,7 @@ public class RobotContainer {
         init();
 
         driveSubsystem.setDefaultCommand(new ArcadeDrive(driver));
-        armSubsystem.setDefaultCommand(new armDefualtControlCommand(armSubsystem));
+        armSubsystem.setDefaultCommand(new armDefualtControlCommand(armSubsystem,operator));
     }
 
     public void initRobot() {

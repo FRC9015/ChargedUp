@@ -26,7 +26,7 @@ public class FootSubsystem implements Subsystem{
 
     private FootSubsystem(){
        
-        foot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
+        foot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 11, 10);
      }
 
     public void footDown(){

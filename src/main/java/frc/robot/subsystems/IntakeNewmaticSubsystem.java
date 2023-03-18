@@ -28,7 +28,7 @@ public class IntakeNewmaticSubsystem implements Subsystem{
     private IntakeNewmaticSubsystem(){
         intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_CAN_ID, MotorType.kBrushless);
         intakeMotor.setSmartCurrentLimit(20, 30);
-        intake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
+        intake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 13, 12);
         forward = false;
     }
 

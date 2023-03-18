@@ -21,16 +21,16 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
     public static final class DriveConstants {
 
-        public static final int LEFT_FRONT_MOTOR_ID = 13;
-        public static final int LEFT_BACK_MOTOR_ID = 15;
-        public static final int RIGHT_FRONT_MOTOR_ID = 16;
+        public static final int LEFT_FRONT_MOTOR_ID = 11;
+        public static final int LEFT_BACK_MOTOR_ID = 12;
+        public static final int RIGHT_FRONT_MOTOR_ID = 13;
         public static final int RIGHT_BACK_MOTOR_ID = 14;
 
         public static final int VELOCITY_PID_SLOT = 1; // Slot numbers for PIDF constants
         public static final int POSITION_PID_SLOT = 2; // Slot numbers for PIDF constants
 
-        public static final boolean LEFT_INVERTED = true;
-        public static final boolean RIGHT_INVERTED = false;
+        public static final boolean LEFT_INVERTED = false;
+        public static final boolean RIGHT_INVERTED = true;
 
         public static final double SLOW_SPEED_MULTIPLIER = 0.5;
         
@@ -76,16 +76,16 @@ public final class Constants {
     }
 
     public static final class CounterweightConstants {
-        //public static final int DRIVE_MOTOR_CAN_ID = 42;
+        public static final int DRIVE_MOTOR_CAN_ID = 26;
         public static final int ENDSTOP_SWITCH_PORT = 0;
         public static final int[] ENCODER_DIO_PINS = {1, 2}; // Encoder wired into DIO pins 1 & 2 on the roboRIO
     }
     public static final class ArmConstants {
-        public static final int ROTATE_CAN_ID=19;
-        public static final int TELESCOPE_CAN_ID=20;
+        public static final int ROTATE_CAN_ID=24;
+        public static final int TELESCOPE_CAN_ID=22;
     }
     public static final class IntakeConstants{
-        public static final int INTAKE_MOTOR_CAN_ID=42;
+        public static final int INTAKE_MOTOR_CAN_ID=21;
     }
 
 }

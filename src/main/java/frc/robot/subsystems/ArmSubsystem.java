@@ -66,13 +66,15 @@ public class ArmSubsystem implements Subsystem
         activatePID = false;
 
 
-        rotateArmBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 11,10);
-        rotateArmBrake.set(DoubleSolenoid.Value.kReverse);
+        rotateArmBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 15,14);
+        rotateArmBrake.set(DoubleSolenoid.Value.kForward);
     }
 
     public void rotateArm(double motorspeed){
+        if( motorspeed!=0){
         releaseBrake();
         rotateArm.set(motorspeed);
+        }
     }
 
     public void telescopeArm(double motorspeed){
@@ -123,23 +125,22 @@ public class ArmSubsystem implements Subsystem
      * @return whether the brake is applied on the arm
      */
     public boolean getBrakeApplied () {
-        return rotateArmBrake.get() == DoubleSolenoid.Value.kForward;
+        return rotateArmBrake.get() == DoubleSolenoid.Value.kReverse;
     }
 
 
     // ----------------- PRIVATE HELPER METHODS ----------------- //
 
     private void applyBrake() {
-        double currentVel = rotateEncoder.getVelocity();
+        double currentVel = rotateArm.getAppliedOutput();
+ 
 
-        if (Math.abs(currentVel) < 0.01) {
-            rotateArmBrake.set(DoubleSolenoid.Value.kForward);
-            rotateArm.setIdleMode(IdleMode.kCoast);
+        if (Math.abs(currentVel) == 0) {
+            rotateArmBrake.set(DoubleSolenoid.Value.kReverse);
         }
     }
 
     private void releaseBrake() {
-        rotateArm.setIdleMode(IdleMode.kBrake);
-        rotateArmBrake.set(DoubleSolenoid.Value.kReverse);
+        rotateArmBrake.set(DoubleSolenoid.Value.kForward);
     }
 }

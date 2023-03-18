@@ -9,23 +9,22 @@ import java.util.Set;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.RobotContainer;
 import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class armDefualtControlCommand extends CommandBase {
   private final ArmSubsystem armSubsystem;
-  private final Set<Subsystem> subsystems;
-
 
   private OperatorController controller;
+  
   /** Creates a new armDefualtControlCommand. */
-  public armDefualtControlCommand(ArmSubsystem armSubsystem) {
+  public armDefualtControlCommand(ArmSubsystem armSubsystem,OperatorController mycontroller) {
     // Use addRequirements() here to declare subsystem dependencies.
+    controller = mycontroller;
     this.armSubsystem = armSubsystem;
-    this.subsystems = Set.of(this.armSubsystem);
-
-
+    addRequirements(armSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -37,10 +36,16 @@ public class armDefualtControlCommand extends CommandBase {
   public void execute() {
     if (Math.abs(controller.getTankLeft())>0.05){
     armSubsystem.rotateArm(controller.getTankLeft());}
+    else{
+      armSubsystem.rotateArm(0);
+    }
 
 
     if (Math.abs(controller.getTankRight())>0.05){
-    armSubsystem.telescopeArm(controller.getTankRight());}
+    armSubsystem.telescopeArm(0.5*controller.getTankRight());}
+    else{
+      armSubsystem.telescopeArm(0);
+    }
 
   }
 
@@ -52,10 +57,5 @@ public class armDefualtControlCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     return false;
-  }
-
-  @Override
-  public Set<Subsystem> getRequirements() {
-      return this.subsystems;
   }
 }

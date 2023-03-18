@@ -10,15 +10,17 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import frc.robot.Constants.CounterweightConstants;
 
 public class CounterweightPIDSubsystem extends PIDSubsystem {
     
     private final static CounterweightPIDSubsystem INSTANCE = new CounterweightPIDSubsystem();
     DigitalInput limit = new DigitalInput(0);
 
-    private final CANSparkMax counterWeightMotor= new CANSparkMax(69, MotorType.kBrushless);
+    private final CANSparkMax counterWeightMotor= new CANSparkMax(CounterweightConstants.DRIVE_MOTOR_CAN_ID, MotorType.kBrushless);
 
     private static double kP = 0;
     private static double kI = 0;
