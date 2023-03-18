@@ -75,7 +75,7 @@ public final class Constants {
     }
 
     public static final class CounterweightConstants {
-        public static final int DRIVE_MOTOR_CAN_ID = 0;
+        public static final int DRIVE_MOTOR_CAN_ID = 26;
 
         public static final int ENDSTOP_SWITCH_PORT = 0;
         
