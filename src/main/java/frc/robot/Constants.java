@@ -85,7 +85,7 @@ public final class Constants {
         public static final int ARM_LIFT_CAN_ID = 19;
         public static final int ARM_TELESCOPE_CAN_ID = 20;
 
-        public static final int ARM_POSITION_FACTOR = 0;
+        public static final int ARM_POSITION_FACTOR = 1;
 
         public static final DoubleSolenoidConstants ARM_BRAKE_SOLENOID = new DoubleSolenoidConstants(11, 10);
 
