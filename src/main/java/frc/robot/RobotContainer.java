@@ -24,9 +24,9 @@ import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CounterweightPIDSubsystem;
+import frc.robot.subsystems.DiffDriveSubsystem;
 import frc.robot.subsystems.LimelightSubsytem;
 import frc.robot.subsystems.PigeonSubsystem;
-import frc.robot.subsystems.drive.DiffDriveSubsystem;
 
 /**
  * Very little robot logic should actually be handled in the {@link Robot}
