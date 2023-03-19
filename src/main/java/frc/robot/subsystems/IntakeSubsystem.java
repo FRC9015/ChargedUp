@@ -17,6 +17,13 @@ public class IntakeSubsystem extends SubsystemBase {
         return INSTANCE;
     }
 
+    public static enum IntakeState {
+        /** Cubes & also helps grab cones */
+        OPEN,
+        /** Cones only */
+        CLOSED;
+    }
+
     DoubleSolenoid intakeActuator;
     CANSparkMax intakeMotor;
 
@@ -27,11 +34,11 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotor.setIdleMode(IdleMode.kBrake);
     }
 
-    public void openIntake(){
+    public synchronized void openIntake(){
         intakeActuator.set(DoubleSolenoid.Value.kForward);
     }
 
-    public void closeIntake(){
+    public synchronized void closeIntake(){
         intakeActuator.set(DoubleSolenoid.Value.kReverse);
     }
 
