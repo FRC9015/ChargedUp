@@ -17,6 +17,9 @@ public class IntakeSubsystem extends SubsystemBase {
         return INSTANCE;
     }
 
+    /**
+     * Represents state of the intake pneumatics
+     */
     public static enum IntakeState {
         /** Cubes & also helps grab cones */
         OPEN,
