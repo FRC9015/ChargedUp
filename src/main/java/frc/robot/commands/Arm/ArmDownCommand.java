@@ -11,8 +11,8 @@ public class ArmDownCommand extends CommandBase {
     }
 
     @Override
-    public void execute() {
-        armSubsystem.rotateArm(-0.2);
+    public void initialize() {
+        armSubsystem.rotateArm(0.5);
     }
 
     @Override
