@@ -18,36 +18,34 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.IntakeConstants;
 
-
-
-public class ArmSubsystem implements Subsystem
-{
+public class ArmSubsystem implements Subsystem {
     private final static ArmSubsystem INSTANCE = new ArmSubsystem();
-    
+
     @SuppressWarnings("WeakerAccess")
     public static ArmSubsystem getInstance() {
         return INSTANCE;
     }
 
-
-    private final CANSparkMax rotateArm; //rotateArm pivots the arm. 
-    private final CANSparkMax telescopeArm; //telescopeArm moves the arm in and out.
+    private final CANSparkMax rotateArm; // rotateArm pivots the arm.
+    private final double kStartingArmPosition;
+    private final double kMaxArmPosition = 1; // TODO CHANGE THIS
+    private final CANSparkMax telescopeArm; // telescopeArm moves the arm in and out.
+    private final double kStartingTelescopePosition;
     private RelativeEncoder rotateEncoder, telescopeEncoder;
     private PIDController pid;
+
     private double kP = 0.02;
     private double kI = 0;
-    private double kD =0;
+    private double kD = 0;
     private boolean activatePID;
 
     private final DoubleSolenoid rotateArmBrake;
 
-
     private double rotatePidSetpoint, telescopePidSetpoint;
 
     // Creates a new ArmSubsystem.
-    private ArmSubsystem() 
-    {
-        
+    private ArmSubsystem() {
+
         pid = new PIDController(kP, kI, kD);
         rotateArm = new CANSparkMax(ArmConstants.ROTATE_CAN_ID, MotorType.kBrushless);
         rotateArm.setIdleMode(IdleMode.kBrake);
@@ -55,9 +53,11 @@ public class ArmSubsystem implements Subsystem
         telescopeArm.setIdleMode(IdleMode.kBrake);
 
         rotateEncoder = rotateArm.getEncoder();
+        kStartingArmPosition = rotateEncoder.getPosition();
         rotatePidSetpoint = rotateEncoder.getPosition();
-        
+
         telescopeEncoder = telescopeArm.getEncoder();
+        kStartingTelescopePosition = telescopeEncoder.getPosition();
         telescopePidSetpoint = telescopeEncoder.getPosition();
 
         rotateEncoder.setPosition(0);
@@ -65,75 +65,89 @@ public class ArmSubsystem implements Subsystem
 
         activatePID = false;
 
-
-        rotateArmBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 15,14);
+        rotateArmBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 15, 14);
         rotateArmBrake.set(DoubleSolenoid.Value.kForward);
     }
 
-    public void rotateArm(double motorspeed){
-        if( motorspeed!=0){
-        releaseBrake();
-        rotateArm.set(motorspeed);
+    public void rotateArm(double motorspeed) {
+        if (motorspeed != 0) {
+            releaseBrake();
+            System.out.println(motorspeed);
+            if (armSafeToRaise()) {
+                rotateArm.set(motorspeed*0.5);
+            } else {
+                rotateArm.set(motorspeed*0.5);
+            }
+        } else {
+            rotateArm.set(0);
         }
     }
 
-    public void telescopeArm(double motorspeed){
-        telescopeArm.set(motorspeed);
+    public void telescopeArm(double motorspeed) {
+        telescopeArm.set(motorspeed*0.95);
     }
 
-    public void setRotatePid(double setpoint){
+    private boolean armSafeToRaise() {
+        boolean armAboveLimit = Math.abs(rotateEncoder.getPosition() - kStartingArmPosition) < 0.05;
+        boolean armTelescopeRetracted = Math.abs(telescopeEncoder.getPosition() - kStartingTelescopePosition) < 0.05;
+
+        return armAboveLimit ? armTelescopeRetracted : true;
+    }
+
+    public void setRotatePid(double setpoint) {
         rotatePidSetpoint = setpoint;
     }
 
-    public void SetActivatePID(boolean active){
+    public void SetActivatePID(boolean active) {
         System.out.println("setarmy");
         activatePID = active;
     }
 
-    public double getRotEncoderPos(){
-        return rotateEncoder.getPosition();}
-    
-    public double getTeleEncoderPos(){
-        return telescopeEncoder.getPosition();
-    }
     
 
-    public void setPID(){
+    public double getRotEncoderPos() {
+        return rotateEncoder.getPosition();
+    }
+
+    public void lockarm(){
+        rotateArm.set(0.1);
+    }
+
+    public double getTeleEncoderPos() {
+        return telescopeEncoder.getPosition();
+    }
+
+    public void setPID() {
         System.out.print(rotateEncoder.getPosition());
         System.out.println(rotatePidSetpoint);
         System.out.println(activatePID);
-        if( activatePID){
+        if (activatePID) {
             releaseBrake();
             rotateArm.set(pid.calculate(rotateEncoder.getPosition(), rotatePidSetpoint));
         }
     }
 
-    
-    public void periodic()
-    {
+    public void periodic() {
         applyBrake();
     }
-    
-    
-    public void simulationPeriodic()
-    {
+
+    public void simulationPeriodic() {
         // This method will be called once per scheduler run during simulation
     }
 
-        /**
+    /**
      * Check if the brake is on the arm
+     * 
      * @return whether the brake is applied on the arm
      */
-    public boolean getBrakeApplied () {
+    public boolean getBrakeApplied() {
         return rotateArmBrake.get() == DoubleSolenoid.Value.kReverse;
     }
-
 
     // ----------------- PRIVATE HELPER METHODS ----------------- //
 
     private void applyBrake() {
         double currentVel = rotateArm.getAppliedOutput();
- 
 
         if (Math.abs(currentVel) == 0) {
             rotateArmBrake.set(DoubleSolenoid.Value.kReverse);

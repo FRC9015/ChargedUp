@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.RobotState;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeNewmaticSubsystem implements Subsystem{
@@ -30,6 +31,13 @@ public class IntakeNewmaticSubsystem implements Subsystem{
         intakeMotor.setSmartCurrentLimit(20, 30);
         intake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 13, 12);
         forward = false;
+    }
+
+    @Override
+    public void periodic() {
+        System.out.println(intake.get()==DoubleSolenoid.Value.kForward);
+
+        RobotState.setIntakeOpen(!(intake.get()==DoubleSolenoid.Value.kReverse));
     }
 
     public void openIntake(){

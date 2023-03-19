@@ -35,14 +35,14 @@ public class armDefualtControlCommand extends CommandBase {
   @Override
   public void execute() {
     if (Math.abs(controller.getTankLeft())>0.05){
-    armSubsystem.rotateArm(controller.getTankLeft());}
+    armSubsystem.rotateArm(-controller.getTankLeft());}
     else{
-      armSubsystem.rotateArm(0);
+      armSubsystem.rotateArm(0.07);
     }
 
 
     if (Math.abs(controller.getTankRight())>0.05){
-    armSubsystem.telescopeArm(0.5*controller.getTankRight());}
+    armSubsystem.telescopeArm(-0.35*controller.getTankRight());}
     else{
       armSubsystem.telescopeArm(0);
     }

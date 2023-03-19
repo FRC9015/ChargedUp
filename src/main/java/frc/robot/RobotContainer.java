@@ -106,6 +106,12 @@ public class RobotContainer {
     public Command getAutonomousCommand()
     {
 
+        return(new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0.4, 0),driveSubsystem))).withTimeout(2).andThen(new InstantCommand(()->driveSubsystem.arcadeDrive(0, 0)).andThen(new BalanceCommand(pigeonSubsystem, driveSubsystem)));
+    }
+
+    public Command getAutonomousCommandcopy()
+    {
+
         HashMap<String, Command> eventMap = new HashMap<>();
         eventMap.put("Balance", new BalanceCommand(pigeonSubsystem, driveSubsystem));
         eventMap.put("marker2", new PrintCommand("marker 2"));
@@ -201,7 +207,7 @@ public class RobotContainer {
         driver.getStart().toggleOnTrue(new BalanceCommand(pigeonSubsystem, driveSubsystem));
         driver.getBack().onTrue(new InstantCommand(()->footSubsystem.toggleFoot() ,footSubsystem));
         
-        driver.getA().onTrue(new InstantCommand(()-> intakeNewmaticSubsystem.switchIntake(), intakeNewmaticSubsystem));
+        operator.getRTrigAsButton().whileTrue(new InstantCommand(()-> intakeNewmaticSubsystem.openIntake(), intakeNewmaticSubsystem)).whileFalse(new InstantCommand(()-> intakeNewmaticSubsystem.closeIntake(), intakeNewmaticSubsystem));
         driver.getRB().whileTrue(new StartEndCommand(
             () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.5), 
             ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
@@ -228,6 +234,8 @@ public class RobotContainer {
         operator.getB().onTrue(new armpidCommand(armSubsystem, 100,0));
         operator.getX().onTrue(new armpidCommand(armSubsystem, 100,0));
         operator.getY().onTrue(new armpidCommand(armSubsystem, 100,0));
+
+
 
 
     }

@@ -130,7 +130,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private static final double kI_default = 0.0;
     private static final double kD_default = 0.0;
     private static final double iZone_default = 0.0;
-    private static final double kF_default = 0.2;
+    private static final double kF_default = 0.3;
 
     private double kP = kP_default;
     private double kI = kI_default;
@@ -312,7 +312,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
         turn = rateLimited ? accelRateLimit2.calculate(turn) : turn;
 
         double fwdspeed = calcMetersPerSecond(fwd);
-        double turnspeed = calcMetersPerSecond(turn);
+        double turnspeed = calcMetersPerSecond(turn*1.2);
 
         DifferentialDriveWheelSpeeds WheelSpeeds = DriveConstants.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(fwdspeed,0,turnspeed));
 

@@ -31,6 +31,7 @@ public class Dashboard {
 
     private ShuffleboardTab teleopTab, autoTab, currentTab, debugTab;
     private ShuffleboardLayout balanceLayout, driveLayout, counterweightLayout, autoPathLayout; 
+    private SimpleWidget intakeOpen, footDown;
     private static SendableChooser<PathPlannerTrajectory> autoPathChooser; 
     private static ArrayList<String> dataInstances;
 
@@ -44,10 +45,22 @@ public class Dashboard {
         dataInstances = new ArrayList<String>();
     }
 
+    public void periodic() {
+        intakeOpen.getEntry().setBoolean((RobotState.getIntakeOpen()));
+        footDown.getEntry().setBoolean((RobotState.isFeetDown()));
+    }
+
     public void init() {
         initTabs();
         initLayouts();
         initSubclasses();
+
+        try {
+            intakeOpen = teleopTab.add("Intake Open", false).withWidget(BuiltInWidgets.kBooleanBox);
+            footDown = teleopTab.add("Foot Down", false).withWidget(BuiltInWidgets.kBooleanBox);
+        } catch (Error e) {
+            e.printStackTrace();
+        }
     }
 
     public void initTabs() {
