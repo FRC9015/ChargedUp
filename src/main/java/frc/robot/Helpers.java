@@ -9,8 +9,9 @@ public class Helpers {
 
     /**
      * Constrain a number within the limit, positive or negative
+     * 
      * @param input Input to test against limit
-     * @param limit Positive, nonzero number 
+     * @param limit Positive, nonzero number
      * @return
      */
     public static double limitDecimal(double input, double limit) {
@@ -30,6 +31,10 @@ public class Helpers {
         return result;
     }
 
+    /**
+     * DEPRECATED: Use {@link edu.wpi.first.math.MathUtil#applyDeadband(double, double) MathUtil.applyDeadband()} instead
+     */
+    @Deprecated
     public double calcDeadzone(double input, double dz) {
         if (Math.abs(input) <= dz) {
             return 0;
@@ -45,7 +50,7 @@ public class Helpers {
             if (maxLength < msg.length()) {
                 maxLength = msg.length();
             }
-        } 
+        }
 
         maxLength += 4;
 
@@ -54,7 +59,7 @@ public class Helpers {
         for (int i = 0; i <= maxLength; i++) {
             capString += "*";
         }
-        
+
         System.out.println();
         System.out.println(capString);
 
@@ -67,8 +72,8 @@ public class Helpers {
     }
 
     public static void handleRevError(REVLibError status, String yay) {
-        if(status == REVLibError.kOk) {
-            Helpers.logBox("YAY: "+yay);
+        if (status == REVLibError.kOk) {
+            Helpers.logBox("YAY: " + yay);
         } else {
             throw new Error("FOLLOW ERROR: " + status.toString());
         }
