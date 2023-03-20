@@ -11,9 +11,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.DriveConstants;
 
 public class AutoPaths {
-    private static final AutoPaths INSTANCE = new AutoPaths();
+    private static AutoPaths INSTANCE;
 
     public static AutoPaths getInstance() {
+        if(INSTANCE == null) INSTANCE = new AutoPaths();
         return INSTANCE;
     }
 

@@ -18,9 +18,10 @@ import frc.robot.Constants.*;
 /** Singleton Dashboard Class */
 public class Dashboard {
 
-    private static Dashboard INSTANCE = new Dashboard();
+    private static Dashboard INSTANCE;
 
     public static Dashboard getInstance() {
+        if(INSTANCE == null) INSTANCE = new Dashboard();
         return INSTANCE;
     }
 

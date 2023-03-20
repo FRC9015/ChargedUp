@@ -34,14 +34,11 @@ import frc.robot.subsystems.PigeonSubsystem;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    private static RobotContainer INSTANCE = new RobotContainer();
+    private static RobotContainer INSTANCE;
 
     @SuppressWarnings("WeakerAccess")
     public static RobotContainer getInstance() {
-        if (INSTANCE == null) {
-            System.out.println("---------- CREATING NEW ROBOT-CONTAINER ----------");
-            INSTANCE = new RobotContainer();
-        }
+        if(INSTANCE == null) INSTANCE = new RobotContainer();
         return INSTANCE;
     }
     // The robot's subsystems and commands are defined here...
