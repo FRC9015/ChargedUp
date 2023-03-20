@@ -3,15 +3,26 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import lombok.Synchronized;
 
 public class RobotState implements Sendable {
     
-    private final static RobotState INSTANCE = new RobotState();
+    private static RobotState INSTANCE;
 
     public static RobotState getInstance() {
+        if(INSTANCE == null) INSTANCE = new RobotState();
         return INSTANCE;
     }
 
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("RobotState");
+        builder.addBooleanProperty("runningSlow", RobotState::getSlowed, this::setSlowed);
+    }
+
+    /* ---------- Drivetrain Slowed State ---------- */
+
+    private static Object $lockSlow = new Object();
     private static boolean runningSlow = false;
 
     public static boolean getSlowed() {
@@ -25,37 +36,38 @@ public class RobotState implements Sendable {
         return runningSlow && !(edu.wpi.first.wpilibj.RobotState.isAutonomous());
     }
 
-    public static synchronized void setSlow() {
+    @Synchronized("$lockSlow")
+    public static void setSlow() {
         runningSlow = true;
     }
 
-    public static synchronized void setFast() {
+    @Synchronized("$lockSlow")
+    public static void setFast() {
         runningSlow = false;
     }
 
-    public static synchronized boolean toggleSlow() {
+    @Synchronized("$lockSlow")
+    public static boolean toggleSlow() {
         runningSlow = !runningSlow;
-
         return runningSlow;
     }
 
-    private synchronized void setSlowed(boolean isSlowed) {
+    @Synchronized("$lockSlow")
+    private void setSlowed(boolean isSlowed) {
         runningSlow = isSlowed;
     }
 
-    private static Pose2d savedpoint = new Pose2d();
+    /* ---------- Saved Waypoint State ---------- */
+
+    private static Object $lockWaypoint = new Object();
+    private static Pose2d savedWaypoint = new Pose2d();
 
     public static Pose2d getSavedPoint(){
-        return savedpoint;
+        return savedWaypoint;
     }
 
+    @Synchronized("$lockWaypoint")
     public static void setSavedPoint(Pose2d newPoint){
-        savedpoint = newPoint;
-    }
-
-    @Override
-    public void initSendable(SendableBuilder builder) {
-        builder.setSmartDashboardType("RobotState");
-        builder.addBooleanProperty("runningSlow", RobotState::getSlowed, this::setSlowed);
+        savedWaypoint = newPoint;
     }
 }
