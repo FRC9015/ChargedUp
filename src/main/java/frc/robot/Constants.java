@@ -81,6 +81,14 @@ public final class Constants {
         
         public static final int[] ENCODER_DIO_PINS = {1, 2}; // Encoder wired into DIO pins 1 & 2 on the roboRIO
     }
+
+    public static final class ArmConstants {
+        public static final double DEFAULT_LIFT_SPEED = 0.4;
+        public static final double DEFAULT_TELESCOPE_SPEED = 0.25;
+
+        public static final double LIFT_INPUT_SCALAR = 0.45;
+        public static final double TELESCOPE_INPUT_SCALAR = 0.45;
+    }
     public static final class IntakeConstants {
         public static final int ARM_LIFT_CAN_ID = 24;
         public static final int ARM_TELESCOPE_CAN_ID = 22;
