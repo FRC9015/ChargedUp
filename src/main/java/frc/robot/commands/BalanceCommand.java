@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class BalanceCommand extends CommandBase {
 
   private PigeonSubsystem pigeon = PigeonSubsystem.getInstance();
-  private DiffDriveSubsystem drive = DiffDriveSubsystem.getInstance();
+  private DiffDriveSubsystem drive = DiffDriveSubsystem.INSTANCE;
 
   private double kP = 0.5, kI = 0, kD = 0;
   private PIDController balancePID = new PIDController(kP, kI, kD);

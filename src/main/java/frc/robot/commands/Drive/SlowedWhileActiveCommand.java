@@ -5,6 +5,6 @@ import frc.robot.RobotState;
 
 public class SlowedWhileActiveCommand extends StartEndCommand {
   public SlowedWhileActiveCommand() {
-    super(()-> RobotState.setSlow(), ()-> RobotState.setFast());
+    super(RobotState::setSlow, RobotState::setFast);
   }
 }

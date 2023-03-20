@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.controllers.DriverController;
 import frc.robot.subsystems.DiffDriveSubsystem;
 public class TankDrive extends CommandBase {
-    private final DiffDriveSubsystem diffDriveSubsystem = DiffDriveSubsystem.getInstance();
+    private final DiffDriveSubsystem diffDriveSubsystem = DiffDriveSubsystem.INSTANCE;
 
     private DriverController driver;
 

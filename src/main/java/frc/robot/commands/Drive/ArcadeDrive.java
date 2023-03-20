@@ -5,7 +5,7 @@ import frc.robot.controllers.DriverController;
 import frc.robot.subsystems.DiffDriveSubsystem;
 
 public class ArcadeDrive extends CommandBase {
-    private final DiffDriveSubsystem diffDriveSubsystem = DiffDriveSubsystem.getInstance();
+    private final DiffDriveSubsystem diffDriveSubsystem = DiffDriveSubsystem.INSTANCE;
     private DriverController driver;
 
     public ArcadeDrive(DriverController myDriver) {

@@ -9,10 +9,7 @@ import frc.robot.RobotState;
 
 public class SwitchSpeed extends InstantCommand {
 
-  public SwitchSpeed() {}
-  
-  @Override
-  public void initialize() {
-    RobotState.toggleSlow();
+  public SwitchSpeed() {
+    super(RobotState::toggleSlow);
   }
 }

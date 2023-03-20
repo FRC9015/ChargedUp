@@ -45,7 +45,7 @@ public class RobotContainer {
         return INSTANCE;
     }
     // The robot's subsystems and commands are defined here...
-    DiffDriveSubsystem driveSubsystem = DiffDriveSubsystem.getInstance();
+    DiffDriveSubsystem driveSubsystem = DiffDriveSubsystem.INSTANCE;
     PigeonSubsystem pigeonSubsystem = PigeonSubsystem.getInstance();
     ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     LimelightSubsytem limelightSubsytem = LimelightSubsytem.getInstance();
