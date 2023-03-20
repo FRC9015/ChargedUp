@@ -1,4 +1,3 @@
-
 {
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.server.launchMode": "Standard",
@@ -15,17 +14,27 @@
     "**/.factorypath": true,
     "**/*~": true
   },
+  "java.jdt.ls.lombokSupport.enabled": true,
+  
   "java.test.config": [
     {
       "name": "WPIlibUnitTests",
       "workingDirectory": "${workspaceFolder}/build/jni/release",
-      "vmargs": [ "-Djava.library.path=${workspaceFolder}/build/jni/release" ],
+      "vmargs": [
+        "-Djava.library.path=${workspaceFolder}/build/jni/release"
+      ],
       "env": {
-        "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release" ,
+        "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release",
         "DYLD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release"
       }
     }
   ],
   "java.test.defaultConfig": "WPIlibUnitTests",
-  "wpilib.autoSaveOnDeploy": true
+  "wpilib.autoSaveOnDeploy": true,
+  "[kotlin]": {
+    "editor.defaultFormatter": "fwcd.kotlin"
+  },
+  "kotlin.completion.snippets.enabled": true,
+  "kotlin.externalSources.autoConvertToKotlin": false,
+  "kotlin.indexing.enabled": true
 }

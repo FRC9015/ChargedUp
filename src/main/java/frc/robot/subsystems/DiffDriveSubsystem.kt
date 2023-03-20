@@ -7,8 +7,8 @@ import com.revrobotics.CANSparkMax.IdleMode
 import com.revrobotics.CANSparkMaxLowLevel
 import com.revrobotics.RelativeEncoder
 import com.revrobotics.SparkMaxPIDController
+import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.controller.RamseteController
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
@@ -28,6 +28,7 @@ import frc.robot.RobotState
 import frc.robot.commands.UpdatePIDFConstantsCommand
 import frc.robot.utils.PIDFConstants
 import java.util.function.BiConsumer
+import java.util.ArrayList
 
 object DiffDriveSubsystem : SubsystemBase() {
     private val leftFront: CANSparkMax
@@ -268,9 +269,9 @@ object DiffDriveSubsystem : SubsystemBase() {
      * @return meters per second
      */
     private fun calcMetersPerSecond(input: Double): Double {
-        var input = input;
-        val isSlowed = RobotState.getSlowedSmart();
-        input = MathUtil.applyDeadband(input, 0.1);
+        var input = input
+        val isSlowed = RobotState.getSlowedSmart()
+        input = MathUtil.applyDeadband(input, 0.1)
         val inputMetersPerSecond =
                 input * DriveConstants.MAX_RPM * DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR
         val speedMultiplier = Dashboard.getInstance().drive.speedMultiplier
