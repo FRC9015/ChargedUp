@@ -208,17 +208,18 @@ public class RobotContainer {
         driver.getBack().onTrue(new InstantCommand(()->footSubsystem.toggleFoot() ,footSubsystem));
         
         operator.getRTrigAsButton().whileTrue(new InstantCommand(()-> intakeNewmaticSubsystem.openIntake(), intakeNewmaticSubsystem)).whileFalse(new InstantCommand(()-> intakeNewmaticSubsystem.closeIntake(), intakeNewmaticSubsystem));
-        driver.getRB().whileTrue(new StartEndCommand(
+        operator.getLB().whileTrue(new StartEndCommand(
             () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.5), 
             ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
             intakeNewmaticSubsystem));
 
-        driver.getRTrigAsButton().whileTrue(new StartEndCommand(
+        operator.getLTrigAsButton().whileTrue(new StartEndCommand(
             () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.8), 
             ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
-            intakeNewmaticSubsystem));
+            intakeNewmaticSubsystem).alongWith(new PrintCommand("in")));
             
-        driver.getLTrigAsButton().onTrue(new SwitchSpeed());
+        //driver.getLTrigAsButton().onTrue(new SwitchSpeed());
+        driver.getLTrigAsButton().or(driver.getLB()).whileTrue(new SlowedWhileActiveCommand()); // While left bumper held, slow robot down
 
         //driver.getX().onTrue(new OpenIntakeCommand(intakeNewmaticSubsystem));
       

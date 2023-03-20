@@ -130,8 +130,17 @@ public class OperatorController implements Sendable {
         return lb;
     }
 
-    public JoystickButton getLTrigAsButton(){
-        return lTrig;
+    public Trigger getLTrigAsButton(){
+        return new Trigger(new BooleanSupplier() {
+
+            @Override
+            public boolean getAsBoolean() {
+                // TODO Auto-generated method stub
+                System.out.println(lTrigger.getAsDouble());
+                return  lTrigger.getAsDouble()>0.3;
+            }
+            
+        });
     }
 
 

@@ -52,7 +52,7 @@ public class BalanceCommand extends CommandBase {
 
     double moveSpeed = balancePID.calculate(angle);
     // Limit max motor speed to 0.2
-    drive.arcadeDriveRaw(-Helpers.limitDecimal(moveSpeed, 0.2), 0, false);
+    drive.arcadeDriveRaw(Helpers.limitDecimal(moveSpeed, 0.2), 0, false);
 
     if (Math.abs(moveSpeed) <= 0.01) {
       // If the PID is calculating below a certain threshold, we can safely assume that we're balanced

@@ -33,7 +33,7 @@ public class BalancePIDCommand extends PIDCommand {
         },
         0.0, // The constant setpoint 
         output -> {
-          drive.arcadeDriveRaw(Helpers.limitDecimal(output, 0.25), 0, false);
+          drive.arcadeDriveRaw(Helpers.limitDecimal(-output, 0.25), 0, false);
         },
         pigeon, drive // Subsystem requirements
         );

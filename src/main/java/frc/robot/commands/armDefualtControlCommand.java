@@ -42,7 +42,7 @@ public class armDefualtControlCommand extends CommandBase {
 
 
     if (Math.abs(controller.getTankRight())>0.05){
-    armSubsystem.telescopeArm(-0.35*controller.getTankRight());}
+    armSubsystem.telescopeArm(-0.45*controller.getTankRight());}
     else{
       armSubsystem.telescopeArm(0);
     }

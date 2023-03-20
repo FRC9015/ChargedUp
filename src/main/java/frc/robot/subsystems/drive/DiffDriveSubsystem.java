@@ -4,15 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
 
-import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPRamseteCommand;
 import java.util.List;
-import java.util.function.BiConsumer;
-
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPRamseteCommand;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -312,7 +307,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
         turn = rateLimited ? accelRateLimit2.calculate(turn) : turn;
 
         double fwdspeed = calcMetersPerSecond(fwd);
-        double turnspeed = calcMetersPerSecond(turn*1.2);
+        double turnspeed = calcRadiansPerSecond(turn);
 
         DifferentialDriveWheelSpeeds WheelSpeeds = DriveConstants.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(fwdspeed,0,turnspeed));
 
@@ -341,16 +336,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
     //issue: the left is just folowing the right
 
     private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-        
         leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity);
         rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity);
-    }
-
-    private void setSpeedsRaw(double left, double right) {
-        
-        left1.set(left);
-        right1.set(right);
-
     }
 
     public synchronized void setBrakeMode(IdleMode newBrakeMode) {
@@ -417,10 +404,6 @@ public class DiffDriveSubsystem extends SubsystemBase {
     
         ramseteCommand.schedule();
       }
-    public void outputVolts(DifferentialDriveWheelVoltages volts){
-        left1.setVoltage(volts.left);
-        right1.setVoltage(volts.right);
-    }
 
       // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
       public Command getTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
@@ -470,7 +453,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         double inputMetersPerSecond = (input * DriveConstants.MAX_RPM) * DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR;
 
-        double speedMultiplier = Dashboard.getInstance().drive.getSpeedMultiplier();
+        double speedMultiplier = DriveConstants.SLOW_SPEED_MULTIPLIER;
 
         // If the robot should be running in slow mode, reduce speed by the multiplier
         // (set in dashboard)
