@@ -10,10 +10,11 @@ import frc.robot.utils.DoubleSolenoidConstants;
 public class PneumaticHubSubsystem extends SubsystemBase {
 
     // Singleton Instance of this Class
-    private static PneumaticHubSubsystem INSTANCE = new PneumaticHubSubsystem();
+    private static PneumaticHubSubsystem INSTANCE;
     
     // Getter Method for Singleton Instance
     public static PneumaticHubSubsystem getInstance() {
+        if(INSTANCE == null) INSTANCE = new PneumaticHubSubsystem();
         return INSTANCE;
     }
 

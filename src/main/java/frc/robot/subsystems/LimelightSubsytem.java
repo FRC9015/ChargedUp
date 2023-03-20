@@ -6,19 +6,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LimelightSubsytem extends SubsystemBase {
 
 
-    private final static LimelightSubsytem INSTANCE = new LimelightSubsytem();
+    private static LimelightSubsytem INSTANCE;
 
+    @SuppressWarnings("WeakerAccess")
+    public static LimelightSubsytem getInstance() {
+        if(INSTANCE == null) INSTANCE = new LimelightSubsytem();
+        return INSTANCE;
+    }
+
+    
     NetworkTable limelight;
     NetworkTableEntry tx, ty, ta, tv, tid, botpose;
 
     public static enum CamMode {
         VISION, // Vision processor
         DRIVER  // Driver Camera (Increases exposure, disables vision processing)
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public static LimelightSubsytem getInstance() {
-        return INSTANCE;
     }
 
     public LimelightSubsytem() {

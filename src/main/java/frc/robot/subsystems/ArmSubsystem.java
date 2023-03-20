@@ -12,10 +12,11 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.utils.PIDFConstants;
 public class ArmSubsystem extends SubsystemBase
 {
-    private final static ArmSubsystem INSTANCE = new ArmSubsystem();
+    private static ArmSubsystem INSTANCE;
     
     @SuppressWarnings("WeakerAccess")
     public static ArmSubsystem getInstance() {
+        if(INSTANCE == null) INSTANCE = new ArmSubsystem();
         return INSTANCE;
     }
 

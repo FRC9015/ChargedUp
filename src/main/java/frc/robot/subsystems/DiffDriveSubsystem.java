@@ -48,7 +48,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
      * the {@link #getInstance()} method to get the single instance (rather
      * than trying to construct an instance of this class.)
      */
-    private final static DiffDriveSubsystem INSTANCE = new DiffDriveSubsystem();
+    private static DiffDriveSubsystem INSTANCE;
 
     /**
      * Returns the Singleton instance of this DiffDriveSubsystem. This static method
@@ -57,6 +57,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
      */
     @SuppressWarnings("WeakerAccess")
     public static DiffDriveSubsystem getInstance() {
+        if(INSTANCE == null) INSTANCE = new DiffDriveSubsystem();
         return INSTANCE;
     }
 

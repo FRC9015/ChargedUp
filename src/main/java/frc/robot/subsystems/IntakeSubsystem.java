@@ -10,10 +10,11 @@ import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-    private final static IntakeSubsystem INSTANCE = new IntakeSubsystem();
+    private static IntakeSubsystem INSTANCE;
 
     @SuppressWarnings("WeakerAccess")
     public static IntakeSubsystem getInstance() {
+        if(INSTANCE == null) INSTANCE = new IntakeSubsystem();
         return INSTANCE;
     }
 

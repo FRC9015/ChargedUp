@@ -10,9 +10,10 @@ import frc.robot.Constants.PneumaticConstants;
 
 public class PneumaticFeetSubsystem extends SubsystemBase {
   
-  private static PneumaticFeetSubsystem INSTANCE = new PneumaticFeetSubsystem();
+  private static PneumaticFeetSubsystem INSTANCE;
 
   public static PneumaticFeetSubsystem getInstance() {
+    if(INSTANCE == null) INSTANCE = new PneumaticFeetSubsystem();
     return INSTANCE;
   }
 

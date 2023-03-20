@@ -11,7 +11,13 @@ import frc.robot.Constants.CounterweightConstants;
 
 public class CounterweightPIDSubsystem extends PIDSubsystem {
     
-    private final static CounterweightPIDSubsystem INSTANCE = new CounterweightPIDSubsystem();
+    private static CounterweightPIDSubsystem INSTANCE;
+
+    public static CounterweightPIDSubsystem getInstance(){
+        if(INSTANCE == null) INSTANCE = new CounterweightPIDSubsystem();
+        return INSTANCE;
+    }
+
     DigitalInput limit = new DigitalInput(CounterweightConstants.ENDSTOP_SWITCH_PORT);
 
     private CANSparkMax counterWeightMotor;
@@ -22,11 +28,6 @@ public class CounterweightPIDSubsystem extends PIDSubsystem {
     private static double kD = 0;
 
     private boolean activatePID = false;
-
-    public static CounterweightPIDSubsystem getInstance(){
-        return INSTANCE;
-    }
-    
 
     private CounterweightPIDSubsystem(){
         super(new PIDController(kP, kI, kD));

@@ -10,10 +10,11 @@ import frc.robot.Constants.SensorConstants;
 public class PigeonSubsystem extends SubsystemBase {
     
 
-    private final static PigeonSubsystem INSTANCE = new PigeonSubsystem();
+    private static PigeonSubsystem INSTANCE;
 
     @SuppressWarnings("WeakerAccess")
     public static PigeonSubsystem getInstance() {
+        if(INSTANCE == null) INSTANCE = new PigeonSubsystem();
         return INSTANCE;
     }
 
