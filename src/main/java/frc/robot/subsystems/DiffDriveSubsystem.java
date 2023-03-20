@@ -12,6 +12,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -307,7 +308,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private double calcMetersPerSecond(double input) {
         boolean isSlowed = RobotState.getSlowedSmart();
 
-        input = Helpers.calcDeadzone(input, 0.1);
+        input = MathUtil.applyDeadband(input, 0.1);
 
         double inputMetersPerSecond = (input * DriveConstants.MAX_RPM) * DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR;
 
@@ -321,7 +322,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private double calcRadiansPerSecond(double input) {
         boolean isSlowed = RobotState.getSlowedSmart();
 
-        input = Helpers.calcDeadzone(input, 0.1);
+        input = MathUtil.applyDeadband(input, 0.1);
 
         double inputRadiansPerSecond = input * DriveConstants.MAX_ANGULAR_VELOCITY;
 
