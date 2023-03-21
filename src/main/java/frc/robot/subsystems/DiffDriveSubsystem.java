@@ -37,24 +37,8 @@ import frc.robot.commands.UpdatePIDFConstantsCommand;
 import frc.robot.utils.PIDFConstants;
 
 public class DiffDriveSubsystem extends SubsystemBase {
-
-    // With eager singleton initialization, any static variables/fields used in the
-    // constructor must appear before the "INSTANCE" variable so that they are
-    // initialized
-    // before the constructor is called when the "INSTANCE" variable initializes.
-
-    /**
-     * The Singleton instance of this DiffDriveSubsystem. Code should use
-     * the {@link #getInstance()} method to get the single instance (rather
-     * than trying to construct an instance of this class.)
-     */
     private static DiffDriveSubsystem INSTANCE;
 
-    /**
-     * Returns the Singleton instance of this DiffDriveSubsystem. This static method
-     * should be used, rather than the constructor, to get the single instance
-     * of this class. For example: {@code DiffDriveSubsystem.getInstance();}
-     */
     @SuppressWarnings("WeakerAccess")
     public static DiffDriveSubsystem getInstance() {
         if(INSTANCE == null) INSTANCE = new DiffDriveSubsystem();
@@ -338,11 +322,6 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         leftSpeed.getEntry().setDouble(speeds.leftMetersPerSecond);
         rightSpeed.getEntry().setDouble(speeds.rightMetersPerSecond);
-    }
-
-    private void resetEncoders() {
-        leftEncoder.setPosition(0);
-        rightEncoder.setPosition(0);
-    }
+    } 
 
 }

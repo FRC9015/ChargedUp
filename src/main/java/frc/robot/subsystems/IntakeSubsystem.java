@@ -5,6 +5,8 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
@@ -14,7 +16,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @SuppressWarnings("WeakerAccess")
     public static IntakeSubsystem getInstance() {
-        if(INSTANCE == null) INSTANCE = new IntakeSubsystem();
+        if (INSTANCE == null)
+            INSTANCE = new IntakeSubsystem();
         return INSTANCE;
     }
 
@@ -31,32 +34,51 @@ public class IntakeSubsystem extends SubsystemBase {
     DoubleSolenoid intakeActuator;
     CANSparkMax intakeMotor;
 
-    private IntakeSubsystem(){
+    Timer controlFrameTimer = new Timer();
+
+    private IntakeSubsystem() {
         intakeActuator = PneumaticHubSubsystem.getDoubleSolenoid(IntakeConstants.INTAKE_OPEN_CLOSE);
 
         intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_DRIVE_CAN_ID, MotorType.kBrushless);
         intakeMotor.setIdleMode(IdleMode.kBrake);
     }
 
-    public synchronized void openIntake(){
-        intakeActuator.set(DoubleSolenoid.Value.kForward);
-    }
-
-    public synchronized void closeIntake(){
-        intakeActuator.set(DoubleSolenoid.Value.kReverse);
-    }
-
-    public void runIntakeDrive(double speed) {
-        intakeMotor.set(speed);
-    }
-
-    public synchronized void switchIntake(){
-        if(intakeActuator.get() == DoubleSolenoid.Value.kForward) {       
-            openIntake();
-        } else if (intakeActuator.get() == DoubleSolenoid.Value.kReverse) {
-            closeIntake();
+    @Override
+    public void periodic() {
+        /* If the intake drive wheel speed hasn't been updated in at least 500ms,
+         * report a warning and stop the drive wheels
+         */
+        if (controlFrameTimer.hasElapsed(0.5)) {
+            DriverStation.reportWarning("INTAKE SUBSYSTEM: Drive Not Updated Frequently Enough", false);
+            runIntakeDrive(0);
         }
     }
 
+    public void openIntake() {
+        synchronized (intakeActuator) {
+            intakeActuator.set(DoubleSolenoid.Value.kForward);
+        }
+    }
+
+    public void closeIntake() {
+        synchronized (intakeActuator) {
+            intakeActuator.set(DoubleSolenoid.Value.kReverse);
+        }
+    }
+
+    public void runIntakeDrive(double speed) {
+        controlFrameTimer.restart();
+        intakeMotor.set(speed);
+    }
+
+    public void switchIntake() {
+        synchronized (intakeActuator) {
+            if (intakeActuator.get() == DoubleSolenoid.Value.kForward) {
+                openIntake();
+            } else if (intakeActuator.get() == DoubleSolenoid.Value.kReverse) {
+                closeIntake();
+            }
+        }
+    }
 
 }

@@ -83,6 +83,13 @@ public final class Constants {
     }
 
     public static final class ArmConstants {
+        public static final int ARM_LIFT_CAN_ID = 24;
+        public static final int ARM_TELESCOPE_CAN_ID = 22;
+
+        public static final DoubleSolenoidConstants ARM_BRAKE_SOLENOID = new DoubleSolenoidConstants(15, 14);
+
+        public static final int ARM_POSITION_FACTOR = 1;
+        
         public static final double DEFAULT_LIFT_SPEED = 0.4;
         public static final double DEFAULT_TELESCOPE_SPEED = 0.25;
 
@@ -90,12 +97,7 @@ public final class Constants {
         public static final double TELESCOPE_INPUT_SCALAR = 0.45;
     }
     public static final class IntakeConstants {
-        public static final int ARM_LIFT_CAN_ID = 24;
-        public static final int ARM_TELESCOPE_CAN_ID = 22;
 
-        public static final int ARM_POSITION_FACTOR = 1;
-
-        public static final DoubleSolenoidConstants ARM_BRAKE_SOLENOID = new DoubleSolenoidConstants(15, 14);
 
         public static final int INTAKE_DRIVE_CAN_ID = 21;
 

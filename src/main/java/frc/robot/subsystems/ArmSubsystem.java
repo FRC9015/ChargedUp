@@ -8,7 +8,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.utils.PIDFConstants;
 public class ArmSubsystem extends SubsystemBase
 {
@@ -36,7 +36,7 @@ public class ArmSubsystem extends SubsystemBase
     private ArmSubsystem() 
     {
         // Set up stuff for the Arm rotating motors
-        rotateArm = new CANSparkMax(IntakeConstants.ARM_LIFT_CAN_ID, MotorType.kBrushless);
+        rotateArm = new CANSparkMax(ArmConstants.ARM_LIFT_CAN_ID, MotorType.kBrushless);
 
         rotateEncoder = rotateArm.getEncoder();
         rotatePID = rotateArm.getPIDController();
@@ -45,16 +45,16 @@ public class ArmSubsystem extends SubsystemBase
         rotatePIDConstants.updateSparkMax(rotatePID);
 
         // Initialize arm rotation brake and make sure it is released on boot
-        rotateArmBrake = PneumaticHubSubsystem.getDoubleSolenoid(IntakeConstants.ARM_BRAKE_SOLENOID);
+        rotateArmBrake = PneumaticHubSubsystem.getDoubleSolenoid(ArmConstants.ARM_BRAKE_SOLENOID);
         rotateArmBrake.set(DoubleSolenoid.Value.kReverse);
 
         // Set up stuff for the Arm Telescoping motor
-        telescopeArm = new CANSparkMax(IntakeConstants.ARM_TELESCOPE_CAN_ID, MotorType.kBrushless);
+        telescopeArm = new CANSparkMax(ArmConstants.ARM_TELESCOPE_CAN_ID, MotorType.kBrushless);
 
         telescopeEncoder = telescopeArm.getEncoder();
         telescopePID = telescopeArm.getPIDController();
 
-        telescopePIDConstants = new PIDFConstants(0.1, 0, 0 , 0, 0.1); // THESE CONSTANTS MUST BE TUNED
+        telescopePIDConstants = new PIDFConstants(0.1, 0, 0 , 0, 0.1); // TODO: THESE CONSTANTS MUST BE TUNED
         telescopePIDConstants.updateSparkMax(telescopePID);
     }
 

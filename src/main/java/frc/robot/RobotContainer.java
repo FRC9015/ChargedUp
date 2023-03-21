@@ -10,27 +10,31 @@ import com.pathplanner.lib.server.PathPlannerServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.BalanceCommand;
+import frc.robot.commands.Arm.ArmDefaultControlCommand;
 import frc.robot.commands.Arm.Telescope.ArmInCommand;
-import frc.robot.commands.Arm.Lift.ArmDownCommand;
-import frc.robot.commands.Arm.Lift.ArmUpCommand;
 import frc.robot.commands.Arm.Telescope.ArmOutCommand;
 import frc.robot.commands.Drive.ArcadeDrive;
+import frc.robot.commands.Drive.SlowedWhileActiveCommand;
 import frc.robot.commands.Drive.SwitchSpeed;
+import frc.robot.commands.Intake.CloseIntakeCommand;
 import frc.robot.commands.Intake.OpenIntakeCommand;
+import frc.robot.commands.Intake.RunIntakeWheelsCommand;
 import frc.robot.commands.Intake.ToggleIntakeCommand;
 import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.CounterweightPIDSubsystem;
 import frc.robot.subsystems.DiffDriveSubsystem;
 import frc.robot.subsystems.LimelightSubsytem;
 import frc.robot.subsystems.PigeonSubsystem;
+import frc.robot.subsystems.PneumaticFeetSubsystem;
 
 /**
  * Very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
@@ -38,31 +42,37 @@ public class RobotContainer {
 
     @SuppressWarnings("WeakerAccess")
     public static RobotContainer getInstance() {
-        if(INSTANCE == null) INSTANCE = new RobotContainer();
+        if (INSTANCE == null)
+            INSTANCE = new RobotContainer();
         return INSTANCE;
     }
+
     // The robot's subsystems and commands are defined here...
     DiffDriveSubsystem driveSubsystem = DiffDriveSubsystem.getInstance();
     PigeonSubsystem pigeonSubsystem = PigeonSubsystem.getInstance();
     ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     LimelightSubsytem limelightSubsytem = LimelightSubsytem.getInstance();
-    CounterweightPIDSubsystem counterweightPIDSubsystem = CounterweightPIDSubsystem.getInstance();
 
     public final RobotState robotState = RobotState.getInstance();
     private AutoPaths autoPaths = AutoPaths.getInstance();
 
-    private DriverController driver;
-    private OperatorController operator;
-    
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
-    private RobotContainer()
-    {
+    private static DriverController driver;
+    private static OperatorController operator;
+
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    private RobotContainer() {
+        initControllers();
+
         // Configure the button bindings
         configureButtonBindings();
 
-        init();
-
+        // Default Drive Command
         driveSubsystem.setDefaultCommand(new ArcadeDrive(driver));
+
+        // Default Arm Control Command
+        armSubsystem.setDefaultCommand(new ArmDefaultControlCommand());
 
         // Stops the DS from constantly yelling about the joystick being disconnected
         DriverStation.silenceJoystickConnectionWarning(true);
@@ -76,51 +86,60 @@ public class RobotContainer {
         pigeonSubsystem.resetAngles();
         Dashboard.getInstance().putSendable("RobotState", robotState);
 
-        init();
+        initControllers();
 
         autoPaths.init();
 
         Dashboard.getInstance().addAutoPathChooser(autoPaths.getChooser());
     }
 
-    private void init() {
-        if (driver == null) driver = new DriverController(new XboxController(0));
+    private void initControllers() {
+        if (driver == null)
+            driver = new DriverController(new XboxController(0));
         Dashboard.getInstance().putSendable("Driver", driver);
-        if (operator == null) operator = new OperatorController(new XboxController(1));
+        if (operator == null)
+            operator = new OperatorController(new XboxController(1));
         Dashboard.getInstance().putSendable("Operator", operator);
     }
-    
-    
+
     /**
      * Assign Buttons to Command Triggers
      */
-    private void configureButtonBindings()
-    {
-        init();
-        /*button bindings:
-        ABXY buttons for setting the arm/intake to preset locations for scoring and intaking
-        dpad: up/down for adjusting the arm, left/right for slowly rotating the robot for the sake of scoring
-        left trigger/bumper: deployabe intake rollers
-        right trigger/bumper: intake claw
-        start/select: balancing/foot
-        6
+    private void configureButtonBindings() {
+        initControllers();
+        /*
+         * driver.getUpDpad().whileTrue(new
+         * WeightForwardCommand(counterweightPIDSubsystem));
+         * driver.getDownDpad().whileTrue(new
+         * WeightBackCommand(counterweightPIDSubsystem));
+         */
 
-        */
-        // Toggle the balance command on and off when the driver's A button is pressed
-        driver.getA().toggleOnTrue(new RepeatCommand(new BalanceCommand()));
+        /* -------------------- DRIVER CONTROLS -------------------- */
 
-        // When the driver's left bumper is pressed, switch between low and high speed.
-        driver.getLb().onTrue(new SwitchSpeed());
+        /*
+         * While the driver's Start button is pressed, balance the robot
+         * The balance command does have an end condition, but it gets continuously
+         * rescheduled
+         * while the toggle is active.
+         */
+        driver.getStart().toggleOnTrue(new RepeatCommand(new BalanceCommand()));
 
-        driver.getUpDpad().whileTrue(new ArmUpCommand());
-        driver.getDownDpad().whileTrue(new ArmDownCommand());
+        /* Toggle the feet up and down with the driver's Back button */
+        driver.getBack().onTrue(new InstantCommand(() -> PneumaticFeetSubsystem.getInstance().toggleFeet(),
+                PneumaticFeetSubsystem.getInstance()));
 
-        driver.getY().whileTrue(new ArmInCommand());
-        driver.getX().whileTrue(new ArmOutCommand());
+        /* While the driver's left bumper is held, the robot drives slowly */
+        driver.getLb().onTrue(new SlowedWhileActiveCommand());
 
+        /* -------------------- OPERATOR CONTROLS -------------------- */
+        /* Open intake while active, remain closed while not pressed */
+        operator.getRTriggerAsButton().whileTrue(new OpenIntakeCommand()).whileFalse(new CloseIntakeCommand());
 
-        driver.getRb().onTrue(new ToggleIntakeCommand());
-        driver.getX().onTrue(new OpenIntakeCommand());
+        /* Run intake OUT */
+        operator.getLeftBumper().whileTrue(new RunIntakeWheelsCommand(-0.5));
+        
+        /* Run intake IN */
+        operator.getLTriggerAsButton().whileTrue(new RunIntakeWheelsCommand(0.8));
     }
 
     public DriverController getDriver() {
@@ -134,9 +153,9 @@ public class RobotContainer {
     /**
      * @return the command to run in autonomous
      */
-    public Command getAutonomousCommand()
-    {
-        // Read the selected trajectory from the Dashboard and transform that into a Ramsete command
+    public Command getAutonomousCommand() {
+        // Read the selected trajectory from the Dashboard and transform that into a
+        // Ramsete command
         return driveSubsystem.getTrajectoryCommand(autoPaths.getSelectedTrajectory(), true);
     }
 
