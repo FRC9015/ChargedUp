@@ -13,7 +13,7 @@ public final class Blinkin {
         Rainbow(-0.09),
         Party(-0.07),
         Ocean(-0.05),
-        Lave(-0.03),
+        Lava(-0.03),
         Forest(-0.01);
 
         public final double val;
@@ -43,13 +43,13 @@ public final class Blinkin {
     /**
      * Select which custom color to use. Used in conjuction with {@link CustomPatternType}
      */
-    public static enum Colors {
+    public static enum Color {
         Color1(0.0),
         Color2(0.20);
 
         public final double val;
 
-        private Colors(double val) {
+        private Color(double val) {
             this.val = val;
         }
     }
