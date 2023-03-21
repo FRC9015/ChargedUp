@@ -97,8 +97,6 @@ public final class Constants {
         public static final double TELESCOPE_INPUT_SCALAR = 0.45;
     }
     public static final class IntakeConstants {
-
-
         public static final int INTAKE_DRIVE_CAN_ID = 21;
 
         private static final int INTAKE_OPEN_PORT = 13;
@@ -111,6 +109,160 @@ public final class Constants {
         public static final int P_HUB_CAN_ID = 4;
 
         public static final DoubleSolenoidConstants LIFT_FEET_CONSTANTS = new DoubleSolenoidConstants(11, 10);
+    }
+
+    public static final class LEDConstants {
+        public static final int BLINKIN_PWM_PORT = 0;
+    }
+
+    public static final class BlinkinConstants {
+        public static enum BlinkinState {
+            /* --------- FIXED PATTERNS ---------- */
+            /* Rainbow & Misc Patterns */
+            Rainbow(-0.99),
+            PartyRainbow(-0.97),
+            OceanRainbow(-0.95),
+            LaveRainbow(-0.93),
+            ForestRainbow(-0.91),
+            RainbowWithGlitter(-0.89),
+            Confetti(-0.87),
+            /* Shot Pattern */
+            RedShot(-0.85),
+            BlueShot(-0.83),
+            WhiteShot(-0.81),
+            /* Sinelon Patterns */
+            RainbowSinelon(-0.79),
+            PartySinelon(-0.77),
+            OceanSinelon(-0.75),
+            LaveSinelon(-0.73),
+            ForestSinelon(-0.71),
+            /* Beats Per Minute Patterns */
+            RainbowBPM(-0.69),
+            PartyBPM(-0.67),
+            OceanBPM(-0.65),
+            LaveBPM(-0.63),
+            ForestBPM(-0.61),
+            /* Fire */
+            MediumFire(-0.59),
+            LargeFire(-0.57),
+            /* Twinkle Patterns */
+            RainbowTwinkles(-0.55),
+            PartyTwinkles(-0.53),
+            OceanTwinkles(-0.51),
+            LaveTwinkles(-0.49),
+            ForestTwinkles(-0.47),
+            /* Colorwave Patterns */
+            RainbowColorWaves(-0.45),
+            PartyColorWaves(-0.43),
+            OceanColorWaves(-0.41),
+            LaveColorWaves(-0.39),
+            ForestColorWaves(-0.37),
+            /* Larson Scanners */
+            LarsonScannerRed(-0.35),
+            LarsonScannerGray(-0.33),
+            /* LightChase Patterns */
+            LightChaseRed(-0.31),
+            LightChaseBlue(-0.29),
+            LightChaseGray(-0.27),
+            /* Heartbeat Patterns */
+            HeartbeatRed(-0.25),
+            HearbeatBlue(-0.23),
+            HeartbeatWhite(-0.21),
+            HeartbeatGray(-0.19),
+            /* Breating Patterns */
+            BreathRed(-0.17),
+            BreathBlue(-0.15),
+            BreathGray(-0.13),
+            /* Strobes */
+            StrobeRed(-0.11),
+            StrobeBlue(-0.09),
+            StrobeGold(-0.07),
+            StrobeWhite(-0.05),
+        
+            /* --------- COLOR 1 PATTERNS ---------- */
+            /** Color 1: End to End Blend to Black */
+            Color1_E2EBlendBlack(-0.03),
+            Color1_LarsonScanner(-0.01),
+            Color1_LightChase(0.01),
+            Color1_HeartbeatSlow(0.03),
+            Color1_HeartbeatMed(0.05),
+            Color1_HeartbeatFast(0.07),
+            Color1_BreathSlow(0.09),
+            Color1_BreathFast(0.11),
+            Color1_Shot(0.13),
+            Color1_Strobe(0.15),
+        
+            /* --------- COLOR 1 PATTERNS ---------- */
+            /** Color 1: End to End Blend to Black */
+            Color2_E2EBlendBlack(0.17),
+            Color2_LarsonScanner(0.19),
+            Color2_LightChase(0.21),
+            Color2_HeartbeatSlow(0.23),
+            Color2_HeartbeatMed(0.25),
+            Color2_HeartbeatFast(0.27),
+            Color2_BreathSlow(0.29),
+            Color2_BreathFast(0.31),
+            Color2_Shot(0.33),
+            Color2_Strobe(0.35),
+        
+            /* --------- Color 1 & 2 Patterns ---------- */
+            /** Sparkle, Color 1 on Color 2 */
+            Sparkle_1on2(0.37),
+            /** Sparkle, Color 2 on Color 1 */
+            Sparkle_2on1(0.39),
+            /** Color Gradient, Color 1 and 2 */
+            Gradient(0.41),
+            /** Beats Per Minute, Color 1 and 2 */
+            BeatsPerMinute(0.43),
+            /** End to End Blend, Color 1 to 2 */
+            EndToEndBlend_1to2(0.45),
+            /** End to End Blend */
+            EndToEndBlend(0.47),
+            /**
+             * Color 1 and Color 2 no blending <br>
+             * </br>
+             * <b>Setup Pattern</b>
+             */
+            Color1and2(0.49),
+            SetupPattern(0.49),
+            /** Twinkles, Color 1 and 2 */
+            Twinkles(0.51),
+            /** Color Waves, Color 1 and 2 */
+            ColorWaves(0.53),
+            /** Sinelon, Color 1 and 2 */
+            Sinelon(0.55),
+        
+            /* --------- Solid Colors ---------- */
+            HotPink(0.57),
+            DarkRed(0.59),
+            Red(0.61),
+            RedOrange(0.63),
+            Orange(0.65),
+            Gold(0.67),
+            Yellow(0.69),
+            LawnGreen(0.71),
+            Lime(0.73),
+            DarkGreen(0.75),
+            Green(0.77),
+            BlueGreen(0.79),
+            Aqua(0.81),
+            SkyBlue(0.83),
+            DarkBlue(0.85),
+            Blue(0.87),
+            BlueViolet(0.89),
+            Violet(0.91),
+            White(0.93),
+            Gray(0.95),
+            DarkGray(0.97),
+            Black(0.99),
+            Off(0.99);
+        
+            public final double val;
+        
+            private BlinkinState(double val) {
+              this.val = val;
+            }
+          }
     }
 
 }
