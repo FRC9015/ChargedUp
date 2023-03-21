@@ -23,7 +23,7 @@ public class Dashboard {
     public static Dashboard getInstance() {
         if(INSTANCE == null) INSTANCE = new Dashboard();
         return INSTANCE;
-    }
+    } 
 
     public enum CurrentTab {
         Auto,
