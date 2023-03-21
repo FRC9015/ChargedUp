@@ -21,36 +21,22 @@ public class PneumaticFeetSubsystem extends SubsystemBase {
   // -------------------
 
   private final DoubleSolenoid feet;
-  private boolean feetDown;
-
   public PneumaticFeetSubsystem() {
     feet = PneumaticHubSubsystem.getDoubleSolenoid(PneumaticConstants.LIFT_FEET_CONSTANTS);
   }
 
   @Override
-  public void periodic() {
-    switch (feet.get()) { /* Make sure the feetDown boolean is always up to date */
-      case kForward:
-        feetDown = true;
-      case kReverse:
-        feetDown = false;
-      default:
-        break;
-    }
-  }
+  public void periodic() {}
 
   public void extendFeet() {
-    feetDown = true;
     feet.set(DoubleSolenoid.Value.kForward);
   }
 
   public void retractFeet() {
-    feetDown = false;
     feet.set(DoubleSolenoid.Value.kReverse);
   }
 
   public void disableFeet() {
-    feetDown = false;
     feet.set(DoubleSolenoid.Value.kOff);
   }
 
