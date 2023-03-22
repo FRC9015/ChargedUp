@@ -33,12 +33,14 @@ public class PneumaticHubSubsystem extends SubsystemBase {
     }
 
     public static Solenoid getSolenoid(int channel) {
+        getInstance();
         Solenoid solenoid = INSTANCE.pHub.makeSolenoid(channel);
         solenoids.add(new SolenoidBase(solenoid));
         return solenoid;
     }
 
     public static DoubleSolenoid getDoubleSolenoid(int forwardChannel, int reverseChannel) {
+        getInstance();
         DoubleSolenoid solenoid = INSTANCE.pHub.makeDoubleSolenoid(forwardChannel, reverseChannel);
         solenoids.add(new SolenoidBase(solenoid));
         return solenoid;
