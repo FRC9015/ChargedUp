@@ -14,15 +14,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.Arm.ArmDefaultControlCommand;
-import frc.robot.commands.Arm.Telescope.ArmInCommand;
-import frc.robot.commands.Arm.Telescope.ArmOutCommand;
 import frc.robot.commands.Drive.ArcadeDrive;
 import frc.robot.commands.Drive.SlowedWhileActiveCommand;
-import frc.robot.commands.Drive.SwitchSpeed;
 import frc.robot.commands.Intake.CloseIntakeCommand;
 import frc.robot.commands.Intake.OpenIntakeCommand;
 import frc.robot.commands.Intake.RunIntakeWheelsCommand;
-import frc.robot.commands.Intake.ToggleIntakeCommand;
 import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
 import frc.robot.subsystems.ArmSubsystem;
@@ -47,14 +43,14 @@ public class RobotContainer {
         return INSTANCE;
     }
 
-    // The robot's subsystems and commands are defined here...
-    DiffDriveSubsystem driveSubsystem = DiffDriveSubsystem.getInstance();
-    PigeonSubsystem pigeonSubsystem = PigeonSubsystem.getInstance();
-    ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
-    LimelightSubsytem limelightSubsytem = LimelightSubsytem.getInstance();
+    private final DiffDriveSubsystem driveSubsystem;
+    private final PigeonSubsystem pigeonSubsystem;
+    private final ArmSubsystem armSubsystem;
+    private final LimelightSubsytem limelightSubsytem;
 
-    public final RobotState robotState = RobotState.getInstance();
-    private AutoPaths autoPaths = AutoPaths.getInstance();
+    private final Dashboard dash;
+    public final RobotState robotState;
+    private AutoPaths autoPaths;
 
     private static DriverController driver;
     private static OperatorController operator;
@@ -63,16 +59,46 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     private RobotContainer() {
-        initControllers();
+        // Construct subsystems
+        driveSubsystem = DiffDriveSubsystem.getInstance();
+        pigeonSubsystem = PigeonSubsystem.getInstance();
+        armSubsystem = ArmSubsystem.getInstance();
+        limelightSubsytem = LimelightSubsytem.getInstance();
+
+        // Construct other singletons
+        dash = Dashboard.getInstance();
+        robotState = RobotState.getInstance();
+        autoPaths = AutoPaths.getInstance();
+
+        // Initialize controllers
+        controllerInit();
 
         // Configure the button bindings
         configureButtonBindings();
+    }
+
+    /* WARNING: This method blocks startup of the Robot! */
+    public void robotInit() {
+        // Reset Pigeon
+        pigeonSubsystem.resetAngles();
 
         // Default Drive Command
         driveSubsystem.setDefaultCommand(new ArcadeDrive(driver));
 
         // Default Arm Control Command
         armSubsystem.setDefaultCommand(new ArmDefaultControlCommand());
+
+        boolean autoPathsSuccess = true;
+
+        /* Read paths from filesystem; robot should not fail if paths are not read */
+        try {
+            autoPaths.init();
+        } catch (Exception e) {
+            DriverStation.reportError("Loading AutoPaths Failed", e.getStackTrace());
+            autoPathsSuccess = false;
+        } finally {
+            if (autoPathsSuccess) dash.addAutoPathChooser(autoPaths.getChooser());
+        }
 
         // Stops the DS from constantly yelling about the joystick being disconnected
         DriverStation.silenceJoystickConnectionWarning(true);
@@ -82,18 +108,15 @@ public class RobotContainer {
         }
     }
 
-    public void initRobot() {
-        pigeonSubsystem.resetAngles();
-        Dashboard.getInstance().putSendable("RobotState", robotState);
+    /*
+     * This runs on the first run of robotPeriodic; use for longer running startup
+     * code.
+     */
+    public void robotPostBoot() {
 
-        initControllers();
-
-        autoPaths.init();
-
-        Dashboard.getInstance().addAutoPathChooser(autoPaths.getChooser());
     }
 
-    private void initControllers() {
+    private void controllerInit() {
         if (driver == null)
             driver = new DriverController(new XboxController(0));
         Dashboard.getInstance().putSendable("Driver", driver);
@@ -102,11 +125,19 @@ public class RobotContainer {
         Dashboard.getInstance().putSendable("Operator", operator);
     }
 
+    public DriverController getDriver() {
+        return driver;
+    }
+
+    public OperatorController getOperator() {
+        return operator;
+    }
+
     /**
      * Assign Buttons to Command Triggers
      */
     private void configureButtonBindings() {
-        initControllers();
+        controllerInit();
         /*
          * driver.getUpDpad().whileTrue(new
          * WeightForwardCommand(counterweightPIDSubsystem));
@@ -137,17 +168,9 @@ public class RobotContainer {
 
         /* Run intake OUT */
         operator.getLeftBumper().whileTrue(new RunIntakeWheelsCommand(-0.5));
-        
+
         /* Run intake IN */
         operator.getLTriggerAsButton().whileTrue(new RunIntakeWheelsCommand(0.8));
-    }
-
-    public DriverController getDriver() {
-        return driver;
-    }
-
-    public OperatorController getOperator() {
-        return operator;
     }
 
     /**

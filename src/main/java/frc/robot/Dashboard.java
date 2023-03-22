@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.*;
+import frc.robot.utils.PIDFConstants;
 
 /** Singleton Dashboard Class */
 public class Dashboard {
@@ -79,6 +81,9 @@ public class Dashboard {
         autoPath = new AutoPathData(autoPathLayout);
     }
 
+    public void periodic() {
+    }
+
     /**
      * Change the currently selected tab on the dashboard <p>
      * IMPORTANT: This method only switches tabs if we are in a match. This is detected by checking if the FMS is attached.
@@ -114,7 +119,6 @@ public class Dashboard {
             debugTab.add(name, send);
             dataInstances.add(name);
         }
-        
     }
 
     public void addAutoPathChooser(SendableChooser<PathPlannerTrajectory> chooser) {
@@ -138,6 +142,8 @@ public class Dashboard {
 
         return toReturn;
     }
+
+    
 
     /**
      * Dashboard subclass that handles all drive system data and interactions
