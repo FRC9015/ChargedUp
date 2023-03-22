@@ -32,7 +32,7 @@ public final class Constants {
         public static final boolean LEFT_INVERTED = false;
         public static final boolean RIGHT_INVERTED = true;
 
-        public static final double SLOW_SPEED_MULTIPLIER = 0.45;
+        public static final double SLOW_SPEED_MULTIPLIER = 0.2;
         
         public static final double ACCEL_RATE_LIMIT = 2.0;
 

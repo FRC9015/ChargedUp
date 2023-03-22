@@ -136,7 +136,7 @@ public class OperatorController implements Sendable {
             @Override
             public boolean getAsBoolean() {
                 // TODO Auto-generated method stub
-                System.out.println(lTrigger.getAsDouble());
+                //System.out.println(lTrigger.getAsDouble());
                 return  lTrigger.getAsDouble()>0.3;
             }
             

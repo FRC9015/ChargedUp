@@ -37,7 +37,7 @@ public class armDefualtControlCommand extends CommandBase {
     if (Math.abs(controller.getTankLeft())>0.05){
     armSubsystem.rotateArm(-controller.getTankLeft());}
     else{
-      armSubsystem.rotateArm(0.07);
+      armSubsystem.rotateArm(0);
     }
 
 

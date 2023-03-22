@@ -26,6 +26,12 @@ public class ArmSubsystem implements Subsystem {
         return INSTANCE;
     }
 
+    //arm straight up encoder: 1.81
+    //telescope out: 0.62
+
+    //high cube:rot:0.758 tele:0.595
+
+
     private final CANSparkMax rotateArm; // rotateArm pivots the arm.
     private final double kStartingArmPosition;
     private final double kMaxArmPosition = 1; // TODO CHANGE THIS
@@ -66,12 +72,17 @@ public class ArmSubsystem implements Subsystem {
         activatePID = false;
 
         rotateArmBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 15, 14);
-        rotateArmBrake.set(DoubleSolenoid.Value.kForward);
+        rotateArmBrake.set(DoubleSolenoid.Value.kReverse);
+    }
+
+    public void resetArm(){
+        rotateEncoder.setPosition(0);
+        telescopeEncoder.setPosition(0);
     }
 
     public void rotateArm(double motorspeed) {
         if (motorspeed != 0) {
-            releaseBrake();
+            rotateArmBrake.set(DoubleSolenoid.Value.kForward);
             System.out.println(motorspeed);
             if (armSafeToRaise()) {
                 rotateArm.set(motorspeed*0.5);
@@ -80,6 +91,8 @@ public class ArmSubsystem implements Subsystem {
             }
         } else {
             rotateArm.set(0);
+            rotateArmBrake.set(DoubleSolenoid.Value.kReverse);
+
         }
     }
 
@@ -128,6 +141,10 @@ public class ArmSubsystem implements Subsystem {
     }
 
     public void periodic() {
+        System.out.print("rotate position:");
+        System.out.println(rotateEncoder.getPosition());
+        System.out.print("telescope position:");
+        System.out.println(telescopeEncoder.getPosition());
         applyBrake();
     }
 
@@ -150,11 +167,13 @@ public class ArmSubsystem implements Subsystem {
         double currentVel = rotateArm.getAppliedOutput();
 
         if (Math.abs(currentVel) == 0) {
-            rotateArmBrake.set(DoubleSolenoid.Value.kReverse);
+            //rotateArmBrake.set(DoubleSolenoid.Value.kReverse);
+        }else{
+            //rotateArmBrake.set(DoubleSolenoid.Value.kForward);
         }
     }
 
     private void releaseBrake() {
-        rotateArmBrake.set(DoubleSolenoid.Value.kForward);
+        //rotateArmBrake.set(DoubleSolenoid.Value.kForward);
     }
 }

@@ -22,33 +22,46 @@ public class armpidCommand extends CommandBase {
   private PIDController rotPidController, telePidController;
   private final ArmSubsystem armSubsystem;
   private final Set<Subsystem> subsystems;
+  private boolean waitToExtend;
 
   /** Creates a new armpid. */
-  public armpidCommand(ArmSubsystem myArmSubsystem,double rotsetpoint,double telesetpoint) {
-    rotPidController = new PIDController(0.02, 0, 0);
+  public armpidCommand(ArmSubsystem myArmSubsystem,double rotsetpoint,double telesetpoint,boolean waitToExtend,double error) {
+    rotPidController = new PIDController(2.7, 0.4, 0.3);
     rotPidController.setSetpoint(rotsetpoint);
-    rotPidController.setTolerance(0);
+    rotPidController.setTolerance(error);
 
-    telePidController = new PIDController(0.02, 0, 0);
+    telePidController = new PIDController(0.7, 0.2, 0.2);
     telePidController.setSetpoint(telesetpoint);
-    telePidController.setTolerance(0);
+    telePidController.setTolerance(error);
         
+    this.waitToExtend = waitToExtend;
+
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
+  
     this.armSubsystem = myArmSubsystem;
     this.subsystems = Set.of(this.armSubsystem);
     
   }
   public void execute(){
     armSubsystem.rotateArm( rotPidController.calculate(armSubsystem.getRotEncoderPos()));
-    armSubsystem.telescopeArm( telePidController.calculate(armSubsystem.getTeleEncoderPos()));
+    if (waitToExtend){
+      if (armSubsystem.getRotEncoderPos()>0.3){
+    armSubsystem.telescopeArm( telePidController.calculate(armSubsystem.getTeleEncoderPos()));}
+    }else{
+      armSubsystem.telescopeArm( telePidController.calculate(armSubsystem.getTeleEncoderPos()));
+    }
 
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (telePidController.atSetpoint() && rotPidController.atSetpoint()){
+      return true;
+    }
     return false;
+    
   }
 
 

@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Dashboard.CurrentTab;
 import frc.robot.controllers.DriverController;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.FootSubsystem;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
 
@@ -52,6 +53,7 @@ public class Robot extends TimedRobot
         autoPaths = AutoPaths.getInstance();
 
         CameraServer.startAutomaticCapture();
+        
     }
     
     
@@ -134,6 +136,10 @@ public class Robot extends TimedRobot
         }
 
         FootSubsystem.getInstance().footUp();
+
+
+        //GET THIS OUT OF REAL CODE
+        ArmSubsystem.getInstance().resetArm();
     }
     
     

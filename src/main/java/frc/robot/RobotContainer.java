@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.commands.*;
 import frc.robot.controllers.DriverController;
@@ -100,6 +101,7 @@ public class RobotContainer {
         Dashboard.getInstance().putSendable("Driver", driver);
         if (operator == null) operator = new OperatorController(new XboxController(1));
         Dashboard.getInstance().putSendable("Operator", operator);
+        armSubsystem.resetArm();
     
     }
 
@@ -140,7 +142,7 @@ public class RobotContainer {
  
          // When the driver's left bumper is pressed, switch between low and high speed.
          //driver.getLB().whileTrue(new StartEndCommand(() -> armSubsystem.SetActivatePID(true),() -> armSubsystem.SetActivatePID(true), armSubsystem));
-         driver.getBack().whileTrue(new armpidCommand(armSubsystem, -100,0));
+         //driver.getBack().whileTrue(new armpidCommand(armSubsystem, -100,0));
          
          driver.getLB().onTrue(new InstantCommand(()-> intakeNewmaticSubsystem.switchIntake(), intakeNewmaticSubsystem));
  
@@ -231,10 +233,10 @@ public class RobotContainer {
 
 
 
-        operator.getA().onTrue(new armpidCommand(armSubsystem, 100,0));
-        operator.getB().onTrue(new armpidCommand(armSubsystem, 100,0));
-        operator.getX().onTrue(new armpidCommand(armSubsystem, 100,0));
-        operator.getY().onTrue(new armpidCommand(armSubsystem, 100,0));
+        operator.getA().whileTrue(new armpidCommand(armSubsystem, 0.81,0.595,true,0));
+        operator.getB().whileTrue(new armpidCommand(armSubsystem, 0.59,0.11,true,0));
+        operator.getX().whileTrue(new SequentialCommandGroup(new armpidCommand(armSubsystem, 0.239,0,false,0.1),new armpidCommand(armSubsystem, 0.2396,0.458,false,0)));
+        operator.getY().whileTrue(new SequentialCommandGroup( new armpidCommand(armSubsystem, armSubsystem.getRotEncoderPos(),0,false,0.05)));
 
 
 
