@@ -10,6 +10,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
  */
 public class PIDFConstants implements Sendable {
     private double kP, kI, kD, kIZone, kFF;
+    private String dashName;
 
     /**
      * Construct with only basic PID constants
@@ -18,9 +19,20 @@ public class PIDFConstants implements Sendable {
      * @param D Derivative term
      */
     public PIDFConstants(double P, double I, double D) {
+        this(P, I, D, null);
+    }
+
+    /**
+     * Construct with only basic PID constants
+     * @param P Proportional term
+     * @param I Integral term
+     * @param D Derivative term
+     */
+    public PIDFConstants(double P, double I, double D, String name) {
         kP = P;
         kI = I;
         kD = D;
+        dashName = name;
     }
 
     /**
@@ -32,11 +44,26 @@ public class PIDFConstants implements Sendable {
      * @param FF FeedForward term
      */
     public PIDFConstants(double P, double I, double D, double IZone, double FF) {
+        this(P, I, D, IZone, FF, null);
+    }
+
+        /**
+     * Construct constants for a PID controller with FeedFoward
+     * @param P Proportional term
+     * @param I Integral term
+     * @param D Derivative term
+     * @param IZone Specifies the range the |error| must be within for the integral term to take effect. Must be positive, or set to zero to disable.
+     * @param FF FeedForward term
+     * @param name Name that should be shown on the dashboard
+     */
+    public PIDFConstants(double P, double I, double D, double IZone, double FF, String name) {
         kP = P;
         kI = I;
         kD = D;
         kIZone = IZone;
         kFF = FF;
+
+        dashName = name;
     }
 
     /**
@@ -54,7 +81,8 @@ public class PIDFConstants implements Sendable {
 
     @Override
     public void initSendable(SendableBuilder builder) {
-        builder.setSmartDashboardType(this.getClass().getName());
+        builder.setSmartDashboardType(dashName == null ? this.getClass().getName() : dashName);
+        builder.setActuator(true);
         builder.addDoubleProperty("P", this::getP, this::setP);
         builder.addDoubleProperty("I", this::getI, this::setI);
         builder.addDoubleProperty("D", this::getD, this::setD);
