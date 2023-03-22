@@ -30,6 +30,9 @@ public class AutoPaths {
         paths = new SendableChooser<PathPlannerTrajectory>();
     }
 
+    /**
+     * This method reads paths from the deploy directory
+     */
     public void init() {
         pathFiles = pathsDir.listFiles();
 
