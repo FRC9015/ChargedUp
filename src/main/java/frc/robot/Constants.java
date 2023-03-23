@@ -20,6 +20,7 @@ import frc.robot.utils.DoubleSolenoidConstants;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final double NEO_MAX_RPM = 5700.0; // Max allowed RPM of the NEO motors
     public static final class DriveConstants {
 
         public static final int LEFT_FRONT_MOTOR_ID = 11;
@@ -83,8 +84,11 @@ public final class Constants {
     }
 
     public static final class ArmConstants {
-        public static final int ARM_LIFT_CAN_ID = 24;
-        public static final int ARM_TELESCOPE_CAN_ID = 22;
+        public static final int LIFT_CAN_ID = 24;
+        public static final int TELESCOPE_CAN_ID = 22;
+
+        public static final boolean LIFT_INVERTED = false;
+        public static final boolean TELESCOPE_INVERTED = false;
 
         public static final DoubleSolenoidConstants ARM_BRAKE_SOLENOID = new DoubleSolenoidConstants(15, 14);
 
@@ -95,6 +99,19 @@ public final class Constants {
 
         public static final double LIFT_INPUT_SCALAR = 0.45;
         public static final double TELESCOPE_INPUT_SCALAR = 0.45;
+
+        public static enum LiftPositions {
+            Intake(0.81),
+            ScoreLow(0.59),
+            ScoreMid(0.59),
+            ScoreHigh(0.59);
+
+            public final double val;
+
+            private LiftPositions(double val) {
+                this.val = val;
+            }
+        }
     }
     public static final class IntakeConstants {
         public static final int INTAKE_DRIVE_CAN_ID = 21;
