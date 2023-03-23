@@ -1,5 +1,22 @@
 {
   "Connections": {
     "open": true
-  }
+  },
+  "NetworkTables Settings": {
+    "dsClient": false,
+    "mode": "Client (NT4)",
+    "serverTeam": "localhost"
+  },
+  "Persistent Values": {
+    "open": false
+  },
+  "Retained Values": {
+    "open": false
+  },
+  "transitory": {
+    "SmartDashboard": {
+      "open": true
+    }
+  },
+  "tree": false
 }
