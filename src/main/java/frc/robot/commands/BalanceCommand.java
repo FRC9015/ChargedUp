@@ -16,7 +16,7 @@ public class BalanceCommand extends CommandBase {
   private PigeonSubsystem pigeon;
   private DiffDriveSubsystem drive;
 
-  private double kP = 0.007, kI = 0, kD = 0.001;
+  private double kP = 0.0071, kI = 0, kD = 0.001;
   private PIDController balancePID = new PIDController(kP, kI, kD);
 
   private MedianFilter angleFilter;
@@ -52,7 +52,7 @@ public class BalanceCommand extends CommandBase {
 
     double moveSpeed = balancePID.calculate(angle);
     // Limit max motor speed to 0.2
-    drive.arcadeDriveRaw(Helpers.limitDecimal(moveSpeed, 0.2), 0, false);
+    drive.arcadeDriveRaw(Helpers.limitDecimal(-moveSpeed, 0.2), 0, false);
 
     if (Math.abs(moveSpeed) <= 0.01) {
       // If the PID is calculating below a certain threshold, we can safely assume that we're balanced

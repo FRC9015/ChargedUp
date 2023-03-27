@@ -16,12 +16,14 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
 import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
@@ -105,20 +107,110 @@ public class RobotContainer {
     
     }
 
-    public Command getAutonomousCommand()
+    public Command getHighCubeMobilzeBalanceAuto()
     {
-
-        return(new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0.4, 0),driveSubsystem))).withTimeout(2).andThen(new InstantCommand(()->driveSubsystem.arcadeDrive(0, 0)).andThen(new BalanceCommand(pigeonSubsystem, driveSubsystem)));
+        return(new SequentialCommandGroup(
+            new PrintCommand("getHighCubeMobilzeBalanceAuto"),
+            new armpidCommand(armSubsystem, 0.81,0.6,true,0.1,operator).withTimeout(3).alongWith(
+                new StartEndCommand(
+                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.1), 
+                ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+                intakeNewmaticSubsystem).withTimeout(0.25)
+            ),
+            new StartEndCommand(
+                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.5), 
+                ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+                intakeNewmaticSubsystem).withTimeout(0.2),
+            new ParallelCommandGroup(
+            new armpidCommand(armSubsystem, 0.60,0.13,true,0.1,operator),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0.3, 0),driveSubsystem)).withTimeout(4.1)),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0, 0),driveSubsystem)).withTimeout(0.8),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(-0.4, 0),driveSubsystem)).withTimeout(1.55),
+            new BalanceCommand(pigeonSubsystem, driveSubsystem)
+        ).alongWith(new WaitCommand(14.9).andThen(new InstantCommand(()->footSubsystem.footDown(), footSubsystem)))
+        );
     }
 
-    public Command getAutonomousCommandcopy()
+    public Command getHighCubeMobilzeAuto()
     {
-
-        HashMap<String, Command> eventMap = new HashMap<>();
-        eventMap.put("Balance", new BalanceCommand(pigeonSubsystem, driveSubsystem));
-        eventMap.put("marker2", new PrintCommand("marker 2"));
-        return driveSubsystem.getAutCommandWithEvents(autoPaths.getSelectedTrajectory(), true,eventMap);
+        return(new SequentialCommandGroup(
+            new PrintCommand("getHighCubeMobilzeAuto"),
+            new armpidCommand(armSubsystem, 0.81,0.6,true,0.1,operator).withTimeout(3).alongWith(
+                new StartEndCommand(
+                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.1), 
+                ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+                intakeNewmaticSubsystem).withTimeout(0.25)
+            ),
+            new StartEndCommand(
+                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.5), 
+                ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+                intakeNewmaticSubsystem).withTimeout(0.2),
+            new ParallelCommandGroup(
+            new armpidCommand(armSubsystem, 0.60,0.13,true,0.1,operator),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0.3, 0),driveSubsystem)).withTimeout(3.9)),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0, 0),driveSubsystem)).withTimeout(0.8)
+            
+        ));
     }
+
+
+    public Command getHighConeMobilizeBalanceAuto()
+    {
+        return(new SequentialCommandGroup(
+            new PrintCommand("getHighConeMobilizeBalanceAuto"),
+            new armpidCommand(armSubsystem, 2.4,0,false,0.2,operator).withTimeout(4).andThen(new armpidCommand(armSubsystem, 2.6,0.635,false,0.2,operator).withTimeout(2)).alongWith(
+                new StartEndCommand(
+                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.1), 
+                ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+                intakeNewmaticSubsystem).withTimeout(0.25)
+            ),
+            new WaitCommand(0.5),
+            new StartEndCommand(
+                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.4), 
+                ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+                intakeNewmaticSubsystem).withTimeout(0.2),
+            new ParallelCommandGroup(
+            new armpidCommand(armSubsystem, 0.60,0.05,true,0.1,operator),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(-0.3, 0),driveSubsystem)).withTimeout(4.1)),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0, 0),driveSubsystem)).withTimeout(0.8),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0.4, 0),driveSubsystem)).withTimeout(1.55),
+            new BalanceCommand(pigeonSubsystem, driveSubsystem)
+        ).alongWith(new WaitCommand(14.9).andThen(new InstantCommand(()->footSubsystem.footDown(), footSubsystem)))
+        );
+
+    }
+
+    public Command getHighConeMobilizeAuto()
+    {
+        return(new SequentialCommandGroup(
+            new PrintCommand("getHighConeMobilizeAuto"),
+            new armpidCommand(armSubsystem, 2.4,0,false,0.2,operator).withTimeout(3).andThen(new armpidCommand(armSubsystem, 2.6,0.635,false,0.2,operator).withTimeout(2)).alongWith(
+                new StartEndCommand(
+                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.1), 
+                ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+                intakeNewmaticSubsystem).withTimeout(0.25)
+            ),
+            new WaitCommand(0.5),
+            new StartEndCommand(
+                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.4), 
+                ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+                intakeNewmaticSubsystem).withTimeout(0.2),
+            new ParallelCommandGroup(
+            new armpidCommand(armSubsystem, 0.60,0.05,true,0.1,operator),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(-0.3, 0),driveSubsystem)).withTimeout(3.9)),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0, 0),driveSubsystem)).withTimeout(0.8)
+        ));
+
+    }
+
+    // public Command getAutonomousCommandcopy()
+    // {
+
+    //     HashMap<String, Command> eventMap = new HashMap<>();
+    //     eventMap.put("Balance", new BalanceCommand(pigeonSubsystem, driveSubsystem));
+    //     eventMap.put("marker2", new PrintCommand("marker 2"));
+    //     return driveSubsystem.getAutCommandWithEvents(autoPaths.getSelectedTrajectory(), true,eventMap);
+    // }
     /**
      * Assign Buttons to Command Triggers
      */
@@ -232,11 +324,26 @@ public class RobotContainer {
         //driver.getBack().onTrue(new RavisRamseteCommand(driveSubsystem));
 
 
+        driver.getY().whileTrue(new armpidCommand(armSubsystem, 0.81,0.595,true,0,operator));
 
-        operator.getA().whileTrue(new armpidCommand(armSubsystem, 0.81,0.595,true,0));
-        operator.getB().whileTrue(new armpidCommand(armSubsystem, 0.59,0.11,true,0));
-        operator.getX().whileTrue(new SequentialCommandGroup(new armpidCommand(armSubsystem, 0.239,0,false,0.1),new armpidCommand(armSubsystem, 0.2396,0.458,false,0)));
-        operator.getY().whileTrue(new SequentialCommandGroup( new armpidCommand(armSubsystem, armSubsystem.getRotEncoderPos(),0,false,0.05)));
+
+        operator.getY().whileTrue(new armpidCommand(armSubsystem, 0.81,0.595,true,0,operator));
+        operator.getB().whileTrue(new armpidCommand(armSubsystem, 0.60,0.13,true,0,operator));
+        operator.getA().whileTrue(new armpidCommand(armSubsystem, 0.2096,0.458,false,0,operator));
+
+        operator.getX().whileTrue(new armpidCommand(armSubsystem, 2.4,0,false,0.2,operator).andThen(new armpidCommand(armSubsystem, 2.6,0.635,false,0,operator)));
+
+       // operator.getY().whileTrue(new SequentialCommandGroup( new armpidCommand(armSubsystem, armSubsystem.getRotEncoderPos(),0,false,0.05)));
+
+       operator.getUpDpad().whileTrue(new InstantCommand(()->armSubsystem.changeRotOffset(0.01),armSubsystem));
+       operator.getDownDpad().whileTrue(new InstantCommand(()->armSubsystem.changeRotOffset(-0.01),armSubsystem));
+
+       operator.getRightDpad().whileTrue(new InstantCommand(()->armSubsystem.changeTeleOffset(0.01),armSubsystem));
+       operator.getLeftDpad().whileTrue(new InstantCommand(()->armSubsystem.changeTeleOffset(-0.01),armSubsystem));
+
+       operator.getStart().onTrue(new InstantCommand(()->armSubsystem.resetArm(),armSubsystem));
+
+       operator.getBack().whileTrue(new LEDOnWhileActive());
 
 
 

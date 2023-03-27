@@ -4,12 +4,14 @@
 
 package frc.robot.commands;
 
+import java.lang.ModuleLayer.Controller;
 import java.util.Set;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.controllers.OperatorController;
 import frc.robot.subsystems.ArmSubsystem;
 
 
@@ -24,17 +26,22 @@ public class armpidCommand extends CommandBase {
   private final Set<Subsystem> subsystems;
   private boolean waitToExtend;
 
+  private OperatorController controller;
+
   /** Creates a new armpid. */
-  public armpidCommand(ArmSubsystem myArmSubsystem,double rotsetpoint,double telesetpoint,boolean waitToExtend,double error) {
-    rotPidController = new PIDController(2.7, 0.4, 0.3);
+  public armpidCommand(ArmSubsystem myArmSubsystem,double rotsetpoint,double telesetpoint,boolean waitToExtend,double error,OperatorController opController) {
+    rotPidController = new PIDController(3, 0.5, 0.3);
+    
     rotPidController.setSetpoint(rotsetpoint);
     rotPidController.setTolerance(error);
 
-    telePidController = new PIDController(0.7, 0.2, 0.2);
+    telePidController = new PIDController(0.9, 0.1, 0.2);
     telePidController.setSetpoint(telesetpoint);
     telePidController.setTolerance(error);
         
     this.waitToExtend = waitToExtend;
+
+    controller = opController;
 
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
@@ -44,7 +51,19 @@ public class armpidCommand extends CommandBase {
     
   }
   public void execute(){
-    armSubsystem.rotateArm( rotPidController.calculate(armSubsystem.getRotEncoderPos()));
+
+    if (Math.abs(controller.getTankLeft())>0.05){
+      rotPidController.setSetpoint(rotPidController.getSetpoint()-controller.getTankLeft()*0.01);
+    }
+      
+  
+  
+      if (Math.abs(controller.getTankRight())>0.05){
+      telePidController.setSetpoint(telePidController.getSetpoint()-controller.getTankRight()*0.01);;}
+      
+
+
+    armSubsystem.rotateArm( Math.max(Math.min(0.6, rotPidController.calculate(armSubsystem.getRotEncoderPos())),-0.6));
     if (waitToExtend){
       if (armSubsystem.getRotEncoderPos()>0.3){
     armSubsystem.telescopeArm( telePidController.calculate(armSubsystem.getTeleEncoderPos()));}

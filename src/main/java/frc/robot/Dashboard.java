@@ -13,6 +13,7 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.*;
 
 /** Singleton Dashboard Class */
@@ -32,7 +33,7 @@ public class Dashboard {
     private ShuffleboardTab teleopTab, autoTab, currentTab, debugTab;
     private ShuffleboardLayout balanceLayout, driveLayout, counterweightLayout, autoPathLayout; 
     private SimpleWidget intakeOpen, footDown;
-    private static SendableChooser<PathPlannerTrajectory> autoPathChooser; 
+    private static SendableChooser<Command> autoPathChooser; 
     private static ArrayList<String> dataInstances;
 
     public DriveData drive;
@@ -129,7 +130,7 @@ public class Dashboard {
         
     }
 
-    public void addAutoPathChooser(SendableChooser<PathPlannerTrajectory> chooser) {
+    public void addAutoPathChooser(SendableChooser<Command> chooser) {
         if (autoPathChooser == null) {autoTab.add(chooser); autoPathChooser = chooser;}
     }
 

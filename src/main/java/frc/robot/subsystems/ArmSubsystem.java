@@ -49,6 +49,9 @@ public class ArmSubsystem implements Subsystem {
 
     private double rotatePidSetpoint, telescopePidSetpoint;
 
+
+    private double rotOffset, teleOffset;
+
     // Creates a new ArmSubsystem.
     private ArmSubsystem() {
 
@@ -73,6 +76,17 @@ public class ArmSubsystem implements Subsystem {
 
         rotateArmBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 15, 14);
         rotateArmBrake.set(DoubleSolenoid.Value.kReverse);
+
+        rotOffset =0;
+        teleOffset=0;
+    }
+
+    public void changeTeleOffset(double change){
+        teleOffset+=change;
+    }
+
+    public void changeRotOffset(double change){
+        rotOffset+=change;
     }
 
     public void resetArm(){
@@ -83,7 +97,7 @@ public class ArmSubsystem implements Subsystem {
     public void rotateArm(double motorspeed) {
         if (motorspeed != 0) {
             rotateArmBrake.set(DoubleSolenoid.Value.kForward);
-            System.out.println(motorspeed);
+            //System.out.println(motorspeed);
             if (armSafeToRaise()) {
                 rotateArm.set(motorspeed*0.5);
             } else {
@@ -119,7 +133,7 @@ public class ArmSubsystem implements Subsystem {
     
 
     public double getRotEncoderPos() {
-        return rotateEncoder.getPosition();
+        return rotateEncoder.getPosition()+rotOffset;
     }
 
     public void lockarm(){
@@ -127,7 +141,7 @@ public class ArmSubsystem implements Subsystem {
     }
 
     public double getTeleEncoderPos() {
-        return telescopeEncoder.getPosition();
+        return telescopeEncoder.getPosition()+teleOffset;
     }
 
     public void setPID() {
@@ -141,10 +155,10 @@ public class ArmSubsystem implements Subsystem {
     }
 
     public void periodic() {
-        System.out.print("rotate position:");
-        System.out.println(rotateEncoder.getPosition());
-        System.out.print("telescope position:");
-        System.out.println(telescopeEncoder.getPosition());
+        // System.out.print("rotate position:");
+        // System.out.println(rotateEncoder.getPosition());
+        // System.out.print("telescope position:");
+        // System.out.println(telescopeEncoder.getPosition());
         applyBrake();
     }
 

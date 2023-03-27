@@ -8,6 +8,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 
 public class AutoPaths {
@@ -17,45 +18,35 @@ public class AutoPaths {
         return INSTANCE;
     }
 
-    private File pathsDir;
-    private File[] pathFiles;
+    //private File pathsDir;
+    //private File[] pathFiles;
     private ArrayList<String> pathNames;
-    private SendableChooser<PathPlannerTrajectory> paths;
+    private SendableChooser<Command> paths;
 
     private AutoPaths() {
-        pathsDir = new File(Filesystem.getDeployDirectory(), "pathplanner");
 
-        pathNames = new ArrayList<String>();
-        paths = new SendableChooser<PathPlannerTrajectory>();
+        paths = new SendableChooser<Command>();
     }
 
     public void init() {
-        pathFiles = pathsDir.listFiles();
 
-        for (File pathFile : pathFiles) {
-            String pathFileName = pathFile.getName();
 
-            if (pathFileName.indexOf(".path") >= 0) {
-                String pathName = pathFileName.substring(0, pathFileName.indexOf(".path"));
+        //pathNames.add(pathName);
+        //pathNames.add(pathName);
+        //pathNames.add(pathName);
 
-                pathNames.add(pathName);
-            }
-        }
+       
+        paths.addOption("getHighConeMobilizeBalanceAuto", RobotContainer.getInstance().getHighConeMobilizeBalanceAuto());
+        paths.addOption("getHighCubeMobilizeBalanceAuto", RobotContainer.getInstance().getHighCubeMobilzeBalanceAuto());
+        paths.addOption("getHighConeMobilizeAuto", RobotContainer.getInstance().getHighConeMobilizeAuto());
+        paths.addOption("getHighCubeMobilizeAuto", RobotContainer.getInstance().getHighCubeMobilzeAuto());
 
-        for (String pathName: pathNames) {
-            PathPlannerTrajectory traj = PathPlanner.loadPath(pathName, DriveConstants.kPathConstraints);
-
-            paths.addOption(pathName, traj);
-        }
+        
     }
 
-    public String[] getPathNames() {
-        String[] constantPathNames = new String[pathNames.size()];
 
-        return pathNames.toArray(constantPathNames);
-    }
 
-    public SendableChooser<PathPlannerTrajectory> getChooser() {
+    public SendableChooser<Command> getChooser() {
         return paths;
     }
 
@@ -63,9 +54,9 @@ public class AutoPaths {
      * 
      * @return instance of a {@link PathPlannerTrajectory} that was selected on the dashboard
      */
-    public PathPlannerTrajectory getSelectedTrajectory(){
+    public Command getSelectedTrajectory(){
         
-            return PathPlanner.loadPath("forward", DriveConstants.kPathConstraints);
+           return (paths.getSelected());
     
     }
 }
