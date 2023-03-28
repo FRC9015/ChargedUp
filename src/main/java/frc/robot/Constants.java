@@ -83,6 +83,15 @@ public final class Constants {
     public static final class ArmConstants {
         public static final int ROTATE_CAN_ID=24;
         public static final int TELESCOPE_CAN_ID=22;
+
+        public static final double stageOneLengthMeters = 0.64;
+        public static final double stageTwoLengthMeters = 0.64;
+        public static final double armMinRotAngle = 45;
+        public static final double armMaxRotAngle = 334;
+        public static final double armForceNewtons = 30;
+
+
+
     }
     public static final class IntakeConstants{
         public static final int INTAKE_MOTOR_CAN_ID=21;

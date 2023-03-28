@@ -345,6 +345,8 @@ public class RobotContainer {
 
        operator.getBack().whileTrue(new LEDOnWhileActive());
 
+       operator.getLS().whileTrue(new RepeatCommand(new InstantCommand(()->armSubsystem.rotateArm(armSubsystem.getArmTorque()*0.005), armSubsystem)));
+
 
 
 

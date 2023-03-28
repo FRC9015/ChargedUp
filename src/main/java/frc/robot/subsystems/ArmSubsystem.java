@@ -47,6 +47,8 @@ public class ArmSubsystem implements Subsystem {
 
     private final DoubleSolenoid rotateArmBrake;
 
+    private double torque;
+
     private double rotatePidSetpoint, telescopePidSetpoint;
 
 
@@ -79,6 +81,8 @@ public class ArmSubsystem implements Subsystem {
 
         rotOffset =0;
         teleOffset=0;
+
+        torque = 0;
     }
 
     public void changeTeleOffset(double change){
@@ -95,19 +99,20 @@ public class ArmSubsystem implements Subsystem {
     }
 
     public void rotateArm(double motorspeed) {
-        if (motorspeed != 0) {
-            rotateArmBrake.set(DoubleSolenoid.Value.kForward);
-            //System.out.println(motorspeed);
-            if (armSafeToRaise()) {
-                rotateArm.set(motorspeed*0.5);
-            } else {
-                rotateArm.set(motorspeed*0.5);
-            }
-        } else {
-            rotateArm.set(0);
-            rotateArmBrake.set(DoubleSolenoid.Value.kReverse);
+        rotateArm.set(motorspeed*0.5);
+        // if (motorspeed != 0) {
+        //     rotateArmBrake.set(DoubleSolenoid.Value.kForward);
+        //     //System.out.println(motorspeed);
+            
+        //         rotateArm.set(motorspeed*0.5);
+            
+        //         rotateArm.set(motorspeed*0.5);
+            
+        // } else {
+        //     rotateArm.set(0);
+        //     //(DoubleSolenoid.Value.kReverse);
 
-        }
+        // }
     }
 
     public void telescopeArm(double motorspeed) {
@@ -154,12 +159,25 @@ public class ArmSubsystem implements Subsystem {
         }
     }
 
+    public double getArmTorque(){
+        final double leverarm = ArmConstants.stageOneLengthMeters+ArmConstants.stageTwoLengthMeters*(getTeleEncoderPos()/0.62);
+        final double theta = ArmConstants.armMinRotAngle+(getRotEncoderPos()/3.73)*(ArmConstants.armMaxRotAngle-ArmConstants.armMinRotAngle);
+        System.out.print("theta");
+        System.out.println(theta);
+        final double torque = leverarm*ArmConstants.armForceNewtons*Math.sin(Math.toRadians(theta));
+        System.out.print("torque");
+        System.out.println(torque);
+        return torque;
+    }
+
     public void periodic() {
-        // System.out.print("rotate position:");
-        // System.out.println(rotateEncoder.getPosition());
+
+
+        System.out.print("rotate position:");
+        System.out.println(rotateEncoder.getPosition());
         // System.out.print("telescope position:");
         // System.out.println(telescopeEncoder.getPosition());
-        applyBrake();
+        //applyBrake();
     }
 
     public void simulationPeriodic() {
