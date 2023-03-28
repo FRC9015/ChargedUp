@@ -293,7 +293,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private double calcMetersPerSecond(double input) {
         boolean isSlowed = RobotState.getSlowedSmart();
 
-        input = MathUtil.applyDeadband(input, 0.1);
+        input = MathUtil.applyDeadband(input, 0.05);
 
         double inputMetersPerSecond = (input * DriveConstants.MAX_RPM) * DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR;
 
@@ -307,7 +307,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private double calcRadiansPerSecond(double input) {
         boolean isSlowed = RobotState.getSlowedSmart();
 
-        input = MathUtil.applyDeadband(input, 0.1);
+        input = MathUtil.applyDeadband(input, 0.05);
 
         double inputRadiansPerSecond = input * DriveConstants.MAX_ANGULAR_VELOCITY;
 
