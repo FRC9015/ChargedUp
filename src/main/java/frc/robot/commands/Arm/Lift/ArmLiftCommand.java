@@ -13,7 +13,7 @@ public class ArmLiftCommand extends ArmMoveCommand {
     public ArmLiftCommand(LiftDirection direction) {
         super(getDefaultSpeed(direction), 0);
     }
-
+ 
     public ArmLiftCommand(double liftSpeed) {
         super(liftSpeed, 0);
     }
