@@ -1,14 +1,29 @@
 package frc.robot.utils;
 
-/**
- * A helper class that computes feedforward outputs for a telescoping arm (modeled as a motor acting
- * against the force of gravity on a beam suspended at an angle, where the force of gravity can increase or decrease based on the position of the arm).
- * <br></br> Based on https://github.com/wpilibsuite/allwpilib/blob/fbf92e919092fe262b1135f9871c8dcdfc6c7a31/wpimath/src/main/java/edu/wpi/first/math/controller/ArmFeedforward.java
- */
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.InterpolatingTreeMap;
 
+/**
+ * A helper class that computes feedforward outputs for a telescoping arm
+ * (modeled as a motor acting
+ * against the force of gravity on a beam suspended at an angle, where the force
+ * of gravity can increase or decrease based on the position of the arm).
+ * <br>
+ * </br>
+ * Based on
+ * https://github.com/wpilibsuite/allwpilib/blob/fbf92e919092fe262b1135f9871c8dcdfc6c7a31/wpimath/src/main/java/edu/wpi/first/math/controller/ArmFeedforward.java
+ * <br>
+ * </br>
+ * <i>Credit to the following people for this solution: </i>
+ * <ul>
+ * <li>Garrett, Team 11/193, Mentor/Alumni/Control System Advisor</li>
+ * <li>Keller, Team 834</li>
+ * <li>moto moto, Team 834, A</li>
+ * <li>Cole, Team 4342, Coach/Strategy/Code</li>
+ * <li>Simon, Team 41, Design</li>
+ * </ul>
+ * <i>These names are directly from Discord.</i>
+ */
 public class TelescopingArmFeedforward {
     public final double ks;
     public final double minKg, maxKg;
