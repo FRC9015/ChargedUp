@@ -34,10 +34,13 @@ public class armDefualtControlCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+ 
     if (Math.abs(controller.getTankLeft())>0.05){
-    armSubsystem.rotateArm(-controller.getTankLeft());}
+    armSubsystem.rotateArm(-controller.getTankLeft());
+  }
     else{
-      armSubsystem.rotateArm(armSubsystem.getArmTorque()*0.005);
+     // armSubsystem.rotateArm(armSubsystem.getArmTorque()*0.005);
+     armSubsystem.rotateArm(0);
     }
 
 

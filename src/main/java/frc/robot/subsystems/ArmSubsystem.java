@@ -99,7 +99,9 @@ public class ArmSubsystem implements Subsystem {
     }
 
     public void rotateArm(double motorspeed) {
-        rotateArm.set(motorspeed*0.5);
+        System.out.print("torque");
+        System.out.println(getArmTorque());
+        rotateArm.set((motorspeed*0.5)+ getArmTorque()*0.0025);
         // if (motorspeed != 0) {
         //     rotateArmBrake.set(DoubleSolenoid.Value.kForward);
         //     //System.out.println(motorspeed);
@@ -162,19 +164,15 @@ public class ArmSubsystem implements Subsystem {
     public double getArmTorque(){
         final double leverarm = ArmConstants.stageOneLengthMeters+ArmConstants.stageTwoLengthMeters*(getTeleEncoderPos()/0.62);
         final double theta = ArmConstants.armMinRotAngle+(getRotEncoderPos()/3.73)*(ArmConstants.armMaxRotAngle-ArmConstants.armMinRotAngle);
-        System.out.print("theta");
-        System.out.println(theta);
+
         final double torque = leverarm*ArmConstants.armForceNewtons*Math.sin(Math.toRadians(theta));
-        System.out.print("torque");
-        System.out.println(torque);
+
         return torque;
     }
 
     public void periodic() {
 
 
-        System.out.print("rotate position:");
-        System.out.println(rotateEncoder.getPosition());
         // System.out.print("telescope position:");
         // System.out.println(telescopeEncoder.getPosition());
         //applyBrake();
