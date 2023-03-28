@@ -46,9 +46,10 @@ public class ArmSubsystem extends SubsystemBase
         rotateArm.setInverted(ArmConstants.LIFT_INVERTED);
 
         rotateArm.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        homeRotate();
 
         rotateEncoder = rotateArm.getEncoder();
+        homeRotate();
+
         rotatePID = rotateArm.getPIDController();
 
         rotatePIDConstants = new PIDFConstants(0.1, 0, 0 , 0, 0.1); // TODO: THESE CONSTANTS MUST BE TUNED
@@ -63,9 +64,9 @@ public class ArmSubsystem extends SubsystemBase
         telescopeArm.setInverted(ArmConstants.TELESCOPE_INVERTED);
 
         telescopeArm.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        homeTelescope();
 
         telescopeEncoder = telescopeArm.getEncoder();
+        homeTelescope();
         telescopePID = telescopeArm.getPIDController();
 
         telescopePIDConstants = new PIDFConstants(0.1, 0, 0 , 0, 0.1); // TODO: THESE CONSTANTS MUST BE TUNED
