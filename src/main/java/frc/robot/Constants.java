@@ -92,7 +92,16 @@ public final class Constants {
 
         public static final DoubleSolenoidConstants ARM_BRAKE_SOLENOID = new DoubleSolenoidConstants(15, 14);
 
-        public static final int ARM_POSITION_FACTOR = 1;
+        public static final double LIFT_GEAR_RATIO = 125; // Represents 125:1 gear ratio on arm lift motor
+        public static final double TELESCOPE_GEAR_RATIO = 5; // Represents 5:1 gear ratio on arm telescope motor
+
+        // Convert from encoder rotations to radians
+        public static final double LIFT_POSITION_FACTOR = (2 * Math.PI) / LIFT_GEAR_RATIO;
+        // TODO: Update to represent telescope position in meters (currently represents rotations in radians)
+        public static final double TELESCOPE_POSITION_FACTOR = (2 * Math.PI) / TELESCOPE_GEAR_RATIO;
+
+        // If set, this is the soft limit for the arm as it flips over the robot
+        public static final float LIFT_END_LIMIT = (float) Units.degreesToRadians(270);
         
         public static final double DEFAULT_LIFT_SPEED = 0.4;
         public static final double DEFAULT_TELESCOPE_SPEED = 0.25;
