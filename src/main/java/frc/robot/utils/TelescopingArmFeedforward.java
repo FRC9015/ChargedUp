@@ -2,6 +2,10 @@ package frc.robot.utils;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.InterpolatingTreeMap;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableRegistry;
+import lombok.Getter;
 
 /**
  * A helper class that computes feedforward outputs for a telescoping arm
@@ -24,12 +28,14 @@ import edu.wpi.first.util.InterpolatingTreeMap;
  * </ul>
  * <i>These names are directly from Discord.</i>
  */
-public class TelescopingArmFeedforward {
-    public final double ks;
-    public final double minKg, maxKg;
+public class TelescopingArmFeedforward implements Sendable {
+    @Getter
+    private double ks;
+    @Getter
+    private double minKg, maxKg;
     private final InterpolatingTreeMap<Double, Double> kgInterpolate;
-    public final double kv;
-    public final double ka;
+    @Getter
+    private double kv, ka;
 
     /**
      * Creates a new ArmFeedforward with the specified gains. Units of the gain
@@ -52,6 +58,8 @@ public class TelescopingArmFeedforward {
         this.kgInterpolate = new InterpolatingTreeMap<Double, Double>();
         kgInterpolate.put(1.0, maxKg);
         kgInterpolate.put(0.0, minKg);
+
+        SendableRegistry.add(this, "TelescopingArmFeedforward");
     }
 
     /**
@@ -66,6 +74,16 @@ public class TelescopingArmFeedforward {
      */
     public TelescopingArmFeedforward(double ks, double minKg, double maxKg, double kv) {
         this(ks, minKg, maxKg, kv, 0);
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("TelescopingArmFeedforward");
+        builder.addDoubleProperty("Static Constant", () -> ks, (newKs) -> this.ks = newKs);
+        builder.addDoubleProperty("Min Gravity Constant", () -> minKg, (myval) -> this.minKg = myval);
+        builder.addDoubleProperty("Max Gravity Constant", () -> maxKg, (myval) -> this.maxKg = myval);
+        builder.addDoubleProperty("Velocity Constant", () -> kv, (myval) -> this.kv = myval);
+        builder.addDoubleProperty("Acceleration Constant", () -> ka, (myval) -> this.ka = myval);
     }
 
     /**
