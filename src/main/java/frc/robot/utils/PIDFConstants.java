@@ -116,7 +116,7 @@ public class PIDFConstants implements Sendable {
      * @param toUpdate {@link SparkMaxPIDController} to update
      */
     public void updateSparkMax(SparkMaxPIDController toUpdate) {
-        // Method is synchronized to prevent simultaneous updates to the same PIDF
+        // Synchronized to prevent simultaneous updates to the same PIDF
         // object
         synchronized (toUpdate) {
             if (toUpdate.getP() != kP)
