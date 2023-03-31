@@ -103,8 +103,8 @@ public final class Constants {
         /**
          * Constrain the motion of the arm. This prevents too high acceleration and
          * limits max speed. <br></br>
-         * Current Velocity Limit: 𝝅/2 rad/sec, aka 1/4 rotations per second <br></br>
-         * Current Acceleration Limit: 𝝅/4 rad/sec, aka 1/8 rotations per second per
+         * Current Velocity Limit: pi/2 rad/sec, aka 1/4 rotations per second <br></br>
+         * Current Acceleration Limit: pi/4 rad/sec, aka 1/8 rotations per second per
          * second (Would take 2s to reach aforementioned max speed)
          */
         public static final TrapezoidProfile.Constraints ROTATE_CONSTRAINTS = new TrapezoidProfile.Constraints(
