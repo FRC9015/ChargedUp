@@ -16,7 +16,7 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.utils.PIDFConstants;
 import frc.robot.utils.TelescopingArmFeedforward;
 import lombok.Getter;
-import lombok.var;
+import lombok.val;
 
 public class ArmSubsystem extends SubsystemBase {
     private static ArmSubsystem INSTANCE;
@@ -88,10 +88,10 @@ public class ArmSubsystem extends SubsystemBase {
     /* --------- ROTATE CONTROLS --------- */
 
     private void runRotate() {
-        var output = rotateProfPID.calculate(rotateEncoder.getPosition(), rotateCurrentGoal);
-        var setpoint = rotateProfPID.getSetpoint();
+        val output = rotateProfPID.calculate(rotateEncoder.getPosition(), rotateCurrentGoal);
+        val setpoint = rotateProfPID.getSetpoint();
 
-        var ff = rotateFF.calculate(setpoint.position, setpoint.velocity, getTelescopePercent());
+        val ff = rotateFF.calculate(setpoint.position, setpoint.velocity, getTelescopePercent());
 
         rotateArm.setVoltage(output + ff);
     }
@@ -137,7 +137,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public double getTelescopePercent() {
-        var maxPosition = telescopeArm.getSoftLimit(SoftLimitDirection.kForward);
+        val maxPosition = telescopeArm.getSoftLimit(SoftLimitDirection.kForward);
         return telescopeEncoder.getPosition() / maxPosition;
     }
 

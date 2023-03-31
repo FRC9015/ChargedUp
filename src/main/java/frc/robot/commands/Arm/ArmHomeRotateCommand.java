@@ -12,6 +12,6 @@ public class ArmHomeRotateCommand extends InstantCommand {
 
   @Override
   public void initialize() {
-    arm.homeRotate();
+    arm.homeRotate(false);
   }
 }

@@ -32,7 +32,6 @@ public class ArmMoveCommand extends CommandBase {
   public void end(boolean interrupted) {
     arm.rotateArm(0);
     arm.telescopeArm(0);
-    arm.holdRotatePosition();
     arm.holdTelescopePosition();
   }
 
