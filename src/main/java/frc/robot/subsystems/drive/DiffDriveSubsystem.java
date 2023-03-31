@@ -259,8 +259,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
          * 1: used for the Left input (Tank) and the Forward input (Arcade)
          * 2: used for the Right input (Tank) and the Turn input (Arcade)
          */
-        accelRateLimit1 = new SlewRateLimiter(DriveConstants.ACCEL_RATE_LIMIT);
-        accelRateLimit2 = new SlewRateLimiter(DriveConstants.ACCEL_RATE_LIMIT);
+        accelRateLimit1 = new SlewRateLimiter(DriveConstants.ACCEL_RATE_LIMIT_1);
+        accelRateLimit2 = new SlewRateLimiter(DriveConstants.ACCEL_RATE_LIMIT_2);
 
         trajRamsete = new RamseteController(DriveConstants.RAMSETE_B, DriveConstants.RAMSETE_ZETA);
 
@@ -453,7 +453,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         double inputMetersPerSecond = (input * DriveConstants.MAX_RPM) * DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR;
 
-        double speedMultiplier = DriveConstants.SLOW_SPEED_MULTIPLIER;
+        double speedMultiplier = 0.1;
 
         // If the robot should be running in slow mode, reduce speed by the multiplier
         // (set in dashboard)
@@ -468,7 +468,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         double inputRadiansPerSecond = input * DriveConstants.MAX_ANGULAR_VELOCITY;
 
-        double speedMultiplier = Dashboard.getInstance().drive.getSpeedMultiplier();
+        double speedMultiplier = 0.2;
 
         return isSlowed ? inputRadiansPerSecond * speedMultiplier : inputRadiansPerSecond;
     }

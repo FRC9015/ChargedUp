@@ -8,6 +8,7 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,6 +33,10 @@ public class Robot extends TimedRobot
     private Command autonomousCommand;
 
     private Command teleopCommand;
+
+    private DigitalInput calibrationLimitSwitch = new DigitalInput(3);
+    private DigitalInput brakeToggle = new DigitalInput(4);
+
     
     private RobotContainer robotContainer;
     private AutoPaths autoPaths;
@@ -52,7 +57,7 @@ public class Robot extends TimedRobot
         
         autoPaths = AutoPaths.getInstance();
 
-        CameraServer.startAutomaticCapture();
+        //CameraServer.startAutomaticCapture();
         
     }
     
@@ -84,7 +89,11 @@ public class Robot extends TimedRobot
     
     
     @Override
-    public void disabledPeriodic() {}
+    public void disabledPeriodic() {
+        if (calibrationLimitSwitch.get()){
+            ArmSubsystem.getInstance().resetArm();
+        }
+    }
     
     
     /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
@@ -138,8 +147,6 @@ public class Robot extends TimedRobot
         FootSubsystem.getInstance().footUp();
 
 
-        //GET THIS OUT OF REAL CODE
-        ArmSubsystem.getInstance().resetArm();
     }
     
     

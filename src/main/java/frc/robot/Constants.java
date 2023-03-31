@@ -34,7 +34,8 @@ public final class Constants {
 
         public static final double SLOW_SPEED_MULTIPLIER = 0.2;
         
-        public static final double ACCEL_RATE_LIMIT = 2.0;
+        public static final double ACCEL_RATE_LIMIT_1 = 2.0;
+        public static final double ACCEL_RATE_LIMIT_2 = 4.0;
 
         public static final double WHEEL_SIZE_INCHES = 6.0;
         public static final double DRIVETRAIN_RATIO = 12.75; // Represents KOP-included 8.45:1 gear ratio

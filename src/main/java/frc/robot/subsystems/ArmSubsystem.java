@@ -99,8 +99,7 @@ public class ArmSubsystem implements Subsystem {
     }
 
     public void rotateArm(double motorspeed) {
-        System.out.print("torque");
-        System.out.println(getArmTorque());
+
         rotateArm.set((motorspeed*0.5)+ getArmTorque()*0.0025);
         // if (motorspeed != 0) {
         //     rotateArmBrake.set(DoubleSolenoid.Value.kForward);
@@ -118,7 +117,15 @@ public class ArmSubsystem implements Subsystem {
     }
 
     public void telescopeArm(double motorspeed) {
-        telescopeArm.set(motorspeed*0.95);
+        if (getTeleEncoderPos()<=0.03){
+            telescopeArm.set(Math.max(-0.2, motorspeed*0.95));
+
+        }else if(getTeleEncoderPos()>=0.6){
+            telescopeArm.set(Math.min(0.2, motorspeed*0.95));
+        }
+        else{
+        telescopeArm.set(motorspeed);
+        }
     }
 
     private boolean armSafeToRaise() {
@@ -162,14 +169,20 @@ public class ArmSubsystem implements Subsystem {
     }
 
     public double getArmTorque(){
+
+        // Calculate lever arm using lengths of arm's two stages and position of telescoping encoder
         final double leverarm = ArmConstants.stageOneLengthMeters+ArmConstants.stageTwoLengthMeters*(getTeleEncoderPos()/0.62);
+    
+        // Calculate rotation angle using positions of rotational encoder and min/max rotation angles
         final double theta = ArmConstants.armMinRotAngle+(getRotEncoderPos()/3.73)*(ArmConstants.armMaxRotAngle-ArmConstants.armMinRotAngle);
-
+    
+        // Calculate torque using lever arm, constant arm force, and sine of rotation angle in radians
         final double torque = leverarm*ArmConstants.armForceNewtons*Math.sin(Math.toRadians(theta));
-
+    
+        // Return calculated torque
         return torque;
     }
-
+    
     public void periodic() {
 
 

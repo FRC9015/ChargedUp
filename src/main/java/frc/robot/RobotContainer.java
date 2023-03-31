@@ -99,11 +99,13 @@ public class RobotContainer {
     }
 
     private void init() {
+        armSubsystem.resetArm();
         if (driver == null) driver = new DriverController(new XboxController(0));
         Dashboard.getInstance().putSendable("Driver", driver);
         if (operator == null) operator = new OperatorController(new XboxController(1));
         Dashboard.getInstance().putSendable("Operator", operator);
-        armSubsystem.resetArm();
+
+        //armSubsystem.resetArm();
     
     }
 

@@ -15,7 +15,7 @@ public class ArcadeDrive extends CommandBase {
 
     @Override
     public void execute() {
-        diffDriveSubsystem.arcadeDrive(driver.getArcadeFwd()*0.8, driver.getArcadeTurn()*0.8);
+        diffDriveSubsystem.arcadeDrive(driver.getArcadeFwd(), driver.getArcadeTurn());
     }
 
     @Override

@@ -16,7 +16,7 @@ public class BalanceCommand extends CommandBase {
   private PigeonSubsystem pigeon;
   private DiffDriveSubsystem drive;
 
-  private double kP = 0.0071, kI = 0, kD = 0.001;
+  private double kP = 0.0071, kI = 0, kD = 0.003;
   private PIDController balancePID = new PIDController(kP, kI, kD);
 
   private MedianFilter angleFilter;
@@ -28,7 +28,7 @@ public class BalanceCommand extends CommandBase {
     pigeon = newPigeon;
     drive = newDrive;
 
-    angleFilter = new MedianFilter(25); // Robot refreshes at ~50Hz, so average over the last half second of measurements
+    angleFilter = new MedianFilter(5); // Robot refreshes at ~50Hz, so average over the last half second of measurements
     
     addRequirements(pigeon, drive);
   }
@@ -39,7 +39,7 @@ public class BalanceCommand extends CommandBase {
     drive.tankDriveRaw(0, 0, false);
     drive.setBrakeMode(IdleMode.kBrake);
 
-    balancePID.setSetpoint(0.0); // 0 degrees is obviously balanced
+    balancePID.setSetpoint(0.0); // 0 degrees is balanced
     balancePID.setTolerance(2.0); // Allow for 1 degrees of error in either direction
   }
 
