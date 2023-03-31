@@ -100,20 +100,19 @@ public class ArmSubsystem implements Subsystem {
 
     public void rotateArm(double motorspeed) {
 
-        rotateArm.set((motorspeed*0.5)+ getArmTorque()*0.0025);
-        // if (motorspeed != 0) {
-        //     rotateArmBrake.set(DoubleSolenoid.Value.kForward);
-        //     //System.out.println(motorspeed);
-            
-        //         rotateArm.set(motorspeed*0.5);
-            
-        //         rotateArm.set(motorspeed*0.5);
-            
-        // } else {
-        //     rotateArm.set(0);
-        //     //(DoubleSolenoid.Value.kReverse);
 
-        // }
+        if (getRotEncoderPos()<=0.03){
+            rotateArm.set(Math.max(-0.2, motorspeed*0.95));
+
+        }else if(getRotEncoderPos()>=3.7){
+            rotateArm.set(Math.min(0.2, motorspeed*0.95));
+        }
+        else{
+        rotateArm.set(motorspeed);
+        }
+
+
+
     }
 
     public void telescopeArm(double motorspeed) {

@@ -315,7 +315,7 @@ public class RobotContainer {
             intakeNewmaticSubsystem).alongWith(new PrintCommand("in")));
             
         //driver.getLTrigAsButton().onTrue(new SwitchSpeed());
-        driver.getLTrigAsButton().or(driver.getLB()).whileTrue(new SlowedWhileActiveCommand()); // While left bumper held, slow robot down
+        driver.getLTrigAsButton().or(driver.getLB()).whileTrue(new SlowedWhileActiveCommand().andThen(() -> driveSubsystem.stop(), driveSubsystem)); // While left bumper held, slow robot down
 
         //driver.getX().onTrue(new OpenIntakeCommand(intakeNewmaticSubsystem));
       
