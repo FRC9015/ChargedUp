@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotState;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.subsystems.LEDSubsystem.LEDeffect;
 
 public class FootSubsystem implements Subsystem{
 
@@ -35,6 +36,9 @@ public class FootSubsystem implements Subsystem{
     @Override 
     public void periodic() {
         RobotState.setFeetDown(!(foot.get() == Value.kReverse));
+        if (!(foot.get() == Value.kReverse)){
+            LEDSubsystem.getInstance().setEffect(LEDeffect.Rainbow, null, null, 0, 0, 0);
+        }
     }
 
     public void footDown(){

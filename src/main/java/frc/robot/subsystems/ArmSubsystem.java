@@ -101,15 +101,15 @@ public class ArmSubsystem implements Subsystem {
     public void rotateArm(double motorspeed) {
 
 
-        if (getRotEncoderPos()<=0.03){
-            rotateArm.set(Math.max(-0.2, motorspeed*0.95));
+        // if (getRotEncoderPos()<=0.03){
+        //     rotateArm.set(Math.max(-0.2, motorspeed*0.5+getArmTorque()*0.0025));
 
-        }else if(getRotEncoderPos()>=3.7){
-            rotateArm.set(Math.min(0.2, motorspeed*0.95));
-        }
-        else{
-        rotateArm.set(motorspeed);
-        }
+        // }else if(getRotEncoderPos()>=3.7){
+        //     rotateArm.set(Math.min(0.2, motorspeed*0.5+getArmTorque()*0.0025));
+        // }
+        // else{
+        // rotateArm.set(motorspeed*0.5+getArmTorque()*0.0025);
+        // }
 
 
 

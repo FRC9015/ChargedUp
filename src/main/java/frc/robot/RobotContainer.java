@@ -14,6 +14,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -33,9 +35,12 @@ import frc.robot.subsystems.CounterweightPIDSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.FootSubsystem;
 import frc.robot.subsystems.IntakeNewmaticSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimelightSubsytem;
 import frc.robot.subsystems.PigeonSubsystem;
+import frc.robot.subsystems.LEDSubsystem.LEDeffect;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
+import kotlin.contracts.Effect;
 
 /**
  * Very little robot logic should actually be handled in the {@link Robot}
@@ -61,6 +66,7 @@ public class RobotContainer {
     ArmSubsystem armSubsystem= ArmSubsystem.getInstance();
     LimelightSubsytem limelightSubsytem = LimelightSubsytem.getInstance();
     FootSubsystem footSubsystem = FootSubsystem.getInstance();
+    LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
     //CounterweightSubsystem counterweightSubsystem = CounterweightSubsystem.getInstance();
     CounterweightPIDSubsystem counterweightPIDSubsystem = CounterweightPIDSubsystem.getInstance();
     IntakeNewmaticSubsystem intakeNewmaticSubsystem = IntakeNewmaticSubsystem.getInstance();
@@ -72,9 +78,13 @@ public class RobotContainer {
     private DriverController driver;
     private OperatorController operator;
     
+    
+
+    
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     private RobotContainer()
     {
+
 
         // Configure the button bindings
         configureButtonBindings();
@@ -148,9 +158,9 @@ public class RobotContainer {
                 ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
                 intakeNewmaticSubsystem).withTimeout(0.2),
             new ParallelCommandGroup(
-            new armpidCommand(armSubsystem, 0.60,0.13,true,0.1,operator),
-            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0.3, 0),driveSubsystem)).withTimeout(3.9)),
-            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0, 0),driveSubsystem)).withTimeout(0.8)
+            new armpidCommand(armSubsystem, 0.40,0.13,true,0.1,operator),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0.3, 0),driveSubsystem)).withTimeout(3.5)),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0, 0.6),driveSubsystem)).withTimeout(1.38)
             
         ));
     }
@@ -203,6 +213,10 @@ public class RobotContainer {
             new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0, 0),driveSubsystem)).withTimeout(0.8)
         ));
 
+    }
+
+    public Command getTurn90(){
+        return (new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0, 0.6),driveSubsystem)).withTimeout(1.38));
     }
 
     // public Command getAutonomousCommandcopy()
@@ -315,7 +329,7 @@ public class RobotContainer {
             intakeNewmaticSubsystem).alongWith(new PrintCommand("in")));
             
         //driver.getLTrigAsButton().onTrue(new SwitchSpeed());
-        driver.getLTrigAsButton().or(driver.getLB()).whileTrue(new SlowedWhileActiveCommand().andThen(() -> driveSubsystem.stop(), driveSubsystem)); // While left bumper held, slow robot down
+        driver.getLTrigAsButton().or(driver.getLB()).whileTrue(new SlowedWhileActiveCommand()); // While left bumper held, slow robot down
 
         //driver.getX().onTrue(new OpenIntakeCommand(intakeNewmaticSubsystem));
       
@@ -343,9 +357,10 @@ public class RobotContainer {
        operator.getRightDpad().whileTrue(new InstantCommand(()->armSubsystem.changeTeleOffset(0.01),armSubsystem));
        operator.getLeftDpad().whileTrue(new InstantCommand(()->armSubsystem.changeTeleOffset(-0.01),armSubsystem));
 
-       operator.getStart().onTrue(new InstantCommand(()->armSubsystem.resetArm(),armSubsystem));
+    //    operator.getStart().onTrue(new InstantCommand(()->ledSubsystem.pulseColor(new Color(255, 50, 50),2,255,10),ledSubsystem));
+       operator.getStart().onTrue(new InstantCommand(()->ledSubsystem.setEffect(LEDeffect.SingleColorWave, new Color(255, 100, 0), null, 3, 255, 15),ledSubsystem));
 
-       operator.getBack().whileTrue(new LEDOnWhileActive());
+       operator.getBack().onTrue(new InstantCommand(()->ledSubsystem.setEffect(LEDeffect.SingleColorWave, new Color(20, 10, 255), null, 3, 255, 15),ledSubsystem));
 
        operator.getLS().whileTrue(new RepeatCommand(new InstantCommand(()->armSubsystem.rotateArm(armSubsystem.getArmTorque()*0.005), armSubsystem)));
 

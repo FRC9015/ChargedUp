@@ -13,11 +13,13 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.*;
 
 /** Singleton Dashboard Class */
 public class Dashboard {
+    
 
     private static Dashboard INSTANCE = new Dashboard();
 
@@ -52,6 +54,8 @@ public class Dashboard {
     }
 
     public void init() {
+        SmartDashboard.putNumber("bal filter", 0);
+
         initTabs();
         initLayouts();
         initSubclasses();

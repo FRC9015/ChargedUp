@@ -57,7 +57,7 @@ public class Robot extends TimedRobot
         
         autoPaths = AutoPaths.getInstance();
 
-        //CameraServer.startAutomaticCapture();
+        CameraServer.startAutomaticCapture();
         
     }
     
