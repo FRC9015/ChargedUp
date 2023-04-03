@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotState;
 import frc.robot.Constants.IntakeConstants;
 
-public class IntakeNewmaticSubsystem implements Subsystem{
+public class IntakePneumaticSubsystem implements Subsystem{
 
-    private final static IntakeNewmaticSubsystem INSTANCE = new IntakeNewmaticSubsystem();
+    private final static IntakePneumaticSubsystem INSTANCE = new IntakePneumaticSubsystem();
     private boolean forward;
     @SuppressWarnings("WeakerAccess")
-    public static IntakeNewmaticSubsystem getInstance() {
+    public static IntakePneumaticSubsystem getInstance() {
         return INSTANCE;
         
     }
@@ -26,7 +26,7 @@ public class IntakeNewmaticSubsystem implements Subsystem{
     DoubleSolenoid intake;
     //PneumaticHub pHub;
 
-    private IntakeNewmaticSubsystem(){
+    private IntakePneumaticSubsystem(){
         intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_CAN_ID, MotorType.kBrushless);
         intakeMotor.setSmartCurrentLimit(20, 30);
         intake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 13, 12);
