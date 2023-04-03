@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.Intake;
 
 import frc.robot.subsystems.IntakeNewmaticSubsystem;
 
@@ -8,18 +8,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 
-public class CloseIntakeCommand implements Command{
+public class OpenIntakeCommand implements Command{
     private final IntakeNewmaticSubsystem intakeNewmaticSubsystem;
     private final Set<Subsystem> subsystems;
 
-    public CloseIntakeCommand(IntakeNewmaticSubsystem intakeNewmaticSubsystem){
+    public OpenIntakeCommand(IntakeNewmaticSubsystem intakeNewmaticSubsystem){
         this.intakeNewmaticSubsystem = intakeNewmaticSubsystem;
         this.subsystems = Set.of(this.intakeNewmaticSubsystem);
 
     }
 
     public void initialize(){
-        intakeNewmaticSubsystem.closeIntake();
+        intakeNewmaticSubsystem.openIntake();
     }
     public boolean isFinished(){
         return true;
