@@ -9,11 +9,10 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 
 public class CloseIntakeCommand implements Command{
-    private final IntakeNewmaticSubsystem intakeNewmaticSubsystem;
+    private final IntakeNewmaticSubsystem intakeNewmaticSubsystem = IntakeNewmaticSubsystem.getInstance();
     private final Set<Subsystem> subsystems;
 
-    public CloseIntakeCommand(IntakeNewmaticSubsystem intakeNewmaticSubsystem){
-        this.intakeNewmaticSubsystem = intakeNewmaticSubsystem;
+    public CloseIntakeCommand(){
         this.subsystems = Set.of(this.intakeNewmaticSubsystem);
 
     }

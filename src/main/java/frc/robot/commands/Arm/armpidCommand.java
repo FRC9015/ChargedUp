@@ -20,14 +20,14 @@ public class armpidCommand extends CommandBase {
   
 
   private PIDController rotPidController, telePidController;
-  private final ArmSubsystem armSubsystem;
+  private final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();;
   private final Set<Subsystem> subsystems;
   private boolean waitToExtend;
 
   private OperatorController controller;
 
   /** Creates a new armpid. */
-  public armpidCommand(ArmSubsystem myArmSubsystem,double rotsetpoint,double telesetpoint,boolean waitToExtend,double error,OperatorController opController) {
+  public armpidCommand(double rotsetpoint,double telesetpoint,boolean waitToExtend,double error,OperatorController opController) {
     rotPidController = new PIDController(3, 0.5, 0.3);
     
     rotPidController.setSetpoint(rotsetpoint);
@@ -41,12 +41,7 @@ public class armpidCommand extends CommandBase {
 
     controller = opController;
 
-    // Use addRequirements() here to declare subsystem dependencies.
-    // Configure additional PID options by calling `getController` here.
-  
-    this.armSubsystem = myArmSubsystem;
-    this.subsystems = Set.of(this.armSubsystem);
-    
+    this.subsystems = Set.of(this.armSubsystem);  
   }
   public void execute(){
 

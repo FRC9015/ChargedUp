@@ -8,16 +8,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.controllers.OperatorController;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class armDefualtControlCommand extends CommandBase {
-  private final ArmSubsystem armSubsystem;
+public class ArmDefaultControlCommand extends CommandBase {
+  private final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
 
   private OperatorController controller;
   
   /** Creates a new armDefualtControlCommand. */
-  public armDefualtControlCommand(ArmSubsystem armSubsystem,OperatorController mycontroller) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    controller = mycontroller;
-    this.armSubsystem = armSubsystem;
+  public ArmDefaultControlCommand(OperatorController myController) {
+    controller = myController;
     addRequirements(armSubsystem);
   }
 

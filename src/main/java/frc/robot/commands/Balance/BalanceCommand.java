@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class BalanceCommand extends CommandBase {
 
-  private PigeonSubsystem pigeon;
-  private DiffDriveSubsystem drive;
+  private PigeonSubsystem pigeon = PigeonSubsystem.getInstance();
+  private DiffDriveSubsystem drive = DiffDriveSubsystem.getInstance();
 
   private double kP = 0.0071, kI = 0, kD = 0.003;
   private PIDController balancePID = new PIDController(kP, kI, kD);
@@ -22,12 +22,8 @@ public class BalanceCommand extends CommandBase {
   private MedianFilter angleFilter;
 
   private boolean finished = false;
-    
 
-  public BalanceCommand(PigeonSubsystem newPigeon, DiffDriveSubsystem newDrive) {
-    pigeon = newPigeon;
-    drive = newDrive;
-
+  public BalanceCommand() {
     angleFilter = new MedianFilter(5); // Robot refreshes at ~50Hz, so average over the last half second of measurements
     
     addRequirements(pigeon, drive);

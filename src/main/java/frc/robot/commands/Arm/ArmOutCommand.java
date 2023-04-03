@@ -7,11 +7,10 @@ import frc.robot.subsystems.ArmSubsystem;
 import java.util.Set;
 
 public class ArmOutCommand implements Command {
-    private final ArmSubsystem armSubsystem;
+    private final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     private final Set<Subsystem> subsystems;
 
-    public ArmOutCommand(ArmSubsystem myArmSubsystem) {
-        this.armSubsystem = myArmSubsystem;
+    public ArmOutCommand() {
         this.subsystems = Set.of(this.armSubsystem);
     }
 
