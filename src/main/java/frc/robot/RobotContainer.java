@@ -29,7 +29,6 @@ import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
 //import frc.robot.subsystems.CounterweightSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.CounterweightPIDSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.FootSubsystem;
 import frc.robot.subsystems.IntakeNewmaticSubsystem;
@@ -62,7 +61,6 @@ public class RobotContainer {
     LimelightSubsytem limelightSubsytem = LimelightSubsytem.getInstance();
     FootSubsystem footSubsystem = FootSubsystem.getInstance();
     //CounterweightSubsystem counterweightSubsystem = CounterweightSubsystem.getInstance();
-    CounterweightPIDSubsystem counterweightPIDSubsystem = CounterweightPIDSubsystem.getInstance();
     IntakeNewmaticSubsystem intakeNewmaticSubsystem = IntakeNewmaticSubsystem.getInstance();
     // private final Command driveCommand = new ArcadeDrive();
 
@@ -239,17 +237,12 @@ public class RobotContainer {
          //driver.getBack().whileTrue(new armpidCommand(armSubsystem, -100,0));
          
          driver.getLB().onTrue(new InstantCommand(()-> intakeNewmaticSubsystem.switchIntake(), intakeNewmaticSubsystem));
- 
-         driver.getB().onTrue(new WeightCalibrationCommand(counterweightPIDSubsystem));
- 
+  
          driver.getUpDpad().whileTrue(new ArmUp(armSubsystem));
          driver.getDownDpad().whileTrue(new ArmDown(armSubsystem));
  
          driver.getY().whileTrue(new ArmInCommand(armSubsystem));
          driver.getX().whileTrue(new ArmOutCommand(armSubsystem));
- 
-         driver.getLeftDpad().whileTrue(new WeightBackCommand(counterweightPIDSubsystem));
-         driver.getRightDpad().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
  
          driver.getRTrigAsButton().whileTrue(new StartEndCommand(
              () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.8), 
@@ -293,8 +286,6 @@ public class RobotContainer {
         //driver.getY().whileTrue(new ArmInCommand(armSubsystem));
         //driver.getX().whileTrue(new ArmOutCommand(armSubsystem));
         
-        driver.getUpDpad().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
-        driver.getDownDpad().whileTrue(new WeightBackCommand(counterweightPIDSubsystem));
         //driver.getLeftDpad().whileTrue(new WeightBackCommand(counterweightPIDSubsystem));
         //driver.getRightDpad().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
 
