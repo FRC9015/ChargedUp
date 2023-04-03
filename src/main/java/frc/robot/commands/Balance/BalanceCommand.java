@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.Balance;
 
 import frc.robot.Dashboard;
 import frc.robot.Helpers;

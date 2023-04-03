@@ -31,6 +31,7 @@ import frc.robot.commands.Arm.ArmOutCommand;
 import frc.robot.commands.Arm.ArmUp;
 import frc.robot.commands.Arm.armDefualtControlCommand;
 import frc.robot.commands.Arm.armpidCommand;
+import frc.robot.commands.Balance.BalanceCommand;
 import frc.robot.commands.Drive.ArcadeDrive;
 import frc.robot.commands.Drive.SlowedWhileActiveCommand;
 import frc.robot.controllers.DriverController;
