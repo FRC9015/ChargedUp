@@ -170,13 +170,13 @@ public class ArmSubsystem implements Subsystem {
     public double getArmTorque(){
 
         // Calculate lever arm using lengths of arm's two stages and position of telescoping encoder
-        final double leverarm = ArmConstants.stageOneLengthMeters+ArmConstants.stageTwoLengthMeters*(getTeleEncoderPos()/0.62);
+        final double leverarm = ArmConstants.STAGE_ONE_LENGTH_METERS+ArmConstants.STAGE_TWO_LENGTH_METERS*(getTeleEncoderPos()/0.62);
     
         // Calculate rotation angle using positions of rotational encoder and min/max rotation angles
-        final double theta = ArmConstants.armMinRotAngle+(getRotEncoderPos()/3.73)*(ArmConstants.armMaxRotAngle-ArmConstants.armMinRotAngle);
+        final double theta = ArmConstants.ARM_MIN_ROTATE_ANGLE+(getRotEncoderPos()/3.73)*(ArmConstants.ARM_MAX_ROTATE_ANGLE-ArmConstants.ARM_MIN_ROTATE_ANGLE);
     
         // Calculate torque using lever arm, constant arm force, and sine of rotation angle in radians
-        final double torque = leverarm*ArmConstants.armForceNewtons*Math.sin(Math.toRadians(theta));
+        final double torque = leverarm*ArmConstants.ARM_FORCE_NEWTONS*Math.sin(Math.toRadians(theta));
     
         // Return calculated torque
         return torque;
