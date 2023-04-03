@@ -4,9 +4,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.PneumaticsControlModule;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotState;
 import frc.robot.Constants.IntakeConstants;
@@ -29,7 +26,7 @@ public class IntakePneumaticSubsystem implements Subsystem{
     private IntakePneumaticSubsystem(){
         intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_CAN_ID, MotorType.kBrushless);
         intakeMotor.setSmartCurrentLimit(20, 30);
-        intake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 13, 12);
+        intake = PneumaticHubSubsystem.getDoubleSolenoid(IntakeConstants.OPEN_CLOSE_SOLENOID);
         forward = false;
     }
 

@@ -1,21 +1,16 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.PneumaticsControlModule;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotState;
-import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.PneumaticConstants;
 
 public class FootSubsystem implements Subsystem{
 
     private final static FootSubsystem INSTANCE = new FootSubsystem();
     private boolean forward;
+
     @SuppressWarnings("WeakerAccess")
     public static FootSubsystem getInstance() {
         return INSTANCE;
@@ -28,9 +23,8 @@ public class FootSubsystem implements Subsystem{
 
     private FootSubsystem(){
        
-        foot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 11, 10);
+        foot = PneumaticHubSubsystem.getDoubleSolenoid(PneumaticConstants.LIFT_FEET_CONSTANTS);
      }
-
 
     @Override 
     public void periodic() {

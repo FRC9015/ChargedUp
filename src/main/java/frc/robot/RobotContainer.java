@@ -44,7 +44,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DiffDriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.FootSubsystem;
-import frc.robot.subsystems.IntakeNewmaticSubsystem;
+import frc.robot.subsystems.IntakePneumaticSubsystem;
 import frc.robot.subsystems.LimelightSubsytem;
 import frc.robot.subsystems.PigeonSubsystem;
 
@@ -73,7 +73,7 @@ public class RobotContainer {
     LimelightSubsytem limelightSubsytem = LimelightSubsytem.getInstance();
     FootSubsystem footSubsystem = FootSubsystem.getInstance();
     //CounterweightSubsystem counterweightSubsystem = CounterweightSubsystem.getInstance();
-    IntakeNewmaticSubsystem intakeNewmaticSubsystem = IntakeNewmaticSubsystem.getInstance();
+    IntakePneumaticSubsystem intakeNewmaticSubsystem = IntakePneumaticSubsystem.getInstance();
     // private final Command driveCommand = new ArcadeDrive();
 
     public final RobotState robotState = RobotState.getInstance();

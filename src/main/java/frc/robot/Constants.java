@@ -9,6 +9,7 @@ import com.pathplanner.lib.PathConstraints;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import frc.robot.utils.DoubleSolenoidConstants;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -85,17 +86,25 @@ public final class Constants {
         public static final int ROTATE_CAN_ID=24;
         public static final int TELESCOPE_CAN_ID=22;
 
-        public static final double stageOneLengthMeters = 0.64;
-        public static final double stageTwoLengthMeters = 0.64;
-        public static final double armMinRotAngle = 45;
-        public static final double armMaxRotAngle = 334;
-        public static final double armForceNewtons = 30;
+        public static final double STAGE_ONE_LENGTH_METERS = 0.64;
+        public static final double STAGE_TWO_LENGTH_METERS = 0.64;
+        public static final double ARM_MIN_ROTATE_ANGLE = 45;
+        public static final double ARM_MAX_ROTATE_ANGLE = 334;
+        public static final double ARM_FORCE_NEWTONS = 30;
 
 
 
     }
     public static final class IntakeConstants{
         public static final int INTAKE_MOTOR_CAN_ID=21;
+
+        public static final DoubleSolenoidConstants OPEN_CLOSE_SOLENOID = new DoubleSolenoidConstants( 13, 12);
+    }
+
+    public static final class PneumaticConstants {
+        public static final int P_HUB_CAN_ID = 0; // TODO: Update this and PH to CAN ID 4 despite the fact that Micah thinks it's stupid
+
+        public static final DoubleSolenoidConstants LIFT_FEET_CONSTANTS = new DoubleSolenoidConstants(11, 10);
     }
 
 }
