@@ -2,55 +2,52 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotState;
 import frc.robot.Constants.PneumaticConstants;
 
-public class FootSubsystem implements Subsystem{
+public class FootSubsystem extends SubsystemBase {
 
-    private final static FootSubsystem INSTANCE = new FootSubsystem();
+    private static FootSubsystem INSTANCE;
     private boolean forward;
 
     @SuppressWarnings("WeakerAccess")
     public static FootSubsystem getInstance() {
+        if (INSTANCE == null)
+            INSTANCE = new FootSubsystem();
+
         return INSTANCE;
-        
+
     }
 
-
     DoubleSolenoid foot;
-    //PneumaticHub pHub;
 
-    private FootSubsystem(){
-       
+    private FootSubsystem() {
         foot = PneumaticHubSubsystem.getDoubleSolenoid(PneumaticConstants.LIFT_FEET_CONSTANTS);
-     }
+    }
 
-    @Override 
+    @Override
     public void periodic() {
         RobotState.setFeetDown(!(foot.get() == Value.kReverse));
     }
 
-    public void footDown(){
+    public void footDown() {
         foot.set(DoubleSolenoid.Value.kForward);
     }
 
-    public void footUp(){
+    public void footUp() {
         foot.set(DoubleSolenoid.Value.kReverse);
     }
-    
 
+    public void toggleFoot() {
+        if (forward) {
+            foot.set(DoubleSolenoid.Value.kReverse);
+            forward = false;
 
-    public void toggleFoot(){
-        if(forward){       
-             foot.set(DoubleSolenoid.Value.kReverse);
-             forward = false;
-
-        }else{
+        } else {
             foot.set(DoubleSolenoid.Value.kForward);
             forward = true;
         }
     }
-
 
 }

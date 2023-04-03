@@ -4,24 +4,25 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotState;
 import frc.robot.Constants.IntakeConstants;
 
-public class IntakePneumaticSubsystem implements Subsystem{
+public class IntakePneumaticSubsystem extends SubsystemBase{
 
-    private final static IntakePneumaticSubsystem INSTANCE = new IntakePneumaticSubsystem();
-    private boolean forward;
+    private static IntakePneumaticSubsystem INSTANCE;
+    
     @SuppressWarnings("WeakerAccess")
     public static IntakePneumaticSubsystem getInstance() {
+        if(INSTANCE == null) INSTANCE = new IntakePneumaticSubsystem();
         return INSTANCE;
         
     }
 
+    private boolean forward;
 
     CANSparkMax intakeMotor;
     DoubleSolenoid intake;
-    //PneumaticHub pHub;
 
     private IntakePneumaticSubsystem(){
         intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_CAN_ID, MotorType.kBrushless);

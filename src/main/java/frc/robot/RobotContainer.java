@@ -42,7 +42,6 @@ import frc.robot.controllers.OperatorController;
 //import frc.robot.subsystems.CounterweightSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DiffDriveSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.FootSubsystem;
 import frc.robot.subsystems.IntakePneumaticSubsystem;
 import frc.robot.subsystems.LimelightSubsytem;
@@ -54,27 +53,21 @@ import frc.robot.subsystems.PigeonSubsystem;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    private static boolean hasInstantiate = false;
-    private static RobotContainer INSTANCE = new RobotContainer();
+    private static RobotContainer INSTANCE ;
 
     public static RobotContainer getInstance() {
-        if (INSTANCE == null && !hasInstantiate) {
-            System.out.println("---------- CREATING NEW ROBOT-CONTAINER ----------");
+        if (INSTANCE == null) 
             INSTANCE = new RobotContainer();
-            hasInstantiate = true;
-        }
+        
         return INSTANCE;
     }
     // The robot's subsystems and commands are defined here...
-    private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     DiffDriveSubsystem driveSubsystem = DiffDriveSubsystem.getInstance();
     PigeonSubsystem pigeonSubsystem = PigeonSubsystem.getInstance();
     ArmSubsystem armSubsystem= ArmSubsystem.getInstance();
     LimelightSubsytem limelightSubsytem = LimelightSubsytem.getInstance();
     FootSubsystem footSubsystem = FootSubsystem.getInstance();
-    //CounterweightSubsystem counterweightSubsystem = CounterweightSubsystem.getInstance();
     IntakePneumaticSubsystem intakeNewmaticSubsystem = IntakePneumaticSubsystem.getInstance();
-    // private final Command driveCommand = new ArcadeDrive();
 
     public final RobotState robotState = RobotState.getInstance();
     private AutoPaths autoPaths = AutoPaths.getInstance();
@@ -114,9 +107,6 @@ public class RobotContainer {
         Dashboard.getInstance().putSendable("Driver", driver);
         if (operator == null) operator = new OperatorController(new XboxController(1));
         Dashboard.getInstance().putSendable("Operator", operator);
-
-        //armSubsystem.resetArm();
-    
     }
 
     public Command getHighCubeMobilzeBalanceAuto()
@@ -363,11 +353,6 @@ public class RobotContainer {
     public OperatorController getOperator() {
         return operator;
     }
-
-    /**
-     * @return the command to run in autonomous
-     */
-
 
     /**
      * @return the command to run in teleop

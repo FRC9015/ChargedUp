@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PowerDistSubsystem extends SubsystemBase {
-  public static PowerDistSubsystem INSTANCE;
+  private static PowerDistSubsystem INSTANCE;
 
   public static PowerDistSubsystem getInstance() {
-    if (INSTANCE == null) {
+    if (INSTANCE == null) 
       INSTANCE = new PowerDistSubsystem();
-    }
+    
     return INSTANCE;
   }
 
