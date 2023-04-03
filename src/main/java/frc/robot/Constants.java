@@ -12,15 +12,20 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.utils.DoubleSolenoidConstants;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants
+ * should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
+ * <p>
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
     public static final double NEO_MAX_RPM = 5700.0; // Max allowed RPM of the NEO motors
+
     public static final class DriveConstants {
 
         public static final int LEFT_FRONT_MOTOR_ID = 11;
@@ -32,25 +37,29 @@ public final class Constants {
         public static final boolean RIGHT_INVERTED = false;
 
         public static final double SLOW_SPEED_MULTIPLIER = 0.5;
-        
+
         public static final double ACCEL_RATE_LIMIT_1 = 2;
         public static final double ACCEL_RATE_LIMIT_2 = 1.75;
 
         public static final double WHEEL_SIZE_INCHES = 4.0;
-        public static final double DRIVETRAIN_RATIO = 8.45; // Represents KOP-included 8.45:1 gear ratio
+        public static final double DRIVETRAIN_RATIO = 12.75; // Represents gear ratio on WCP Flipped Gearboxes
         public static final double DRIVE_TRACKWIDTH_INCHES = 14.75; // Rough distance between wheels
-        public static final double MAX_RPM = 5700.0; // Max allowed RPM of the NEO motors (yes its actually 5700 but we're being conservative)
-        public static final double MAX_ANGULAR_VELOCITY = 3 * ( 2 * Math.PI); // 3 * 2pi radians per second a.k.a. 3 rotation per second
+        public static final double MAX_RPM = 5700.0; // Max allowed RPM of the NEO motors (yes its actually 5700 but
+                                                     // we're being conservative)
+        public static final double MAX_ANGULAR_VELOCITY = 3 * (2 * Math.PI); // 3 * 2pi radians per second a.k.a. 3
+                                                                             // rotation per second
 
         public static final double RAMSETE_B = 2.0; // Ramsete B constant, 2.0 is the default WPILib value
         public static final double RAMSETE_ZETA = 0.7; // Ramsete Zeta constant, 0.7 is the default WPILib value
 
-        public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(Units.inchesToMeters(DRIVE_TRACKWIDTH_INCHES));
-        
+        public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(
+                Units.inchesToMeters(DRIVE_TRACKWIDTH_INCHES));
+
         /**
          * Conversion factor from encoder rotations to meters
          */
-        public static final double DRIVE_ENCODER_POSITION_FACTOR = (Units.inchesToMeters(WHEEL_SIZE_INCHES) * Math.PI) / (DRIVETRAIN_RATIO);
+        public static final double DRIVE_ENCODER_POSITION_FACTOR = (Units.inchesToMeters(WHEEL_SIZE_INCHES) * Math.PI)
+                / (DRIVETRAIN_RATIO);
         /**
          * Conversion factor from encoder rotations per minute to meters per second
          */
@@ -79,8 +88,8 @@ public final class Constants {
         public static final int DRIVE_MOTOR_CAN_ID = 26;
 
         public static final int ENDSTOP_SWITCH_PORT = 0;
-        
-        public static final int[] ENCODER_DIO_PINS = {1, 2}; // Encoder wired into DIO pins 1 & 2 on the roboRIO
+
+        public static final int[] ENCODER_DIO_PINS = { 1, 2 }; // Encoder wired into DIO pins 1 & 2 on the roboRIO
     }
 
     public static final class ArmConstants {
@@ -92,8 +101,27 @@ public final class Constants {
 
         public static final DoubleSolenoidConstants ARM_BRAKE_SOLENOID = new DoubleSolenoidConstants(15, 14);
 
-        public static final int ARM_POSITION_FACTOR = 1;
-        
+        public static final double LIFT_GEAR_RATIO = 125; // Represents 125:1 gear ratio on arm lift motor
+        public static final double TELESCOPE_GEAR_RATIO = 5; // Represents 5:1 gear ratio on arm telescope motor
+
+        // Convert from encoder rotations to radians
+        public static final double LIFT_POSITION_FACTOR = (2 * Math.PI) / LIFT_GEAR_RATIO;
+        // TODO: Update to represent telescope position in meters (currently represents
+        // rotations in radians)
+        public static final double TELESCOPE_POSITION_FACTOR = (2 * Math.PI) / TELESCOPE_GEAR_RATIO;
+
+        /*
+         * Arm Horizontal Offset; the Arm Feedforward assumes that the arm's zero
+         * position is paralell to the floor. However, the bottom of the arm's travel is
+         * lower than this.
+         * This offset is set to the encoder when we home the arm.
+         * TODO: This must be found and set
+         */
+        public static final double LIFT_HOME_OFFSET = -(Units.degreesToRadians(30));
+
+        // If set, this is the soft limit for the arm as it flips over the robot
+        public static final float LIFT_END_LIMIT = (float) Units.degreesToRadians(225);
+
         public static final double DEFAULT_LIFT_SPEED = 0.4;
         public static final double DEFAULT_TELESCOPE_SPEED = 0.25;
 
@@ -113,12 +141,14 @@ public final class Constants {
             }
         }
     }
+
     public static final class IntakeConstants {
         public static final int INTAKE_DRIVE_CAN_ID = 21;
 
         private static final int INTAKE_OPEN_PORT = 13;
         private static final int INTAKE_CLOSE_PORT = 12;
-        public static final DoubleSolenoidConstants INTAKE_OPEN_CLOSE = new DoubleSolenoidConstants(INTAKE_OPEN_PORT, INTAKE_CLOSE_PORT);
+        public static final DoubleSolenoidConstants INTAKE_OPEN_CLOSE = new DoubleSolenoidConstants(INTAKE_OPEN_PORT,
+                INTAKE_CLOSE_PORT);
     }
 
     public static final class PneumaticConstants {
@@ -195,7 +225,7 @@ public final class Constants {
             StrobeBlue(-0.09),
             StrobeGold(-0.07),
             StrobeWhite(-0.05),
-        
+
             /* --------- COLOR 1 PATTERNS ---------- */
             /** Color 1: End to End Blend to Black */
             Color1_E2EBlendBlack(-0.03),
@@ -208,7 +238,7 @@ public final class Constants {
             Color1_BreathFast(0.11),
             Color1_Shot(0.13),
             Color1_Strobe(0.15),
-        
+
             /* --------- COLOR 1 PATTERNS ---------- */
             /** Color 1: End to End Blend to Black */
             Color2_E2EBlendBlack(0.17),
@@ -221,7 +251,7 @@ public final class Constants {
             Color2_BreathFast(0.31),
             Color2_Shot(0.33),
             Color2_Strobe(0.35),
-        
+
             /* --------- Color 1 & 2 Patterns ---------- */
             /** Sparkle, Color 1 on Color 2 */
             Sparkle_1on2(0.37),
@@ -248,7 +278,7 @@ public final class Constants {
             ColorWaves(0.53),
             /** Sinelon, Color 1 and 2 */
             Sinelon(0.55),
-        
+
             /* --------- Solid Colors ---------- */
             HotPink(0.57),
             DarkRed(0.59),
@@ -273,13 +303,13 @@ public final class Constants {
             DarkGray(0.97),
             Black(0.99),
             Off(0.99);
-        
+
             public final double val;
-        
+
             private BlinkinState(double val) {
-              this.val = val;
+                this.val = val;
             }
-          }
+        }
     }
 
 }
