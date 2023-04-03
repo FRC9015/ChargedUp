@@ -34,6 +34,8 @@ import frc.robot.commands.Arm.armpidCommand;
 import frc.robot.commands.Balance.BalanceCommand;
 import frc.robot.commands.Drive.ArcadeDrive;
 import frc.robot.commands.Drive.SlowedWhileActiveCommand;
+import frc.robot.commands.experimental.SyncLimelightPose;
+import frc.robot.commands.experimental.waypointCommand;
 import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
 //import frc.robot.subsystems.CounterweightSubsystem;
