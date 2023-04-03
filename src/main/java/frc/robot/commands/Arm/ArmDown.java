@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.Arm;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -6,18 +6,18 @@ import frc.robot.subsystems.ArmSubsystem;
 
 import java.util.Set;
 
-public class ArmOutCommand implements Command {
+public class ArmDown implements Command {
     private final ArmSubsystem armSubsystem;
     private final Set<Subsystem> subsystems;
 
-    public ArmOutCommand(ArmSubsystem myArmSubsystem) {
+    public ArmDown(ArmSubsystem myArmSubsystem) {
         this.armSubsystem = myArmSubsystem;
         this.subsystems = Set.of(this.armSubsystem);
     }
 
     @Override
     public void initialize() {
-        armSubsystem.telescopeArm(0.95);
+        armSubsystem.rotateArm(-0.5);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ArmOutCommand implements Command {
 
     @Override
     public void end(boolean interrupted) {
-        armSubsystem.telescopeArm(0);
+        armSubsystem.rotateArm(0);
     }
 
     @Override
