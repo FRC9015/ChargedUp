@@ -8,7 +8,8 @@
 		"eamodio.gitlens",
 		"bierner.github-markdown-preview",
 		"mortorqrobotics.wpilib-java-snippets",
-		"brenek.kotlin-for-frc"
+		"brenek.kotlin-for-frc",
+		"mhutchie.git-graph"
 		
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
