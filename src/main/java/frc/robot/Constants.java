@@ -80,6 +80,7 @@ public final class Constants {
     public static final class CounterweightConstants {
         public static final int DRIVE_MOTOR_CAN_ID = 26;
         public static final int ENDSTOP_SWITCH_PORT = 0;
+        
         public static final int[] ENCODER_DIO_PINS = {1, 2}; // Encoder wired into DIO pins 1 & 2 on the roboRIO
     }
     public static final class ArmConstants {
@@ -96,7 +97,7 @@ public final class Constants {
 
     }
     public static final class IntakeConstants{
-        public static final int INTAKE_MOTOR_CAN_ID=21;
+        public static final int INTAKE_DRIVE_CAN_ID=21;
 
         public static final DoubleSolenoidConstants OPEN_CLOSE_SOLENOID = new DoubleSolenoidConstants( 13, 12);
     }

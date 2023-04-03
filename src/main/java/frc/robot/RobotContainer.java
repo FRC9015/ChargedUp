@@ -237,7 +237,7 @@ public class RobotContainer {
          //driver.getLB().whileTrue(new StartEndCommand(() -> armSubsystem.SetActivatePID(true),() -> armSubsystem.SetActivatePID(true), armSubsystem));
          //driver.getBack().whileTrue(new armpidCommand(armSubsystem, -100,0));
          
-         driver.getLB().onTrue(new InstantCommand(()-> intakeNewmaticSubsystem.switchIntake(), intakeNewmaticSubsystem));
+         driver.getLb().onTrue(new InstantCommand(()-> intakeNewmaticSubsystem.switchIntake(), intakeNewmaticSubsystem));
   
          driver.getUpDpad().whileTrue(new ArmUp());
          driver.getDownDpad().whileTrue(new ArmDown());
@@ -250,7 +250,7 @@ public class RobotContainer {
              ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
              intakeNewmaticSubsystem));
              
-         driver.getRB().whileTrue(new StartEndCommand(
+         driver.getRb().whileTrue(new StartEndCommand(
              () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.8), 
              ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
              intakeNewmaticSubsystem));
@@ -307,7 +307,7 @@ public class RobotContainer {
             intakeNewmaticSubsystem).alongWith(new PrintCommand("in")));
             
         //driver.getLTrigAsButton().onTrue(new SwitchSpeed());
-        driver.getLTrigAsButton().or(driver.getLB()).whileTrue(new SlowedWhileActiveCommand().andThen(() -> driveSubsystem.stop(), driveSubsystem)); // While left bumper held, slow robot down
+        driver.getLTrigAsButton().or(driver.getLb()).whileTrue(new SlowedWhileActiveCommand().andThen(() -> driveSubsystem.stop(), driveSubsystem)); // While left bumper held, slow robot down
 
         //driver.getX().onTrue(new OpenIntakeCommand(intakeNewmaticSubsystem));
       

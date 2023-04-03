@@ -19,6 +19,7 @@ import edu.wpi.first.math.controller.RamseteController;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -39,6 +40,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 
 import frc.robot.Dashboard;
 import frc.robot.Helpers;
@@ -67,8 +69,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
         return INSTANCE;
     }
 
-    private final CANSparkMax left1, left2;
-    private final CANSparkMax right1, right2;
+    private final CANSparkMax leftFront, leftBack;
+    private final CANSparkMax rightFront, rightBack;
     private final RelativeEncoder leftEncoder, rightEncoder;
     private final SparkMaxPIDController leftPID, rightPID;
     private final RamseteController trajRamsete;
@@ -116,42 +118,42 @@ public class DiffDriveSubsystem extends SubsystemBase {
      * the {@link #getInstance()} method to get the singleton instance.
      */
     private DiffDriveSubsystem() {
-
         CANSparkMax.enableExternalUSBControl(false);
 
         MotorType motorType = MotorType.kBrushless;
-        left1 = new CANSparkMax(DriveConstants.LEFT_FRONT_MOTOR_ID, motorType);
-        allMotors.add(left1);
-        left2 = new CANSparkMax(DriveConstants.LEFT_BACK_MOTOR_ID, motorType);
-        allMotors.add(left2);
+        leftFront = new CANSparkMax(DriveConstants.LEFT_FRONT_MOTOR_ID, motorType);
+        allMotors.add(leftFront);
+        leftBack = new CANSparkMax(DriveConstants.LEFT_BACK_MOTOR_ID, motorType);
+        allMotors.add(leftFront);
 
-        right1 = new CANSparkMax(DriveConstants.RIGHT_FRONT_MOTOR_ID, motorType);
-        allMotors.add(right1);
-        right2 = new CANSparkMax(DriveConstants.RIGHT_BACK_MOTOR_ID, motorType);
-        allMotors.add(right2);
+        rightFront = new CANSparkMax(DriveConstants.RIGHT_FRONT_MOTOR_ID, motorType);
+        allMotors.add(rightFront);
+        rightBack = new CANSparkMax(DriveConstants.RIGHT_BACK_MOTOR_ID, motorType);
+        allMotors.add(rightBack);
 
-        left2.follow(left1);
-
-        right2.follow(right1);
+        leftBack.follow(leftFront);
+        rightBack.follow(rightFront);
 
         // Properly invert motors
-        left1.setInverted(DriveConstants.LEFT_INVERTED);
-        right1.setInverted(DriveConstants.RIGHT_INVERTED);
+        leftFront.setInverted(DriveConstants.LEFT_INVERTED);
+        rightFront.setInverted(DriveConstants.RIGHT_INVERTED);
 
-        left1.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        right2.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-        leftEncoder = left1.getEncoder();
+        // Not sure what the goal was here, so commenting out
+        // left1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        // right2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
+        leftEncoder = leftFront.getEncoder();
         leftEncoder.setPositionConversionFactor(DriveConstants.DRIVE_ENCODER_POSITION_FACTOR);
         leftEncoder.setVelocityConversionFactor(DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR);
 
-        rightEncoder = right1.getEncoder();
+        rightEncoder = rightFront.getEncoder();
         rightEncoder.setPositionConversionFactor(DriveConstants.DRIVE_ENCODER_POSITION_FACTOR);
         rightEncoder.setVelocityConversionFactor(DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR);
 
-        leftPID = left1.getPIDController();
+        leftPID = leftFront.getPIDController();
 
-        rightPID = right1.getPIDController();
+        rightPID = rightFront.getPIDController();
 
         ShuffleboardTab tuningTab = Shuffleboard.getTab("Tuning");
 
@@ -196,6 +198,13 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         // Create a new PIDFConstants object for the drive
         velocityPIDFConstants = new PIDFConstants(kP, kI, kD, iZone, kF);
+
+        for (CANSparkMax ctrl : allMotors) {
+            ctrl.clearFaults();
+            System.out.println(ctrl.getStickyFaults());
+            ctrl.burnFlash();
+            ctrl.setIdleMode(brakeMode);
+        }
 
         double kMaxOutput = 1;
         double kMinOutput = -1;
@@ -251,6 +260,10 @@ public class DiffDriveSubsystem extends SubsystemBase {
         rightSpeedActual.getEntry().setDouble(rightEncoder.getVelocity());
     }
 
+    public Command getPIDFUpdateCommand() {
+        return new UpdatePIDFConstantsCommand(velocityPIDFConstants, leftPID, rightPID);
+    }
+
     public void arcadeDrive(double fwd, double turn) {
 
         arcadeDriveRaw(fwd, turn, true);
@@ -301,11 +314,6 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
     // issue: the left is just folowing the right
 
-    private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-        leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity);
-        rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity);
-    }
-
     public synchronized void setBrakeMode(IdleMode newBrakeMode) {
         this.brakeMode = newBrakeMode;
         for (CANSparkMax controller : allMotors) {
@@ -323,7 +331,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
         stop();
         setBrakeMode(prevBrakeMode);
     }
-
+    
     public void resetOdometry(Pose2d initPose) {
         odometry.resetPosition(new Rotation2d(pigeon.getRotation2d().getRadians() - Math.PI), leftEncoder.getPosition(),
                 rightEncoder.getPosition(), initPose);
@@ -413,6 +421,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private double calcMetersPerSecond(double input) {
         boolean isSlowed = RobotState.getSlowedSmart();
 
+        input = Helpers.calcDeadzone(input, 0.1);
+
         double inputMetersPerSecond = (input * DriveConstants.MAX_RPM) * DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR;
 
         double speedMultiplier = 0.1;
@@ -428,11 +438,21 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private double calcRadiansPerSecond(double input) {
         boolean isSlowed = RobotState.getSlowedSmart();
 
+        input = Helpers.calcDeadzone(input, 0.1);
+
         double inputRadiansPerSecond = input * DriveConstants.MAX_ANGULAR_VELOCITY;
 
         double speedMultiplier = 0.2;
 
         return isSlowed ? inputRadiansPerSecond * speedMultiplier : inputRadiansPerSecond;
+    }
+
+    private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+        leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity);
+        rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity);
+
+        leftSpeed.getEntry().setDouble(speeds.leftMetersPerSecond);
+        rightSpeed.getEntry().setDouble(speeds.rightMetersPerSecond);
     }
 
     private void resetEncoders() {

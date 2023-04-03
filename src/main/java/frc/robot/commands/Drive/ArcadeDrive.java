@@ -16,11 +16,15 @@ public class ArcadeDrive extends CommandBase {
     @Override
     public void execute() {
         diffDriveSubsystem.arcadeDrive(driver.getArcadeFwd(), driver.getArcadeTurn());
+
+        // DifferentialDriveWheelSpeeds speeds = diffDriveSubsystem.getWheelSpeeds();
+
+        // Helpers.logBox("Fwd: " + driver.getArcadeFwd(), "Turn: " + driver.getArcadeTurn(), "Left: " + speeds.leftMetersPerSecond, "Right: " + speeds.rightMetersPerSecond );
     }
 
     @Override
     public void end(boolean interrupted) {
-        if (!interrupted) {
+        if (!interrupted) {      
             diffDriveSubsystem.stop();
         }
     }

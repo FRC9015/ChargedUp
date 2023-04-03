@@ -2,6 +2,9 @@ package frc.robot;
 
 import com.revrobotics.REVLibError;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class Helpers {
 
     /**
@@ -25,6 +28,14 @@ public class Helpers {
         }
 
         return result;
+    }
+
+    public double calcDeadzone(double input, double dz) {
+        if (Math.abs(input) <= dz) {
+            return 0;
+        } else {
+            return input;
+        }
     }
 
     public static void logBox(String... msgs) {

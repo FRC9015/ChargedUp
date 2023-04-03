@@ -10,12 +10,6 @@ public class LimelightSubsytem extends SubsystemBase {
 
     private static LimelightSubsytem INSTANCE;
 
-    @SuppressWarnings("WeakerAccess")
-    public static LimelightSubsytem getInstance() {
-        if(INSTANCE == null) INSTANCE = new LimelightSubsytem();
-        return INSTANCE;
-    }
-
     NetworkTable limelight;
     NetworkTableEntry tx, ty, ta, tv, tid, botpose;
 
@@ -28,6 +22,11 @@ public class LimelightSubsytem extends SubsystemBase {
     public static enum CamMode {
         VISION, // Vision processor
         DRIVER // Driver Camera (Increases exposure, disables vision processing)
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public static LimelightSubsytem getInstance() {
+        return INSTANCE;
     }
 
     public LimelightSubsytem() {

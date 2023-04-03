@@ -28,7 +28,6 @@ public class ArmOutCommand implements Command {
         // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
     }
-
     @Override
     public void end(boolean interrupted) {
         armSubsystem.telescopeArm(0);

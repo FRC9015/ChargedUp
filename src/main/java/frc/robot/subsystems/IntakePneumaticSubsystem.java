@@ -25,7 +25,7 @@ public class IntakePneumaticSubsystem extends SubsystemBase{
     DoubleSolenoid intake;
 
     private IntakePneumaticSubsystem(){
-        intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_CAN_ID, MotorType.kBrushless);
+        intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_DRIVE_CAN_ID, MotorType.kBrushless);
         intakeMotor.setSmartCurrentLimit(20, 30);
         intake = PneumaticHubSubsystem.getDoubleSolenoid(IntakeConstants.OPEN_CLOSE_SOLENOID);
         forward = false;

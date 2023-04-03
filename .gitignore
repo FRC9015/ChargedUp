@@ -205,7 +205,8 @@ replay_pid*
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -258,9 +259,6 @@ nbdist/
 # Ignore all local history of files
 .history
 .ionide
-
-# Support for Project snippet scope
-.vscode/*.code-snippets
 
 # Ignore code-workspaces
 *.code-workspace
