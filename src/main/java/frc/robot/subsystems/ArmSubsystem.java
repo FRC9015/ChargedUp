@@ -53,7 +53,6 @@ public class ArmSubsystem extends SubsystemBase {
         rotateArm.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
         rotateEncoder = rotateArm.getEncoder();
-        homeRotate();
 
         rotatePID = rotateArm.getPIDController();
 
