@@ -17,8 +17,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Dashboard.CurrentTab;
 import frc.robot.controllers.DriverController;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DiffDriveSubsystem;
 import frc.robot.subsystems.FootSubsystem;
-import frc.robot.subsystems.drive.DiffDriveSubsystem;
 
 
 

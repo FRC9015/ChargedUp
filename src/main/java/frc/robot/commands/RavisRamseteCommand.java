@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.drive.DiffDriveSubsystem;
+import frc.robot.subsystems.DiffDriveSubsystem;
 
 public class RavisRamseteCommand extends CommandBase {
   private final DiffDriveSubsystem diffDriveSubsystem;

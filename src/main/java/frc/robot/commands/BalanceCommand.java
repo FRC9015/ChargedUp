@@ -2,8 +2,8 @@ package frc.robot.commands;
 
 import frc.robot.Dashboard;
 import frc.robot.Helpers;
+import frc.robot.subsystems.DiffDriveSubsystem;
 import frc.robot.subsystems.PigeonSubsystem;
-import frc.robot.subsystems.drive.DiffDriveSubsystem;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 

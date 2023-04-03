@@ -11,8 +11,8 @@ import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Dashboard;
 import frc.robot.Helpers;
+import frc.robot.subsystems.DiffDriveSubsystem;
 import frc.robot.subsystems.PigeonSubsystem;
-import frc.robot.subsystems.drive.DiffDriveSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:

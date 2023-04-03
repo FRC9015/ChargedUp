@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive;
+package frc.robot.subsystems;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +63,6 @@ import frc.robot.Helpers;
 import frc.robot.RobotState;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.UpdatePIDFConstantsCommand;
-import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.utils.PIDFConstants;
 
 public class DiffDriveSubsystem extends SubsystemBase {

@@ -29,12 +29,12 @@ import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
 //import frc.robot.subsystems.CounterweightSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DiffDriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.FootSubsystem;
 import frc.robot.subsystems.IntakeNewmaticSubsystem;
 import frc.robot.subsystems.LimelightSubsytem;
 import frc.robot.subsystems.PigeonSubsystem;
-import frc.robot.subsystems.drive.DiffDriveSubsystem;
 
 /**
  * Very little robot logic should actually be handled in the {@link Robot}
@@ -211,12 +211,11 @@ public class RobotContainer {
     //     eventMap.put("marker2", new PrintCommand("marker 2"));
     //     return driveSubsystem.getAutCommandWithEvents(autoPaths.getSelectedTrajectory(), true,eventMap);
     // }
+
     /**
      * Assign Buttons to Command Triggers
      */
-
-
-     private void configureButtonBindingscopy()
+     private void configureTestButtonBindings()
      {
          init();
          /*button bindings:
