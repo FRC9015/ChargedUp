@@ -1,21 +1,22 @@
-package frc.robot.commands;
+package frc.robot.commands.Drive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.controllers.DriverController;
 import frc.robot.subsystems.DiffDriveSubsystem;
-
-public class ArcadeDrive extends CommandBase {
+public class TankDrive extends CommandBase {
     private final DiffDriveSubsystem diffDriveSubsystem = DiffDriveSubsystem.getInstance();
+
     private DriverController driver;
 
-    public ArcadeDrive(DriverController myDriver) {
+    public TankDrive(DriverController myDriver) {
         driver = myDriver;
+
         addRequirements(this.diffDriveSubsystem);
     }
 
     @Override
     public void execute() {
-        diffDriveSubsystem.arcadeDrive(driver.getArcadeFwd(), driver.getArcadeTurn());
+        diffDriveSubsystem.tankDrive(driver.getArcadeFwd(), driver.getArcadeTurn());
     }
 
     @Override
@@ -24,5 +25,4 @@ public class ArcadeDrive extends CommandBase {
             diffDriveSubsystem.stop();
         }
     }
-
 }

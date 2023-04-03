@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
+import frc.robot.commands.Drive.ArcadeDrive;
+import frc.robot.commands.Drive.SlowedWhileActiveCommand;
 import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
 //import frc.robot.subsystems.CounterweightSubsystem;
