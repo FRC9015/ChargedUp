@@ -18,46 +18,58 @@ public class AutoPaths {
         return INSTANCE;
     }
 
-    //private File pathsDir;
-    //private File[] pathFiles;
+    private File pathsDir;
+    private File[] pathFiles;
     private ArrayList<String> pathNames;
-    private SendableChooser<Command> paths;
+    private SendableChooser<PathPlannerTrajectory> paths;
+    private boolean pathsInitialized = false;
+
+    private SendableChooser<Command> commandAutos;
 
     private AutoPaths() {
+        pathsDir = new File(Filesystem.getDeployDirectory(), "pathplanner");
+        pathNames = new ArrayList<String>();
 
-        paths = new SendableChooser<Command>();
+        commandAutos = new SendableChooser<Command>();
+        paths = new SendableChooser<PathPlannerTrajectory>();
     }
 
     public void init() {
+        commandAutos.addOption("getHighConeMobilizeBalanceAuto",
+                RobotContainer.getInstance().getHighConeMobilizeBalanceAuto());
+        commandAutos.addOption("getHighCubeMobilizeBalanceAuto",
+                RobotContainer.getInstance().getHighCubeMobilzeBalanceAuto());
+        commandAutos.addOption("getHighConeMobilizeAuto", RobotContainer.getInstance().getHighConeMobilizeAuto());
+        commandAutos.addOption("getHighCubeMobilizeAuto", RobotContainer.getInstance().getHighCubeMobilzeAuto());
 
-
-        //pathNames.add(pathName);
-        //pathNames.add(pathName);
-        //pathNames.add(pathName);
-
-       
-        paths.addOption("getHighConeMobilizeBalanceAuto", RobotContainer.getInstance().getHighConeMobilizeBalanceAuto());
-        paths.addOption("getHighCubeMobilizeBalanceAuto", RobotContainer.getInstance().getHighCubeMobilzeBalanceAuto());
-        paths.addOption("getHighConeMobilizeAuto", RobotContainer.getInstance().getHighConeMobilizeAuto());
-        paths.addOption("getHighCubeMobilizeAuto", RobotContainer.getInstance().getHighCubeMobilzeAuto());
-
-        
     }
 
+    public SendableChooser<Command> getCommandAutos() {
+        return commandAutos;
+    }
 
+    /**
+     * 
+     * @return instance of a {@link Command Command Auto} that was selected on the
+     *         dashboard
+     */
+    public Command getSelectedAuto() {
+        return commandAutos.getSelected();
+    }
 
-    public SendableChooser<Command> getChooser() {
+    public SendableChooser<PathPlannerTrajectory> getPaths() {
+        if (!pathsInitialized) throw new Error("Paths not initialized!");
         return paths;
     }
 
     /**
      * 
-     * @return instance of a {@link PathPlannerTrajectory} that was selected on the dashboard
+     * @return instance of a {@link PathPlannerTrajectory} that was selected on the
+     *         dashboard
      */
-    public Command getSelectedTrajectory(){
-        
-           return (paths.getSelected());
-    
+    public PathPlannerTrajectory getSelectedTrajectory() {
+        if (!pathsInitialized) throw new Error("Paths not initialized!");
+        return paths.getSelected();
     }
 
     public PathPlannerTrajectory getTrajectory(String name) {
@@ -68,5 +80,31 @@ public class AutoPaths {
         } else {
             return traj;
         }
+    }
+
+    /**
+     * Load pathplanner trajectories from filesystem
+     */
+    @SuppressWarnings("unused")
+    private void loadPathFiles() {
+        pathFiles = pathsDir.listFiles();
+
+        for (File pathFile : pathFiles) {
+            String pathFileName = pathFile.getName();
+
+            if (pathFileName.indexOf(".path") >= 0) {
+                String pathName = pathFileName.substring(0, pathFileName.indexOf(".path"));
+
+                pathNames.add(pathName);
+            }
+        }
+
+        for (String pathName : pathNames) {
+            PathPlannerTrajectory traj = PathPlanner.loadPath(pathName, DriveConstants.kPathConstraints);
+
+            paths.addOption(pathName, traj);
+        }
+
+        pathsInitialized = true;
     }
 }

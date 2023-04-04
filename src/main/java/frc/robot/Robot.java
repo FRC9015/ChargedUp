@@ -2,15 +2,10 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.Dashboard.CurrentTab;
-import frc.robot.controllers.DriverController;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DiffDriveSubsystem;
 import frc.robot.subsystems.FootSubsystem;
@@ -97,9 +92,9 @@ public class Robot extends TimedRobot
         DiffDriveSubsystem.getInstance().resetOdometry(new Pose2d());
         //DiffDriveSubsystem.getInstance().runRamseteCommand(new Pose2d(0, 0, new Rotation2d()), new Pose2d(0, 1, new Rotation2d()), DiffDriveSubsystem.getInstance());
         // Dashboard.getInstance().setCurrentTab(CurrentTab.Auto);
-        autonomousCommand = autoPaths.getSelectedTrajectory();
+        autonomousCommand = autoPaths.getSelectedAuto();
         
-        // schedule the autonomous command (example)
+        // schedule the autonomous command
         if (autonomousCommand != null)
         {
             autonomousCommand.schedule();
