@@ -5,10 +5,13 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.CANifier.LEDChannel;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,6 +21,8 @@ import frc.robot.Dashboard.CurrentTab;
 import frc.robot.controllers.DriverController;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.FootSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.LEDSubsystem.LEDPreset;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
 
 
@@ -49,6 +54,7 @@ public class Robot extends TimedRobot
     @Override
     public void robotInit()
     {
+        DriverStation.silenceJoystickConnectionWarning(true);
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         robotContainer = RobotContainer.getInstance();
@@ -80,6 +86,8 @@ public class Robot extends TimedRobot
 
         Dashboard.getInstance().periodic();
 
+
+
     }
     
     
@@ -92,6 +100,8 @@ public class Robot extends TimedRobot
     public void disabledPeriodic() {
         if (calibrationLimitSwitch.get()){
             ArmSubsystem.getInstance().resetArm();
+            robotContainer.getLedSubsystem().setPreset(LEDPreset.LOGOFAST);
+            System.out.println("calibrated");
         }
     }
     

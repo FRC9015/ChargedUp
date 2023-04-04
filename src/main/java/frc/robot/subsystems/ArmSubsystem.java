@@ -124,6 +124,7 @@ public class ArmSubsystem implements Subsystem {
         }
         else{
         telescopeArm.set(motorspeed);
+        System.out.println("fulll speeed");
         }
     }
 

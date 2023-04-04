@@ -36,7 +36,7 @@ public class LEDSubsystem extends SubsystemBase {
   private int rainbowFirstPixelHue;
 
   private double freq=10, amp=1, speed=10;
-  private Color color1=new Color(32, 83, 250), color2=new Color(246, 107, 14);
+  //private Color color1=new Color(32, 83, 250), color2=new Color(246, 107, 14);
 
   public enum LEDeffect{
     SingleColorWave,
@@ -45,6 +45,15 @@ public class LEDSubsystem extends SubsystemBase {
     Rainbow,
     off
   }
+  public enum LEDPreset{
+    CONE,
+    CUBE,
+    RAINBOW,
+    LOGOSLOW,
+    LOGOFAST,
+    OFF
+  }
+  LEDPreset chosenPreset = LEDPreset.LOGOSLOW;
   LEDeffect choseneffect = LEDeffect.DoubleColorWave;
 
   private LEDSubsystem() {
@@ -85,36 +94,53 @@ public class LEDSubsystem extends SubsystemBase {
 
     //pulsetwoColor(new Color(255,0,0), new Color(0,0,255), freq, speed);
     //pulsetwoColor(new Color(246,107,14), new Color(10,10,250), freq, speed);
-    switch (choseneffect){
-      case off:
+    switch (chosenPreset){
+      case CONE:
+        freq=2;
+        amp=255;
+        speed=15;
+        pulseColor(new Color(255, 100, 0), freq,amp, speed);
+        break;
+      case CUBE:
+        freq=2;
+        amp=255;
+        speed=15;
+        pulseColor(new Color(20, 10, 255), freq,amp, speed);
+        break;
+      case LOGOFAST:
+
+        pulsetwoColor(new Color(32, 83, 250), new Color(246, 107, 14), 10, 30);
+        break;
+      case LOGOSLOW:
+        freq=5;
+        speed=5;
+        pulsetwoColor(new Color(32, 83, 250), new Color(246, 107, 14), freq, speed);
+        break;
+      case OFF:
         setStaticColor(new Color(0, 0, 0));
         break;
-      case Rainbow:
-        rainbow();
+      case RAINBOW:
+       rainbow();
+      default:
         break;
-      case DoubleColorWave:
-        pulsetwoColor(color1, color2, freq, speed);
-        break;
-      case SingleColorPulse:
-        pulseColorSolid(color1, freq, amp, speed);
-        break;
-      case SingleColorWave:
-        pulseColor(color1, freq, amp, speed);
-        break;
-      
-    }
 
+    }
+    
     ledStrip.setData(ledBuffer);
   }
 
   public void setEffect(LEDeffect eff, Color mColor1, Color mColor2,double mfreq, double mamp, double mspeed){
     choseneffect=eff;
-    color1 = mColor1;
-    color2 = mColor2;
+    //color1 = mColor1;
+    //color2 = mColor2;
     freq=mfreq;
     amp = mamp;
     speed = mspeed;
 
+  }
+
+  public void setPreset(LEDPreset preset){
+    chosenPreset = preset;
   }
 
 
@@ -138,7 +164,7 @@ public class LEDSubsystem extends SubsystemBase {
     synchronized (ledBuffer) {
         double time = System.currentTimeMillis() / 1000.0; // current time in seconds
         for (int i = 0; i < ledBuffer.getLength(); i++) {
-            double brightness = 0.5 + 0.5 * Math.sin(2 * Math.PI * frequency * i / ledBuffer.getLength() + time*another);
+            double brightness = 0.7 + 0.4 * Math.sin(2 * Math.PI * frequency * i / ledBuffer.getLength() + time*another);
             brightness *= amplitude;
             int red = (int) (color.red* brightness);
             int green = (int) (color.green * brightness);

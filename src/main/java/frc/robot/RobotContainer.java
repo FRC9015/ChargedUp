@@ -38,6 +38,7 @@ import frc.robot.subsystems.IntakeNewmaticSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimelightSubsytem;
 import frc.robot.subsystems.PigeonSubsystem;
+import frc.robot.subsystems.LEDSubsystem.LEDPreset;
 import frc.robot.subsystems.LEDSubsystem.LEDeffect;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
 import kotlin.contracts.Effect;
@@ -109,7 +110,6 @@ public class RobotContainer {
     }
 
     private void init() {
-        armSubsystem.resetArm();
         if (driver == null) driver = new DriverController(new XboxController(0));
         Dashboard.getInstance().putSendable("Driver", driver);
         if (operator == null) operator = new OperatorController(new XboxController(1));
@@ -231,6 +231,9 @@ public class RobotContainer {
      * Assign Buttons to Command Triggers
      */
 
+    public LEDSubsystem getLedSubsystem(){
+        return ledSubsystem;
+    }
 
      private void configureButtonBindingscopy()
      {
@@ -358,9 +361,9 @@ public class RobotContainer {
        operator.getLeftDpad().whileTrue(new InstantCommand(()->armSubsystem.changeTeleOffset(-0.01),armSubsystem));
 
     //    operator.getStart().onTrue(new InstantCommand(()->ledSubsystem.pulseColor(new Color(255, 50, 50),2,255,10),ledSubsystem));
-       operator.getStart().onTrue(new InstantCommand(()->ledSubsystem.setEffect(LEDeffect.SingleColorWave, new Color(255, 100, 0), null, 3, 255, 15),ledSubsystem));
+       operator.getStart().onTrue(new InstantCommand(()->ledSubsystem.setPreset(LEDPreset.CONE),ledSubsystem));
 
-       operator.getBack().onTrue(new InstantCommand(()->ledSubsystem.setEffect(LEDeffect.SingleColorWave, new Color(20, 10, 255), null, 3, 255, 15),ledSubsystem));
+       operator.getBack().onTrue(new InstantCommand(()->ledSubsystem.setPreset(LEDPreset.CUBE),ledSubsystem));
 
        operator.getLS().whileTrue(new RepeatCommand(new InstantCommand(()->armSubsystem.rotateArm(armSubsystem.getArmTorque()*0.005), armSubsystem)));
 
