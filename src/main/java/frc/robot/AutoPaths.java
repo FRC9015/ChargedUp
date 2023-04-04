@@ -40,7 +40,9 @@ public class AutoPaths {
         paths.addOption("HighCubeMobilizeBalance", RobotContainer.getInstance().getHighCubeMobilzeBalanceAuto());
         paths.addOption("HighConeMobilize", RobotContainer.getInstance().getHighConeMobilizeAuto());
         paths.addOption("HighCubeMobilize", RobotContainer.getInstance().getHighCubeMobilzeAuto());
-        paths.addOption("turn 90", RobotContainer.getInstance().getTurn90());
+        paths.addOption("HighCubeMobilizeIntake", RobotContainer.getInstance().getHighCubeMobilzeBalanceAuto());
+        paths.addOption("HighConeMobilizeIntake", RobotContainer.getInstance().getHighConeMobilizeIntakeAuto());
+
 
         
     }
