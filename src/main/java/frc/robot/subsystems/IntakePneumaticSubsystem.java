@@ -33,8 +33,6 @@ public class IntakePneumaticSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-        System.out.println(intake.get()==DoubleSolenoid.Value.kForward);
-
         RobotState.setIntakeOpen(!(intake.get()==DoubleSolenoid.Value.kReverse));
     }
 

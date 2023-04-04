@@ -201,7 +201,6 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         for (CANSparkMax ctrl : allMotors) {
             ctrl.clearFaults();
-            System.out.println(ctrl.getStickyFaults());
             ctrl.burnFlash();
             ctrl.setIdleMode(brakeMode);
         }
