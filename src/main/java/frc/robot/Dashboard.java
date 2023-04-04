@@ -7,8 +7,6 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.Map;
 
-import com.pathplanner.lib.PathPlannerTrajectory;
-
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.*;
