@@ -100,7 +100,7 @@ public class Robot extends TimedRobot
     public void disabledPeriodic() {
         if (calibrationLimitSwitch.get()){
             ArmSubsystem.getInstance().resetArm();
-            robotContainer.getLedSubsystem().setPreset(LEDPreset.LOGOFAST);
+            robotContainer.getLedSubsystem().setPreset(LEDPreset.GREEN);
             System.out.println("calibrated");
         }
     }

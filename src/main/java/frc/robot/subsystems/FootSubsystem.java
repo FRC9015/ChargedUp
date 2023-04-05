@@ -39,11 +39,7 @@ public class FootSubsystem implements Subsystem{
     @Override 
     public void periodic() {
         RobotState.setFeetDown(!(foot.get() == Value.kReverse));
-        if (!(foot.get() == Value.kReverse)){
-            RobotContainer.getInstance().getLedSubsystem().setPreset(LEDPreset.RAINBOW);
-        }else{
-            RobotContainer.getInstance().getLedSubsystem().setPreset(LEDPreset.LOGOFAST);
-        }
+        
     }
 
     public void footDown(){
@@ -60,10 +56,14 @@ public class FootSubsystem implements Subsystem{
         if(forward){       
              foot.set(DoubleSolenoid.Value.kReverse);
              forward = false;
+             LEDSubsystem.getInstance().setPreset(LEDPreset.LOGOSLOW);
 
         }else{
             foot.set(DoubleSolenoid.Value.kForward);
             forward = true;
+            LEDSubsystem.getInstance().setPreset(LEDPreset.RAINBOW);
+
+
         }
     }
 

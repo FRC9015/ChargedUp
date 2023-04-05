@@ -26,7 +26,7 @@ public class LEDSubsystem extends SubsystemBase {
 
   public final Color QE_NAVYBLUE = new Color(17, 43, 60);
   public final Color QE_BLUE = new Color(32, 83, 117);
-  public final Color QE_ORANGE = new Color(246, 107, 14);
+  public final Color QE_ORANGE = new Color(255, 126, 14);
   public final Color CONE = Color.kYellow;
   public final Color CUBE = Color.kPurple;
 
@@ -51,9 +51,11 @@ public class LEDSubsystem extends SubsystemBase {
     RAINBOW,
     LOGOSLOW,
     LOGOFAST,
-    OFF
+    OFF,
+    FLASHINGRED,
+    GREEN
   }
-  LEDPreset chosenPreset = LEDPreset.LOGOSLOW;
+  LEDPreset chosenPreset = LEDPreset.FLASHINGRED;
   LEDeffect choseneffect = LEDeffect.DoubleColorWave;
 
   private LEDSubsystem() {
@@ -112,15 +114,23 @@ public class LEDSubsystem extends SubsystemBase {
         pulsetwoColor(new Color(32, 83, 250), new Color(246, 107, 14), 10, 30);
         break;
       case LOGOSLOW:
-        freq=5;
-        speed=5;
-        pulsetwoColor(new Color(32, 83, 250), new Color(246, 107, 14), freq, speed);
+        freq=2;
+        speed=2;
+        pulsetwoColor(new Color(20, 10, 255), QE_ORANGE, freq, speed);
         break;
       case OFF:
         setStaticColor(new Color(0, 0, 0));
         break;
       case RAINBOW:
        rainbow();
+       break;
+      case FLASHINGRED:
+        pulseColor(new Color(255,0,0), 0, 255, 15);
+        break;
+      case GREEN:
+        pulseColor(new Color(0,255,0), 1, 300, 5);
+        break;
+      
       default:
         break;
 
@@ -164,7 +174,7 @@ public class LEDSubsystem extends SubsystemBase {
     synchronized (ledBuffer) {
         double time = System.currentTimeMillis() / 1000.0; // current time in seconds
         for (int i = 0; i < ledBuffer.getLength(); i++) {
-            double brightness = 0.7 + 0.4 * Math.sin(2 * Math.PI * frequency * i / ledBuffer.getLength() + time*another);
+            double brightness = 0.5 + 0.5 * Math.sin(2 * Math.PI * frequency * i / ledBuffer.getLength() + time*another);
             brightness *= amplitude;
             int red = (int) (color.red* brightness);
             int green = (int) (color.green * brightness);
