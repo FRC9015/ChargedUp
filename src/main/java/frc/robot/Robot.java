@@ -63,7 +63,10 @@ public class Robot extends TimedRobot
         
         autoPaths = AutoPaths.getInstance();
 
-        CameraServer.startAutomaticCapture();
+        //CameraServer.startAutomaticCapture();
+        //CameraServer.startAutomaticCapture();
+
+
         
     }
     
@@ -100,7 +103,12 @@ public class Robot extends TimedRobot
     public void disabledPeriodic() {
         if (calibrationLimitSwitch.get()){
             ArmSubsystem.getInstance().resetArm();
-            robotContainer.getLedSubsystem().setPreset(LEDPreset.GREEN);
+            //if(DriverStation.isFMSAttached()){
+                robotContainer.getLedSubsystem().setPreset(LEDPreset.GREEN);
+
+           // }else{
+            //robotContainer.getLedSubsystem().setPreset(LEDPreset.OFF);
+            //}
             System.out.println("calibrated");
         }
     }

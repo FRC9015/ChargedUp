@@ -200,10 +200,7 @@ public class RobotContainer {
                 intakeNewmaticSubsystem).withTimeout(0.25)
             ),
             new WaitCommand(0.5),
-            new StartEndCommand(
-                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.4), 
-                ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
-                intakeNewmaticSubsystem).withTimeout(0.2),
+            new OpenIntakeCommand(intakeNewmaticSubsystem),
             new ParallelCommandGroup(
             new armpidCommand(armSubsystem, 0.60,0.05,true,0.1,operator),
             new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(-0.3, 0),driveSubsystem)).withTimeout(4.1)),
@@ -226,16 +223,16 @@ public class RobotContainer {
                 intakeNewmaticSubsystem).withTimeout(0.25)
             ),
             new WaitCommand(0.5),
-            new StartEndCommand(
-                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.4), 
-                ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
-                intakeNewmaticSubsystem).withTimeout(0.2),
+            new OpenIntakeCommand(intakeNewmaticSubsystem),
             new ParallelCommandGroup(
             new armpidCommand(armSubsystem, 0.60,0.05,true,0.1,operator),
             new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(-0.3, 0),driveSubsystem)).withTimeout(3.9)),
             new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0, 0),driveSubsystem)).withTimeout(0.8)
         ));
 
+    }
+    public Command justBalance(){
+        return (new BalanceCommand(pigeonSubsystem, driveSubsystem));
     }
     public Command getHighConeMobilizeIntakeAuto()
     {
@@ -248,10 +245,7 @@ public class RobotContainer {
                 intakeNewmaticSubsystem).withTimeout(0.25)
             ),
             new WaitCommand(0.5),
-            new StartEndCommand(
-                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.4), 
-                ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
-                intakeNewmaticSubsystem).withTimeout(0.2),
+            new OpenIntakeCommand(intakeNewmaticSubsystem),
             new ParallelCommandGroup(
             new armpidCommand(armSubsystem, 0.60,0.05,true,0.1,operator),
             new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(-0.3, 0),driveSubsystem)).withTimeout(3.9)),

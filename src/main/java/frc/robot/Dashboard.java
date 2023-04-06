@@ -54,7 +54,7 @@ public class Dashboard {
     }
 
     public void init() {
-        SmartDashboard.putNumber("bal filter", 0);
+        SmartDashboard.putNumber("bal filter", 20);
 
         initTabs();
         initLayouts();

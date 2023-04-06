@@ -38,7 +38,7 @@ public class BalanceCommand extends CommandBase {
     pigeon = newPigeon;
     drive = newDrive;
 
-    angleFilter = new MedianFilter((int)SmartDashboard.getNumber("bal filter", 0)); // Robot refreshes at ~50Hz, so average over the last half second of measurements
+    angleFilter = new MedianFilter((int)SmartDashboard.getNumber("bal filter", 20)); // Robot refreshes at ~50Hz, so average over the last half second of measurements
     
     addRequirements(pigeon, drive);
   }
@@ -56,11 +56,12 @@ public class BalanceCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    balancePID.setPID(SmartDashboard.getNumber("bal P", 0), SmartDashboard.getNumber("bal I", 0), SmartDashboard.getNumber("bal D", 0));
+    balancePID.setPID(SmartDashboard.getNumber("bal P", kP), SmartDashboard.getNumber("bal I", kI), SmartDashboard.getNumber("bal D", kD));
 
 
 
     // angleFilter calculates a moving average of the angle to correct for any spikes
+    System.out.println(pigeon.getPitch());
     double angle = angleFilter.calculate(pigeon.getPitch());
 
     double moveSpeed = balancePID.calculate(angle);

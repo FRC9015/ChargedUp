@@ -20,7 +20,7 @@ public class CounterweightPIDSubsystem extends PIDSubsystem {
     private final static CounterweightPIDSubsystem INSTANCE = new CounterweightPIDSubsystem();
     DigitalInput limit = new DigitalInput(0);
 
-    private final CANSparkMax counterWeightMotor= new CANSparkMax(CounterweightConstants.DRIVE_MOTOR_CAN_ID, MotorType.kBrushless);
+    //private final CANSparkMax counterWeightMotor= new CANSparkMax(CounterweightConstants.DRIVE_MOTOR_CAN_ID, MotorType.kBrushless);
 
     private static double kP = 0;
     private static double kI = 0;
@@ -45,7 +45,7 @@ public class CounterweightPIDSubsystem extends PIDSubsystem {
     }
 
     public void setMotor(double speed){
-        counterWeightMotor.set(speed);
+        //counterWeightMotor.set(speed);
         
     }
     public void setEncoder(double encoderValue){

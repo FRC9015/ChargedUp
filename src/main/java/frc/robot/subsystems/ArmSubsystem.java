@@ -76,7 +76,7 @@ public class ArmSubsystem implements Subsystem {
 
         activatePID = false;
 
-        rotateArmBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 15, 14);
+        rotateArmBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 15, 7);
         rotateArmBrake.set(DoubleSolenoid.Value.kReverse);
 
         rotOffset =0;
@@ -101,26 +101,28 @@ public class ArmSubsystem implements Subsystem {
     public void rotateArm(double motorspeed) {
 
 
-        // if (getRotEncoderPos()<=0.03){
-        //     rotateArm.set(Math.max(-0.2, motorspeed*0.5+getArmTorque()*0.0025));
+        if (getRotEncoderPos()<=0.03){
+            rotateArm.set(Math.max(-0.2, motorspeed*0.5+getArmTorque()*0.0025));
 
-        // }else if(getRotEncoderPos()>=3.7){
-        //     rotateArm.set(Math.min(0.2, motorspeed*0.5+getArmTorque()*0.0025));
-        // }
-        // else{
-        // rotateArm.set(motorspeed*0.5+getArmTorque()*0.0025);
-        // }
+        }else if(getRotEncoderPos()>=3.7){
+            rotateArm.set(Math.min(0.2, motorspeed*0.5+getArmTorque()*0.0025));
+        }
+        else{
+        rotateArm.set(motorspeed*0.5+getArmTorque()*0.0025);
+        }
 
 
 
     }
 
     public void telescopeArm(double motorspeed) {
-        if (getTeleEncoderPos()<=0.03){
-            telescopeArm.set(Math.max(-0.2, motorspeed*0.95));
+        if (getTeleEncoderPos()<=0.1){
+            System.out.println("not fulll speeed");
+            telescopeArm.set(Math.max(-0.1, motorspeed*0.95));
 
-        }else if(getTeleEncoderPos()>=0.6){
-            telescopeArm.set(Math.min(0.2, motorspeed*0.95));
+        }else if(getTeleEncoderPos()>=0.57){
+            System.out.println("not fulll speeed");
+            telescopeArm.set(Math.min(0.1, motorspeed*0.95));
         }
         else{
         telescopeArm.set(motorspeed);

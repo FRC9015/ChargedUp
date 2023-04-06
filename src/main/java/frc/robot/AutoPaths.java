@@ -42,6 +42,7 @@ public class AutoPaths {
         paths.addOption("HighCubeMobilize", RobotContainer.getInstance().getHighCubeMobilzeAuto());
         paths.addOption("HighCubeMobilizeIntake", RobotContainer.getInstance().getHighCubeMobilzeBalanceAuto());
         paths.addOption("HighConeMobilizeIntake", RobotContainer.getInstance().getHighConeMobilizeIntakeAuto());
+        paths.addOption("**TEST** just balance", RobotContainer.getInstance().justBalance());
 
 
         

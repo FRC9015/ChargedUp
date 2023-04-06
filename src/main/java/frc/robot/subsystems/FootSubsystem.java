@@ -32,7 +32,7 @@ public class FootSubsystem implements Subsystem{
 
     private FootSubsystem(){
        
-        foot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 11, 10);
+        foot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 11, 14);
      }
 
 
