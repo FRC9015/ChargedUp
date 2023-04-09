@@ -142,6 +142,28 @@ public class RobotContainer {
         ).alongWith(new WaitCommand(14.9).andThen(new InstantCommand(()->footSubsystem.footDown(), footSubsystem)))
         );
     }
+    public Command getHighCubeBalanceAuto()
+    {
+        return(new SequentialCommandGroup(
+            new PrintCommand("getHighCubeMobilzeBalanceAuto"),
+            new armpidCommand(armSubsystem, 0.81,0.6,true,0.1,operator).withTimeout(3).alongWith(
+                new StartEndCommand(
+                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.1), 
+                ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+                intakeNewmaticSubsystem).withTimeout(0.25)
+            ),
+            new StartEndCommand(
+                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.5), 
+                ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+                intakeNewmaticSubsystem).withTimeout(0.2),
+            new ParallelCommandGroup(
+            new armpidCommand(armSubsystem, 0.60,0.13,true,0.1,operator),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0.3, 0),driveSubsystem)).withTimeout(2)),
+            
+            new BalanceCommand(pigeonSubsystem, driveSubsystem)
+        ).alongWith(new WaitCommand(14.9).andThen(new InstantCommand(()->footSubsystem.footDown(), footSubsystem)))
+        );
+    }
 
     public Command getHighCubeMobilzeAuto()
     {
@@ -159,8 +181,8 @@ public class RobotContainer {
                 intakeNewmaticSubsystem).withTimeout(0.2),
             new ParallelCommandGroup(
             new armpidCommand(armSubsystem, 0.40,0.13,true,0.1,operator),
-            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0.3, 0),driveSubsystem)).withTimeout(3.5)),
-            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0, 0.6),driveSubsystem)).withTimeout(1.38)
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0.4, 0),driveSubsystem)).withTimeout(3)),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0, 0.6),driveSubsystem)).withTimeout(1.1)
             
         ));
     }
@@ -192,20 +214,51 @@ public class RobotContainer {
     public Command getHighConeMobilizeBalanceAuto()
     {
         return(new SequentialCommandGroup(
+            
             new PrintCommand("getHighConeMobilizeBalanceAuto"),
+            new OpenIntakeCommand(intakeNewmaticSubsystem),
             new armpidCommand(armSubsystem, 2.4,0,false,0.2,operator).withTimeout(4).andThen(new armpidCommand(armSubsystem, 2.6,0.635,false,0.2,operator).withTimeout(2)).alongWith(
                 new StartEndCommand(
                 () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.1), 
                 ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
                 intakeNewmaticSubsystem).withTimeout(0.25)
             ),
+            
             new WaitCommand(0.5),
-            new OpenIntakeCommand(intakeNewmaticSubsystem),
-            new ParallelCommandGroup(
+            new CloseIntakeCommand(intakeNewmaticSubsystem),
+            new WaitCommand(1),
+            
             new armpidCommand(armSubsystem, 0.60,0.05,true,0.1,operator),
-            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(-0.3, 0),driveSubsystem)).withTimeout(4.1)),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(-0.3, 0),driveSubsystem)).withTimeout(4.1),
+
             new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0, 0),driveSubsystem)).withTimeout(0.8),
             new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0.4, 0),driveSubsystem)).withTimeout(1.55),
+            new BalanceCommand(pigeonSubsystem, driveSubsystem)
+        ).alongWith(new WaitCommand(14.9).andThen(new InstantCommand(()->footSubsystem.footDown(), footSubsystem)))
+        );
+
+    }
+
+    public Command getHighConeBalanceAuto()
+    {
+        return(new SequentialCommandGroup(
+            
+            new PrintCommand("getHighConeMobilizeBalanceAuto"),
+            new OpenIntakeCommand(intakeNewmaticSubsystem),
+            new armpidCommand(armSubsystem, 2.4,0,false,0.2,operator).withTimeout(4).andThen(new armpidCommand(armSubsystem, 2.6,0.635,false,0.2,operator).withTimeout(2)).alongWith(
+                new StartEndCommand(
+                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.1), 
+                ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+                intakeNewmaticSubsystem).withTimeout(0.25)
+            ),
+            
+            new WaitCommand(0.5),
+            new CloseIntakeCommand(intakeNewmaticSubsystem),
+            new WaitCommand(1),
+            
+            new armpidCommand(armSubsystem, 0.60,0.05,true,0.1,operator),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(-0.3, 0),driveSubsystem)).withTimeout(2),
+
             new BalanceCommand(pigeonSubsystem, driveSubsystem)
         ).alongWith(new WaitCommand(14.9).andThen(new InstantCommand(()->footSubsystem.footDown(), footSubsystem)))
         );
@@ -223,11 +276,36 @@ public class RobotContainer {
                 intakeNewmaticSubsystem).withTimeout(0.25)
             ),
             new WaitCommand(0.5),
-            new OpenIntakeCommand(intakeNewmaticSubsystem),
-            new ParallelCommandGroup(
+            new CloseIntakeCommand(intakeNewmaticSubsystem),
+            new WaitCommand(1),
+            
             new armpidCommand(armSubsystem, 0.60,0.05,true,0.1,operator),
-            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(-0.3, 0),driveSubsystem)).withTimeout(3.9)),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(-0.4, 0),driveSubsystem)).withTimeout(2.8),
             new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0, 0),driveSubsystem)).withTimeout(0.8)
+           
+
+        ));
+
+    }
+    public Command getHighConeLeftMobilizeAuto()
+    {
+        return(new SequentialCommandGroup(
+            new PrintCommand("getHighConeMobilizeAuto"),
+            new armpidCommand(armSubsystem, 2.4,0,false,0.2,operator).withTimeout(3).andThen(new armpidCommand(armSubsystem, 2.6,0.635,false,0.2,operator).withTimeout(2)).alongWith(
+                new StartEndCommand(
+                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.1), 
+                ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+                intakeNewmaticSubsystem).withTimeout(0.25)
+            ),
+            new WaitCommand(0.5),
+            new CloseIntakeCommand(intakeNewmaticSubsystem),
+            new WaitCommand(1),
+            
+            new armpidCommand(armSubsystem, 0.60,0.05,true,0.1,operator),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(-0.4, 0),driveSubsystem)).withTimeout(2.8),
+            new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0, 0),driveSubsystem)).withTimeout(0.8)
+           
+
         ));
 
     }
@@ -245,7 +323,7 @@ public class RobotContainer {
                 intakeNewmaticSubsystem).withTimeout(0.25)
             ),
             new WaitCommand(0.5),
-            new OpenIntakeCommand(intakeNewmaticSubsystem),
+            new CloseIntakeCommand(intakeNewmaticSubsystem),
             new ParallelCommandGroup(
             new armpidCommand(armSubsystem, 0.60,0.05,true,0.1,operator),
             new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(-0.3, 0),driveSubsystem)).withTimeout(3.9)),
@@ -259,7 +337,7 @@ public class RobotContainer {
     }
 
     public Command getTurn90(){
-        return (new RepeatCommand(new InstantCommand(()->driveSubsystem.arcadeDrive(0, 0.6),driveSubsystem)).withTimeout(1.38));
+        return(new CloseIntakeCommand(intakeNewmaticSubsystem) );
     }
 
     // public Command getAutonomousCommandcopy()

@@ -22,7 +22,8 @@ public class BalanceCommand extends CommandBase {
   private PigeonSubsystem pigeon;
   private DiffDriveSubsystem drive;
 
-  private double kP = 0.0071, kI = 0, kD = 0.003,filtersize;
+  private double kP = 0.0065, kI = 0, kD = 0.0001;
+  private int filtersize=10;
   private PIDController balancePID = new PIDController(kP, kI, kD);
 
   private MedianFilter angleFilter;
@@ -38,8 +39,10 @@ public class BalanceCommand extends CommandBase {
     pigeon = newPigeon;
     drive = newDrive;
 
-    angleFilter = new MedianFilter((int)SmartDashboard.getNumber("bal filter", 20)); // Robot refreshes at ~50Hz, so average over the last half second of measurements
-    
+    //angleFilter = new MedianFilter((int)SmartDashboard.getNumber("bal filter", 20)); // Robot refreshes at ~50Hz, so average over the last half second of measurements
+    angleFilter = new MedianFilter(filtersize); // Robot refreshes at ~50Hz, so average over the last half second of measurements
+
+
     addRequirements(pigeon, drive);
   }
 
@@ -56,7 +59,7 @@ public class BalanceCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    balancePID.setPID(SmartDashboard.getNumber("bal P", kP), SmartDashboard.getNumber("bal I", kI), SmartDashboard.getNumber("bal D", kD));
+    //balancePID.setPID(SmartDashboard.getNumber("bal P", kP), SmartDashboard.getNumber("bal I", kI), SmartDashboard.getNumber("bal D", kD));
 
 
 
