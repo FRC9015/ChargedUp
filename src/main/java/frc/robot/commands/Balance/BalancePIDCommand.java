@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Balance;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
@@ -11,8 +11,8 @@ import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Dashboard;
 import frc.robot.Helpers;
+import frc.robot.subsystems.DiffDriveSubsystem;
 import frc.robot.subsystems.PigeonSubsystem;
-import frc.robot.subsystems.drive.DiffDriveSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -33,7 +33,7 @@ public class BalancePIDCommand extends PIDCommand {
         },
         0.0, // The constant setpoint 
         output -> {
-          drive.arcadeDriveRaw(Helpers.limitDecimal(output, 0.25), 0, false);
+          drive.arcadeDriveRaw(Helpers.limitDecimal(-output, 0.25), 0, false);
         },
         pigeon, drive // Subsystem requirements
         );

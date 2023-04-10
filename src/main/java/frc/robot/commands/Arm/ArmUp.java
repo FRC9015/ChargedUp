@@ -6,17 +6,17 @@ import frc.robot.subsystems.ArmSubsystem;
 
 import java.util.Set;
 
-public class ArmOutCommand implements Command {
+public class ArmUp implements Command {
     private final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     private final Set<Subsystem> subsystems;
 
-    public ArmOutCommand() {
+    public ArmUp() {
         this.subsystems = Set.of(this.armSubsystem);
     }
 
     @Override
     public void initialize() {
-        armSubsystem.telescopeArm(0.95);
+        armSubsystem.rotateArm(0.5);
     }
 
     @Override
@@ -28,9 +28,10 @@ public class ArmOutCommand implements Command {
         // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
     }
+
     @Override
     public void end(boolean interrupted) {
-        armSubsystem.telescopeArm(0);
+        armSubsystem.rotateArm(0);
     }
 
     @Override

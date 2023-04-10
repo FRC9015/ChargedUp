@@ -18,7 +18,6 @@ public class DriverController implements Sendable {
 
     private final DoubleSupplier tankLeft, tankRight, arcadeFwd, arcadeTurn;
 
-    @Getter
     private final DoubleSupplier lTrigger, rTrigger;
 
     @Getter
@@ -106,6 +105,14 @@ public class DriverController implements Sendable {
             }
             
         });
+    }
+
+    public double getLTrigger(){
+        return lTrigger.getAsDouble();
+    }
+
+    public double getRTrigger(){
+        return rTrigger.getAsDouble();
     }
 
     public void setRumble(GenericHID.RumbleType rumble, double value) {

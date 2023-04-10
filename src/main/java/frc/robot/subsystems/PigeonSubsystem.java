@@ -8,12 +8,12 @@ import frc.robot.Dashboard;
 import frc.robot.Constants.SensorConstants;
 
 public class PigeonSubsystem extends SubsystemBase {
-    
-
-    private final static PigeonSubsystem INSTANCE = new PigeonSubsystem();
+    private static PigeonSubsystem INSTANCE;
 
     @SuppressWarnings("WeakerAccess")
     public static PigeonSubsystem getInstance() {
+        if (INSTANCE == null)
+            INSTANCE = new PigeonSubsystem();
         return INSTANCE;
     }
 
@@ -25,15 +25,21 @@ public class PigeonSubsystem extends SubsystemBase {
     }
 
     /**
-     * Get the pitch (forward/backward angle) of the robot 
+     * Get the pitch (forward/backward angle) of the robot
+     * 
      * @return double angle in degrees
-    */
+     */
     public double getPitch() {
         return pigeonSensor.getPitch();
     }
 
     public Rotation2d getRotation2d() {
         return pigeonSensor.getRotation2d();
+
+    }
+
+    public double getAngle() {
+        return pigeonSensor.getAngle();
     }
 
     public void resetAngles() {
@@ -48,11 +54,12 @@ public class PigeonSubsystem extends SubsystemBase {
     public void periodic() {
         Dashboard.getInstance().balance.setAngle(getPitch());
 
-        /* 
-         * If the absolute value of the robot's pitch is within 2.0 degrees, show the robot as balanced on the dashboard
+        /*
+         * If the absolute value of the robot's pitch is within 2.0 degrees, show the
+         * robot as balanced on the dashboard
          * Will be useful for evaluating if manual adjustments are needed
          */
-        if (Math.abs(getPitch()) < 2.0 ) {
+        if (Math.abs(getPitch()) < 2.0) {
             Dashboard.getInstance().balance.setBalanced(true);
         } else {
             Dashboard.getInstance().balance.setBalanced(false);

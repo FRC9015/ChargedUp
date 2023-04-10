@@ -5,7 +5,7 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 
 public class RobotState implements Sendable {
-    
+
     private final static RobotState INSTANCE = new RobotState();
 
     public static RobotState getInstance() {
@@ -19,7 +19,8 @@ public class RobotState implements Sendable {
     }
 
     /**
-     * As compared to {@link #getSlowed()}, this method will not return true if the robot is in autonomous mode.
+     * As compared to {@link #getSlowed()}, this method will not return true if the
+     * robot is in autonomous mode.
      */
     public static boolean getSlowedSmart() {
         return runningSlow && !(edu.wpi.first.wpilibj.RobotState.isAutonomous());
@@ -43,13 +44,33 @@ public class RobotState implements Sendable {
         runningSlow = isSlowed;
     }
 
+    private static boolean intakeOpen = false;
+
+    public static boolean getIntakeOpen() {
+        return intakeOpen;
+    }
+
+    public static synchronized void setIntakeOpen(boolean isOpen) {
+        intakeOpen = isOpen;
+    }
+
+    private static boolean footDown = false;
+
+    public static boolean isFeetDown() {
+        return footDown;
+    }
+
+    public static synchronized void setFeetDown(boolean isDown) {
+        footDown = isDown;
+    }
+
     private static Pose2d savedpoint = new Pose2d();
 
-    public static Pose2d getSavedPoint(){
+    public static Pose2d getSavedPoint() {
         return savedpoint;
     }
 
-    public static void setSavedPoint(Pose2d newPoint){
+    public static void setSavedPoint(Pose2d newPoint) {
         savedpoint = newPoint;
     }
 

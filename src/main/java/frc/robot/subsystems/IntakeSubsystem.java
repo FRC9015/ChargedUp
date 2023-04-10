@@ -22,7 +22,7 @@ public class IntakeSubsystem extends SubsystemBase {
     PneumaticHubSubsystem pHub = PneumaticHubSubsystem.getInstance();
 
     private IntakeSubsystem(){
-        intakeActuator = pHub.getDoubleSolenoid(IntakeConstants.INTAKE_OPEN_CLOSE);
+        intakeActuator = PneumaticHubSubsystem.getDoubleSolenoid(IntakeConstants.OPEN_CLOSE_SOLENOID);
 
         intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_DRIVE_CAN_ID, MotorType.kBrushless);
         intakeMotor.setIdleMode(IdleMode.kBrake);

@@ -1,19 +1,27 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimelightSubsytem extends SubsystemBase {
 
-
-    private final static LimelightSubsytem INSTANCE = new LimelightSubsytem();
+    private static LimelightSubsytem INSTANCE;
 
     NetworkTable limelight;
     NetworkTableEntry tx, ty, ta, tv, tid, botpose;
 
+    LinearFilter xFilter = LinearFilter.singlePoleIIR(0.3, 0.02);
+    LinearFilter yFilter = LinearFilter.singlePoleIIR(0.3, 0.02);
+    LinearFilter rotFilter = LinearFilter.singlePoleIIR(0.3, 0.02);
+
+    double x, y, rot;
+
     public static enum CamMode {
         VISION, // Vision processor
-        DRIVER  // Driver Camera (Increases exposure, disables vision processing)
+        DRIVER // Driver Camera (Increases exposure, disables vision processing)
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -32,7 +40,7 @@ public class LimelightSubsytem extends SubsystemBase {
 
     }
 
-    /** 
+    /**
      * Check if the camera has (a) target(s) in sight
      */
     public boolean hasTargets() {
@@ -44,7 +52,7 @@ public class LimelightSubsytem extends SubsystemBase {
         }
     }
 
-    /** 
+    /**
      * Get the ID of the detected primary AprilTag
      */
     public int getPrimaryAprilTag() {
@@ -52,7 +60,7 @@ public class LimelightSubsytem extends SubsystemBase {
         return (int) rawTagId;
     }
 
-    /** 
+    /**
      * Set the mode of the camera
      */
     public void setMode(CamMode newMode) {
@@ -63,22 +71,43 @@ public class LimelightSubsytem extends SubsystemBase {
             numMode.setNumber(1);
         }
     }
-    public double getTx(){
+
+    public double getTx() {
         return tx.getDouble(0.0);
     }
 
-    public double[] getBotpose(){
-        if (hasTargets()){
-        return botpose.getDoubleArray(new double[6]);}
-        else{
-            
+    public double[] getBotpose() {
+        if (hasTargets()) {
+            return botpose.getDoubleArray(new double[6]);
+        } else {
+
             return new double[6];
         }
+    }
+
+    public Pose2d getLimelightPose() {
+
+        if (hasTargets()) {
+            return (new Pose2d(8.27 + x, 4 + y, new Rotation2d(y * (3.1415 / 180))));
+        } else {
+            return (null);
+        }
+
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        if (hasTargets()) {
+            x = xFilter.calculate(getBotpose()[0]);
+            y = yFilter.calculate(getBotpose()[1]);
+            rot = rotFilter.calculate(getBotpose()[5]);
+        } else {
+            xFilter.reset();
+            yFilter.reset();
+            rotFilter.reset();
+
+        }
 
     }
 

@@ -1,9 +1,20 @@
 package frc.robot;
 
+import com.ctre.phoenix.CANifier.LEDChannel;
+
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Dashboard.CurrentTab;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DiffDriveSubsystem;
+import frc.robot.subsystems.FootSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.LEDSubsystem.LEDPreset;
+import frc.robot.subsystems.DiffDriveSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
@@ -14,10 +25,17 @@ import frc.robot.Dashboard.CurrentTab;
 public class Robot extends TimedRobot
 {
     private Command autonomousCommand;
+
     private Command teleopCommand;
+
+    private DigitalInput calibrationLimitSwitch = new DigitalInput(3);
+    private DigitalInput brakeToggle = new DigitalInput(4);
+
     
     private RobotContainer robotContainer;    
+    private AutoPaths autoPaths;
     
+    private LEDSubsystem leds;
     /**
      * This method is run when the robot is first started up and should be used for any
      * initialization code.
@@ -25,11 +43,18 @@ public class Robot extends TimedRobot
     @Override
     public void robotInit()
     {
+        DriverStation.silenceJoystickConnectionWarning(true);
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         robotContainer = RobotContainer.getInstance();
 
         robotContainer.initRobot();
+        
+        autoPaths = AutoPaths.getInstance();
+
+        //CameraServer.startAutomaticCapture();
+
+        leds = LEDSubsystem.getInstance();
         
     }
     
@@ -50,6 +75,10 @@ public class Robot extends TimedRobot
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
 
+        Dashboard.getInstance().periodic();
+
+
+
     }
     
     
@@ -59,18 +88,31 @@ public class Robot extends TimedRobot
     
     
     @Override
-    public void disabledPeriodic() {}
+    public void disabledPeriodic() {
+        if (calibrationLimitSwitch.get()){
+            ArmSubsystem.getInstance().resetArm();
+            //if(DriverStation.isFMSAttached()){
+                leds.setPreset(LEDPreset.GREEN);
+
+           // }else{
+            //robotContainer.getLedSubsystem().setPreset(LEDPreset.OFF);
+            //}
+        }
+    }
     
     
     /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
     @Override
     public void autonomousInit()
     {
-        Dashboard.getInstance().setCurrentTab(CurrentTab.Auto);
 
-        autonomousCommand = robotContainer.getAutonomousCommand();
+
+        DiffDriveSubsystem.getInstance().resetOdometry(new Pose2d());
+        //DiffDriveSubsystem.getInstance().runRamseteCommand(new Pose2d(0, 0, new Rotation2d()), new Pose2d(0, 1, new Rotation2d()), DiffDriveSubsystem.getInstance());
+        // Dashboard.getInstance().setCurrentTab(CurrentTab.Auto);
+        autonomousCommand = autoPaths.getSelectedAuto();
         
-        // schedule the autonomous command (example)
+        // schedule the autonomous command
         if (autonomousCommand != null)
         {
             autonomousCommand.schedule();
@@ -81,7 +123,8 @@ public class Robot extends TimedRobot
     
     /** This method is called periodically during autonomous. */
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+    }
     
     
     @Override
@@ -106,6 +149,10 @@ public class Robot extends TimedRobot
         {
             teleopCommand.schedule();
         }
+
+        FootSubsystem.getInstance().footUp();
+
+
     }
     
     
@@ -133,7 +180,7 @@ public class Robot extends TimedRobot
 
     @Override
     public void simulationInit(){
-        Dashboard.getInstance().balance.setAutoBalanced(false);
+        Dashboard.getInstance().balance.setAutoBalanced(true);
         
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to

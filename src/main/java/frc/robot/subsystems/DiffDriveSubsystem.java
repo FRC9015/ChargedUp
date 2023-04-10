@@ -1,10 +1,13 @@
-package frc.robot.subsystems.drive;
+package frc.robot.subsystems;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.function.BiConsumer;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPRamseteCommand;
+import java.util.List;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -13,18 +16,29 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.RamseteController;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -33,22 +47,16 @@ import frc.robot.Helpers;
 import frc.robot.RobotState;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.UpdatePIDFConstantsCommand;
-import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.utils.PIDFConstants;
 
 public class DiffDriveSubsystem extends SubsystemBase {
-
-    // With eager singleton initialization, any static variables/fields used in the
-    // constructor must appear before the "INSTANCE" variable so that they are
-    // initialized
-    // before the constructor is called when the "INSTANCE" variable initializes.
 
     /**
      * The Singleton instance of this DiffDriveSubsystem. Code should use
      * the {@link #getInstance()} method to get the single instance (rather
      * than trying to construct an instance of this class.)
      */
-    private final static DiffDriveSubsystem INSTANCE = new DiffDriveSubsystem();
+    private static DiffDriveSubsystem INSTANCE;
 
     /**
      * Returns the Singleton instance of this DiffDriveSubsystem. This static method
@@ -57,6 +65,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
      */
     @SuppressWarnings("WeakerAccess")
     public static DiffDriveSubsystem getInstance() {
+        if(INSTANCE == null) INSTANCE = new DiffDriveSubsystem();
         return INSTANCE;
     }
 
@@ -70,8 +79,10 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
     private final Dashboard dash = Dashboard.getInstance();
 
-    private final SimpleWidget leftSpeed = dash.putNumber("Speed/Left", 0), leftSpeedActual = dash.putNumber("Speed/LeftActual", 0);
-    private final SimpleWidget rightSpeed = dash.putNumber("Speed/Right", 0), rightSpeedActual = dash.putNumber("Speed/RightActual", 0);
+    private final SimpleWidget leftSpeed = dash.putNumber("Speed/Left", 0),
+            leftSpeedActual = dash.putNumber("Speed/LeftActual", 0);
+    private final SimpleWidget rightSpeed = dash.putNumber("Speed/Right", 0),
+            rightSpeedActual = dash.putNumber("Speed/RightActual", 0);
 
     private final Field2d field;
 
@@ -88,6 +99,18 @@ public class DiffDriveSubsystem extends SubsystemBase {
     private ArrayList<CANSparkMax> allMotors = new ArrayList<CANSparkMax>();
 
     private PigeonSubsystem pigeon = PigeonSubsystem.getInstance();
+
+    private static final double kP_default = 0.0;
+    private static final double kI_default = 0.0;
+    private static final double kD_default = 0.0;
+    private static final double iZone_default = 0.0;
+    private static final double kF_default = 0.3;
+
+    private double kP = kP_default;
+    private double kI = kI_default;
+    private double kD = kD_default;
+    private double iZone = iZone_default;
+    private double kF = kF_default;
 
     /**
      * Creates a new instance of this DiffDriveSubsystem. This constructor
@@ -115,6 +138,11 @@ public class DiffDriveSubsystem extends SubsystemBase {
         leftFront.setInverted(DriveConstants.LEFT_INVERTED);
         rightFront.setInverted(DriveConstants.RIGHT_INVERTED);
 
+
+        // Not sure what the goal was here, so commenting out
+        // left1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        // right2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
         leftEncoder = leftFront.getEncoder();
         leftEncoder.setPositionConversionFactor(DriveConstants.DRIVE_ENCODER_POSITION_FACTOR);
         leftEncoder.setVelocityConversionFactor(DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR);
@@ -127,19 +155,59 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         rightPID = rightFront.getPIDController();
 
+        ShuffleboardTab tuningTab = Shuffleboard.getTab("Tuning");
+
+        // Add widgets to the Shuffleboard tab for editing the PIDF constants
+
+        // Create a Sendable object that represents the PIDF constants
+        Sendable pidfConstantsSendable = new Sendable() {
+            @Override
+            public void initSendable(SendableBuilder builder) {
+                builder.setSmartDashboardType("PIDFConstants");
+                builder.addDoubleProperty("kP", () -> kP, val -> {
+                    kP = val;
+                    leftPID.setP(kP);
+                    rightPID.setP(kP);
+
+                });
+                builder.addDoubleProperty("kI", () -> kI, val -> {
+                    kI = val;
+                    leftPID.setI(kI);
+                    rightPID.setI(kI);
+                });
+                builder.addDoubleProperty("kD", () -> kD, val -> {
+                    kD = val;
+                    leftPID.setD(kD);
+                    rightPID.setD(kD);
+                });
+                builder.addDoubleProperty("iZone", () -> iZone, val -> {
+                    iZone = val;
+                    leftPID.setIZone(iZone);
+                    rightPID.setIZone(iZone);
+                });
+                builder.addDoubleProperty("kF", () -> kF, val -> {
+                    kF = val;
+                    leftPID.setFF(kF);
+                    rightPID.setFF(kF);
+                });
+            }
+        };
+
+        // Add the PIDF constants Sendable to Shuffleboard
+        Shuffleboard.getTab("Tuning").add("micahs pidf", pidfConstantsSendable).withSize(2, 5).withPosition(2, 0);
+
         // Create a new PIDFConstants object for the drive
-        velocityPIDFConstants = new PIDFConstants(0.05, 0.0, 0.0, 0, 0.099);
+        velocityPIDFConstants = new PIDFConstants(kP, kI, kD, iZone, kF);
 
         for (CANSparkMax ctrl : allMotors) {
             ctrl.clearFaults();
-            System.out.println(ctrl.getStickyFaults());
             ctrl.burnFlash();
             ctrl.setIdleMode(brakeMode);
         }
 
         double kMaxOutput = 1;
         double kMinOutput = -1;
-        
+
         velocityPIDFConstants.updateSparkMax(leftPID);
         leftPID.setOutputRange(kMinOutput, kMaxOutput);
 
@@ -150,13 +218,13 @@ public class DiffDriveSubsystem extends SubsystemBase {
         Dashboard.getInstance().putSendable("Drive Velocity PIDF/Update",
                 new UpdatePIDFConstantsCommand(velocityPIDFConstants, leftPID, rightPID));
 
-        odometry = new DifferentialDriveOdometry(pigeon.getRotation2d(),
+        odometry = new DifferentialDriveOdometry(new Rotation2d(pigeon.getRotation2d().getRadians() - Math.PI),
                 leftEncoder.getPosition(), rightEncoder.getPosition());
-        field = new Field2d();
-        //addChild("Field", field);
-        //Dashboard.getInstance().putSendable("field", field);
 
-        SmartDashboard.putData("field",field);
+        field = new Field2d();
+        addChild("Field", field);
+        Dashboard.getInstance().putSendable("field", field);
+        SmartDashboard.putData("field", field);
 
         /**
          * Each input to be rate limited must have it's own filter. In any given drive,
@@ -170,8 +238,14 @@ public class DiffDriveSubsystem extends SubsystemBase {
         trajRamsete = new RamseteController(DriveConstants.RAMSETE_B, DriveConstants.RAMSETE_ZETA);
 
         ramseteOutputBiConsumer = (left, right) -> {
-            setSpeeds(new DifferentialDriveWheelSpeeds(left, right));
+            ChassisSpeeds speeed = DriveConstants.KINEMATICS
+                    .toChassisSpeeds(new DifferentialDriveWheelSpeeds(left, right));
+            ChassisSpeeds speeed2 = new ChassisSpeeds(speeed.vxMetersPerSecond, speeed.vyMetersPerSecond,
+                    -speeed.omegaRadiansPerSecond);
+            DifferentialDriveWheelSpeeds wheelspeeds = DriveConstants.KINEMATICS.toWheelSpeeds(speeed2);
+            setSpeeds(wheelspeeds);
         };
+
     }
 
     @Override
@@ -190,7 +264,9 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
 
     public void arcadeDrive(double fwd, double turn) {
+
         arcadeDriveRaw(fwd, turn, true);
+
     }
 
     public void tankDrive(double left, double right) {
@@ -204,16 +280,17 @@ public class DiffDriveSubsystem extends SubsystemBase {
      * @param rateLimited Should the inputs be rate limited?
      */
     public void arcadeDriveRaw(double fwd, double turn, boolean rateLimited) {
+
         fwd = rateLimited ? accelRateLimit1.calculate(fwd) : fwd;
         turn = rateLimited ? accelRateLimit2.calculate(turn) : turn;
 
-        double fwdSpeed = calcMetersPerSecond(fwd);
-        double turnSpeed = calcRadiansPerSecond(turn);
+        double fwdspeed = calcMetersPerSecond(fwd);
+        double turnspeed = calcRadiansPerSecond(turn);
 
-        DifferentialDriveWheelSpeeds wheelSpeeds = DriveConstants.KINEMATICS
-                .toWheelSpeeds(new ChassisSpeeds(fwdSpeed, 0, turnSpeed));
+        DifferentialDriveWheelSpeeds WheelSpeeds = DriveConstants.KINEMATICS
+                .toWheelSpeeds(new ChassisSpeeds(fwdspeed, 0, turnspeed));
 
-        setSpeeds(wheelSpeeds);
+        setSpeeds(WheelSpeeds);
     }
 
     /**
@@ -234,6 +311,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         setSpeeds(wheelSpeeds);
     }
+    // issue: the left is just folowing the right
 
     public synchronized void setBrakeMode(IdleMode newBrakeMode) {
         this.brakeMode = newBrakeMode;
@@ -254,16 +332,8 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
     
     public void resetOdometry(Pose2d initPose) {
-        odometry.resetPosition(pigeon.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition(), initPose);
-    }
-
-    public void logPosition(String name) {
-        Helpers.logBox(
-            "Note: " + name,
-            "Left Enc: " + leftEncoder.getPosition(), "Right Enc: " + rightEncoder.getPosition(),
-            "Rotation2D: " + pigeon.getRotation2d().getDegrees(),
-            "Pose2D: " + odometry.getPoseMeters()
-        );
+        odometry.resetPosition(new Rotation2d(pigeon.getRotation2d().getRadians() - Math.PI), leftEncoder.getPosition(),
+                rightEncoder.getPosition(), initPose);
     }
 
     public Pose2d getPose() {
@@ -273,7 +343,39 @@ public class DiffDriveSubsystem extends SubsystemBase {
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(), rightEncoder.getVelocity());
     }
-    
+
+    public void logPosition(String name) {
+        Helpers.logBox(
+                "Note: " + name,
+                "Left Enc: " + leftEncoder.getPosition(), "Right Enc: " + rightEncoder.getPosition(),
+                "Rotation2D: " + new Rotation2d(pigeon.getRotation2d().getRadians() - Math.PI).getDegrees(),
+                "Pose2D: " + odometry.getPoseMeters());
+    }
+
+    public void runRamseteCommand(Pose2d end, DiffDriveSubsystem m_diffDriveSubsystem) {
+
+        // Create config for trajectory
+        TrajectoryConfig config = new TrajectoryConfig(1, 0.5);
+        Translation2d idk = new Translation2d();
+        List<Translation2d> waypoints = new ArrayList<>();
+        waypoints.add(idk);
+        // An example trajectory to follow. All units in meters.
+        Trajectory trajectorytogo = TrajectoryGenerator.generateTrajectory(
+                odometry.getPoseMeters(),
+                List.of(),
+                end,
+                config);
+
+        RamseteCommand ramseteCommand = new RamseteCommand(trajectorytogo, odometry::getPoseMeters,
+                new RamseteController(), DriveConstants.KINEMATICS, ramseteOutputBiConsumer, m_diffDriveSubsystem);
+
+         
+
+        ramseteCommand.schedule();
+    }
+
+    // Assuming this method is part of a drivetrain subsystem that provides the
+    // necessary methods
     public Command getTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
         return new SequentialCommandGroup(new InstantCommand(() -> {
             logPosition("BeforePPReset");
@@ -295,8 +397,18 @@ public class DiffDriveSubsystem extends SubsystemBase {
                         this));
     }
 
+    public Command getAutCommandWithEvents(PathPlannerTrajectory traj, boolean isFirstPath,
+            HashMap<String, Command> hash) {
 
-    // ----------------- PRIVATE HELPER METHODS ----------------- //
+        // This is just an example event map. It would be better to have a constant,
+        // global event map
+        // in your code that will be used by all path following commands.
+
+        return (new FollowPathWithEvents(
+                getTrajectoryCommand(traj, isFirstPath),
+                traj.getMarkers(),
+                hash));
+    }
 
     /**
      * Takes in a joystick input and converts it to meters per second, taking into
@@ -312,11 +424,14 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         double inputMetersPerSecond = (input * DriveConstants.MAX_RPM) * DriveConstants.DRIVE_ENCODER_VELOCITY_FACTOR;
 
-        double speedMultiplier = Dashboard.getInstance().drive.getSpeedMultiplier();
+        double speedMultiplier = 0.1;
 
         // If the robot should be running in slow mode, reduce speed by the multiplier
         // (set in dashboard)
         return isSlowed ? inputMetersPerSecond * speedMultiplier : inputMetersPerSecond;
+    }
+
+    public void simulationPeriodic() {
     }
 
     private double calcRadiansPerSecond(double input) {
@@ -326,7 +441,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         double inputRadiansPerSecond = input * DriveConstants.MAX_ANGULAR_VELOCITY;
 
-        double speedMultiplier = Dashboard.getInstance().drive.getSpeedMultiplier();
+        double speedMultiplier = 0.35;
 
         return isSlowed ? inputRadiansPerSecond * speedMultiplier : inputRadiansPerSecond;
     }

@@ -7,16 +7,17 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.Map;
 
-import com.pathplanner.lib.PathPlannerTrajectory;
-
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.*;
 
 /** Singleton Dashboard Class */
 public class Dashboard {
+    
 
     private static Dashboard INSTANCE = new Dashboard();
 
@@ -31,7 +32,8 @@ public class Dashboard {
 
     private ShuffleboardTab teleopTab, autoTab, currentTab, debugTab;
     private ShuffleboardLayout balanceLayout, driveLayout, counterweightLayout, autoPathLayout; 
-    private static SendableChooser<PathPlannerTrajectory> autoPathChooser; 
+    private SimpleWidget intakeOpen, footDown;
+    private static SendableChooser<Command> autoPathChooser; 
     private static ArrayList<String> dataInstances;
 
     public DriveData drive;
@@ -44,10 +46,24 @@ public class Dashboard {
         dataInstances = new ArrayList<String>();
     }
 
+    public void periodic() {
+        intakeOpen.getEntry().setBoolean((RobotState.getIntakeOpen()));
+        footDown.getEntry().setBoolean((RobotState.isFeetDown()));
+    }
+
     public void init() {
+        SmartDashboard.putNumber("bal filter", 20);
+
         initTabs();
         initLayouts();
         initSubclasses();
+
+        try {
+            intakeOpen = teleopTab.add("Intake Open", false).withWidget(BuiltInWidgets.kBooleanBox);
+            footDown = teleopTab.add("Foot Down", false).withWidget(BuiltInWidgets.kBooleanBox);
+        } catch (Error e) {
+            e.printStackTrace();
+        }
     }
 
     public void initTabs() {
@@ -110,13 +126,13 @@ public class Dashboard {
         // check if the sendable with the given name has already been sent
         int indexExists = dataInstances.indexOf(name);
         if (indexExists < 0) {
-            debugTab.add(name, send);
+            //debugTab.add(name, send);
             dataInstances.add(name);
         }
         
     }
 
-    public void addAutoPathChooser(SendableChooser<PathPlannerTrajectory> chooser) {
+    public void addAutoPathChooser(SendableChooser<Command> chooser) {
         if (autoPathChooser == null) {autoTab.add(chooser); autoPathChooser = chooser;}
     }
 
