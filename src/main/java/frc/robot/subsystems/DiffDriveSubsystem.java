@@ -18,7 +18,6 @@ import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -376,30 +375,6 @@ public class DiffDriveSubsystem extends SubsystemBase {
                 "Pose2D: " + odometry.getPoseMeters());
     }
 
-    public void runRamseteCommand(Pose2d end, DiffDriveSubsystem m_diffDriveSubsystem) {
-
-        // Create config for trajectory
-        TrajectoryConfig config = new TrajectoryConfig(1, 0.5);
-        Translation2d idk = new Translation2d();
-        List<Translation2d> waypoints = new ArrayList<>();
-        waypoints.add(idk);
-        // An example trajectory to follow. All units in meters.
-        Trajectory trajectorytogo =
-                TrajectoryGenerator.generateTrajectory(
-                        odometry.getPoseMeters(), List.of(), end, config);
-
-        RamseteCommand ramseteCommand =
-                new RamseteCommand(
-                        trajectorytogo,
-                        odometry::getPoseMeters,
-                        new RamseteController(),
-                        DriveConstants.KINEMATICS,
-                        ramseteOutputBiConsumer,
-                        m_diffDriveSubsystem);
-
-        ramseteCommand.schedule();
-    }
-
     // Assuming this method is part of a drivetrain subsystem that provides the
     // necessary methods
     public Command getTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
@@ -439,6 +414,36 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         return (new FollowPathWithEvents(
                 getTrajectoryCommand(traj, isFirstPath), traj.getMarkers(), hash));
+    }
+
+    public Command getDriveDistanceCommand(double distanceMeters) {
+        TrajectoryConfig config =
+                new TrajectoryConfig(
+                                DriveConstants.kPathConstraints.maxVelocity,
+                                DriveConstants.kPathConstraints.maxAcceleration)
+                        // Add kinematics to ensure max speed is actually obeyed
+                        .setKinematics(DriveConstants.KINEMATICS);
+
+        Pose2d currentPose = getPose(),
+                endPose =
+                        new Pose2d(
+                                currentPose.getX(),
+                                currentPose.getY() + distanceMeters,
+                                currentPose.getRotation());
+
+        Trajectory driveDistanceTrajectory =
+                TrajectoryGenerator.generateTrajectory(List.of(currentPose, endPose), config);
+
+        Command driveCommand =
+                new RamseteCommand(
+                        driveDistanceTrajectory,
+                        this::getPose,
+                        trajRamsete,
+                        DriveConstants.KINEMATICS,
+                        ramseteOutputBiConsumer,
+                        this);
+
+        return driveCommand.andThen(() -> this.stop());
     }
 
     /**
