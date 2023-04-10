@@ -10,7 +10,10 @@
 		"mortorqrobotics.wpilib-java-snippets",
 		"brenek.kotlin-for-frc",
 		"mhutchie.git-graph",
-		"richardwillis.vscode-spotless-gradle"
+		"richardwillis.vscode-spotless-gradle",
+		"naco-siren.gradle-language",
+        "vscjava.vscode-gradle",
+        "vscjava.vscode-java-pack",
 		
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
