@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import lombok.Synchronized;
-
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -27,7 +25,6 @@ public class LimelightSubsytem extends SubsystemBase {
     }
 
     @SuppressWarnings("WeakerAccess")
-    @Synchronized("INSTANCE")
     public static LimelightSubsytem getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new LimelightSubsytem();

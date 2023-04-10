@@ -21,7 +21,6 @@ public class PneumaticHubSubsystem extends SubsystemBase {
     private static PneumaticHubSubsystem INSTANCE;
 
     // Getter Method for Singleton Instance
-    @Synchronized("INSTANCE")
     public static PneumaticHubSubsystem getInstance() {
         if (INSTANCE == null) INSTANCE = new PneumaticHubSubsystem();
         return INSTANCE;

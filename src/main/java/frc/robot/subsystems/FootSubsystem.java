@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import lombok.Synchronized;
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,7 +14,6 @@ public class FootSubsystem extends SubsystemBase {
     private boolean forward;
 
     @SuppressWarnings("WeakerAccess")
-    @Synchronized("INSTANCE")
     public static FootSubsystem getInstance() {
         if (INSTANCE == null) INSTANCE = new FootSubsystem();
 

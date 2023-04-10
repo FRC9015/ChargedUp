@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import lombok.Synchronized;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,7 +12,6 @@ public class PigeonSubsystem extends SubsystemBase {
     private static PigeonSubsystem INSTANCE;
 
     @SuppressWarnings("WeakerAccess")
-    @Synchronized("INSTANCE")
     public static PigeonSubsystem getInstance() {
         if (INSTANCE == null) INSTANCE = new PigeonSubsystem();
         return INSTANCE;

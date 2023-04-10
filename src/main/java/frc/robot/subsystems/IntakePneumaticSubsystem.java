@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import lombok.Synchronized;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -15,7 +14,6 @@ public class IntakePneumaticSubsystem extends SubsystemBase {
     private static IntakePneumaticSubsystem INSTANCE;
 
     @SuppressWarnings("WeakerAccess")
-    @Synchronized("INSTANCE")
     public static IntakePneumaticSubsystem getInstance() {
         if (INSTANCE == null) INSTANCE = new IntakePneumaticSubsystem();
         return INSTANCE;
