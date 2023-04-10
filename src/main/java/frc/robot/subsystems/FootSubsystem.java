@@ -2,9 +2,15 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.RobotState;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.PneumaticConstants;
+import frc.robot.subsystems.LEDSubsystem.LEDPreset;
+import frc.robot.subsystems.LEDSubsystem.LEDeffect;
 
 public class FootSubsystem extends SubsystemBase {
 
@@ -21,6 +27,7 @@ public class FootSubsystem extends SubsystemBase {
     }
 
     DoubleSolenoid foot;
+    //PneumaticHub pHub;
 
     private FootSubsystem() {
         foot = PneumaticHubSubsystem.getDoubleSolenoid(PneumaticConstants.LIFT_FEET_CONSTANTS);
@@ -29,6 +36,7 @@ public class FootSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         RobotState.setFeetDown(!(foot.get() == Value.kReverse));
+        
     }
 
     public void footDown() {
@@ -39,14 +47,18 @@ public class FootSubsystem extends SubsystemBase {
         foot.set(DoubleSolenoid.Value.kReverse);
     }
 
-    public void toggleFoot() {
-        if (forward) {
-            foot.set(DoubleSolenoid.Value.kReverse);
-            forward = false;
+    public void toggleFoot(){
+        if(forward){       
+             foot.set(DoubleSolenoid.Value.kReverse);
+             forward = false;
+             LEDSubsystem.getInstance().setPreset(LEDPreset.LOGOSLOW);
 
-        } else {
+        }else{
             foot.set(DoubleSolenoid.Value.kForward);
             forward = true;
+            LEDSubsystem.getInstance().setPreset(LEDPreset.RAINBOW);
+
+
         }
     }
 

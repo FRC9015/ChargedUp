@@ -293,6 +293,21 @@ public class DiffDriveSubsystem extends SubsystemBase {
         setSpeeds(WheelSpeeds);
     }
 
+    public void arcadeDriveRawer(double fwd, double turn, boolean rateLimited) {
+
+        turn*=0.9;
+
+
+        fwd = rateLimited ? accelRateLimit1.calculate(fwd) : fwd;
+        turn = rateLimited ? accelRateLimit2.calculate(turn) : turn;
+
+        turn*=(1-0.5*Math.abs(fwd));
+
+
+        left1.set(fwd-turn);
+        right1.set(fwd+turn);
+    }
+
     /**
      * Tank Drive the robot without any speed multiplier and optional rate limiting
      * 
@@ -441,7 +456,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
 
         double inputRadiansPerSecond = input * DriveConstants.MAX_ANGULAR_VELOCITY;
 
-        double speedMultiplier = 0.2;
+        double speedMultiplier = 0.35;
 
         return isSlowed ? inputRadiansPerSecond * speedMultiplier : inputRadiansPerSecond;
     }

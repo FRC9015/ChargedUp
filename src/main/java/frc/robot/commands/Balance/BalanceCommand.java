@@ -4,11 +4,14 @@ import frc.robot.Dashboard;
 import frc.robot.Helpers;
 import frc.robot.subsystems.DiffDriveSubsystem;
 import frc.robot.subsystems.PigeonSubsystem;
+import frc.robot.subsystems.DiffDriveSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.MedianFilter;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class BalanceCommand extends CommandBase {
@@ -16,7 +19,8 @@ public class BalanceCommand extends CommandBase {
   private PigeonSubsystem pigeon = PigeonSubsystem.getInstance();
   private DiffDriveSubsystem drive = DiffDriveSubsystem.getInstance();
 
-  private double kP = 0.0071, kI = 0, kD = 0.003;
+  private double kP = 0.0065, kI = 0, kD = 0.0001;
+  private int filtersize=10;
   private PIDController balancePID = new PIDController(kP, kI, kD);
 
   private MedianFilter angleFilter;
@@ -24,8 +28,16 @@ public class BalanceCommand extends CommandBase {
   private boolean finished = false;
 
   public BalanceCommand() {
-    angleFilter = new MedianFilter(5); // Robot refreshes at ~50Hz, so average over the last half second of measurements
-    
+    angleFilter = new MedianFilter(5); // Robot refreshes at ~50Hz, so average over the last half second of measurements    
+
+    SmartDashboard.putNumber("bal P", kP);
+    SmartDashboard.putNumber("bal I", kI);
+    SmartDashboard.putNumber("bal D", kD);
+
+    //angleFilter = new MedianFilter((int)SmartDashboard.getNumber("bal filter", 20)); // Robot refreshes at ~50Hz, so average over the last half second of measurements
+    angleFilter = new MedianFilter(filtersize); // Robot refreshes at ~50Hz, so average over the last half second of measurements
+
+
     addRequirements(pigeon, drive);
   }
 
@@ -42,8 +54,12 @@ public class BalanceCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    //balancePID.setPID(SmartDashboard.getNumber("bal P", kP), SmartDashboard.getNumber("bal I", kI), SmartDashboard.getNumber("bal D", kD));
+
+
+
     // angleFilter calculates a moving average of the angle to correct for any spikes
+    System.out.println(pigeon.getPitch());
     double angle = angleFilter.calculate(pigeon.getPitch());
 
     double moveSpeed = balancePID.calculate(angle);

@@ -1,8 +1,11 @@
 package frc.robot;
 
+import com.ctre.phoenix.CANifier.LEDChannel;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -10,6 +13,8 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DiffDriveSubsystem;
 import frc.robot.subsystems.FootSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.LEDSubsystem.LEDPreset;
+import frc.robot.subsystems.DiffDriveSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
@@ -38,6 +43,7 @@ public class Robot extends TimedRobot
     @Override
     public void robotInit()
     {
+        DriverStation.silenceJoystickConnectionWarning(true);
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         robotContainer = RobotContainer.getInstance();
@@ -47,7 +53,7 @@ public class Robot extends TimedRobot
         autoPaths = AutoPaths.getInstance();
 
         //CameraServer.startAutomaticCapture();
-
+        
         leds = LEDSubsystem.getInstance();
         
     }
@@ -71,6 +77,8 @@ public class Robot extends TimedRobot
 
         Dashboard.getInstance().periodic();
 
+
+
     }
     
     
@@ -83,6 +91,13 @@ public class Robot extends TimedRobot
     public void disabledPeriodic() {
         if (calibrationLimitSwitch.get()){
             ArmSubsystem.getInstance().resetArm();
+            //if(DriverStation.isFMSAttached()){
+                robotContainer.getLedSubsystem().setPreset(LEDPreset.GREEN);
+
+           // }else{
+            //robotContainer.getLedSubsystem().setPreset(LEDPreset.OFF);
+            //}
+            System.out.println("calibrated");
         }
     }
     
