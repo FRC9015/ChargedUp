@@ -50,11 +50,11 @@ public class IntakePneumaticSubsystem extends SubsystemBase {
     }
 
     public void openIntake() {
-        intake.set(DoubleSolenoid.Value.kForward);
+        intake.set(DoubleSolenoid.Value.kReverse);
     }
 
     public void closeIntake() {
-        intake.set(DoubleSolenoid.Value.kReverse);
+        intake.set(DoubleSolenoid.Value.kForward);
     }
 
     public void setIntakeMotorSpeed(double speed) {
