@@ -14,6 +14,7 @@ public class IntakePneumaticSubsystem extends SubsystemBase {
     private static IntakePneumaticSubsystem INSTANCE;
 
     @SuppressWarnings("WeakerAccess")
+    @Synchronized("INSTANCE")
     public static IntakePneumaticSubsystem getInstance() {
         if (INSTANCE == null) INSTANCE = new IntakePneumaticSubsystem();
         return INSTANCE;

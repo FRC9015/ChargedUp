@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import lombok.Synchronized;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -16,6 +17,7 @@ public class ArmSubsystem extends SubsystemBase {
     private static ArmSubsystem INSTANCE;
 
     @SuppressWarnings("WeakerAccess")
+    @Synchronized("INSTANCE")
     public static ArmSubsystem getInstance() {
         if (INSTANCE == null) INSTANCE = new ArmSubsystem();
         return INSTANCE;

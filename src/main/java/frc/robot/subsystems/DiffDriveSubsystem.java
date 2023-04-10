@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+import lombok.Synchronized;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPRamseteCommand;
@@ -60,6 +61,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
      * DiffDriveSubsystem.getInstance();}
      */
     @SuppressWarnings("WeakerAccess")
+    @Synchronized("INSTANCE")
     public static DiffDriveSubsystem getInstance() {
         if (INSTANCE == null) INSTANCE = new DiffDriveSubsystem();
         return INSTANCE;

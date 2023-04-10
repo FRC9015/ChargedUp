@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import java.util.function.Function;
 
+import lombok.Synchronized;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
@@ -14,6 +16,7 @@ import frc.robot.Helpers;
 public class LEDSubsystem extends SubsystemBase {
     private static LEDSubsystem INSTANCE;
 
+    @Synchronized("INSTANCE")
     public static LEDSubsystem getInstance() {
         if (INSTANCE == null) INSTANCE = new LEDSubsystem();
         return INSTANCE;

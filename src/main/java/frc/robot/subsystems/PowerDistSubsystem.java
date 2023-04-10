@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import lombok.Synchronized;
+
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,9 +13,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class PowerDistSubsystem extends SubsystemBase {
     private static PowerDistSubsystem INSTANCE;
 
+    @Synchronized("INSTANCE")
     public static PowerDistSubsystem getInstance() {
         if (INSTANCE == null) INSTANCE = new PowerDistSubsystem();
-
         return INSTANCE;
     }
 
