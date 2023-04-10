@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import lombok.Synchronized;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
