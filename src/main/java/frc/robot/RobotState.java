@@ -6,7 +6,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 
 public class RobotState implements Sendable {
 
-    private final static RobotState INSTANCE = new RobotState();
+    private static final RobotState INSTANCE = new RobotState();
 
     public static RobotState getInstance() {
         return INSTANCE;
@@ -19,8 +19,8 @@ public class RobotState implements Sendable {
     }
 
     /**
-     * As compared to {@link #getSlowed()}, this method will not return true if the
-     * robot is in autonomous mode.
+     * As compared to {@link #getSlowed()}, this method will not return true if the robot is in
+     * autonomous mode.
      */
     public static boolean getSlowedSmart() {
         return runningSlow && !(edu.wpi.first.wpilibj.RobotState.isAutonomous());

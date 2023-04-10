@@ -1,17 +1,18 @@
 package frc.robot;
 
+import lombok.experimental.UtilityClass;
 import com.revrobotics.REVLibError;
 
 import edu.wpi.first.math.MathUtil;
-import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class Helpers {
 
     /**
      * Constrain a number within the limit, positive or negative
+     *
      * @param input Input to test against limit
-     * @param limit Positive, nonzero number 
+     * @param limit Positive, nonzero number
      * @return
      */
     public static double limitDecimal(double input, double limit) {
@@ -46,7 +47,7 @@ public class Helpers {
             if (maxLength < msg.length()) {
                 maxLength = msg.length();
             }
-        } 
+        }
 
         maxLength += 4;
 
@@ -55,7 +56,7 @@ public class Helpers {
         for (int i = 0; i <= maxLength; i++) {
             capString += "*";
         }
-        
+
         System.out.println();
         System.out.println(capString);
 
@@ -68,8 +69,8 @@ public class Helpers {
     }
 
     public static void handleRevError(REVLibError status, String yay) {
-        if(status == REVLibError.kOk) {
-            Helpers.logBox("YAY: "+yay);
+        if (status == REVLibError.kOk) {
+            Helpers.logBox("YAY: " + yay);
         } else {
             throw new Error("FOLLOW ERROR: " + status.toString());
         }
@@ -77,12 +78,13 @@ public class Helpers {
 
     /**
      * Generate a random value within a given value
+     *
      * @param value any value
      * @return a random percentage of the given value
      */
-    public static double randomShift(double value){
-		double sign = Math.random() >= 0.5 ? 1.0 : -1.0;
-		double amount = Math.random() / 10;
-		return MathUtil.clamp(value + sign * amount, 0, 1);
-	}
+    public static double randomShift(double value) {
+        double sign = Math.random() >= 0.5 ? 1.0 : -1.0;
+        double amount = Math.random() / 10;
+        return MathUtil.clamp(value + sign * amount, 0, 1);
+    }
 }

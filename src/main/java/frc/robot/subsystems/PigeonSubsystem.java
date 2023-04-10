@@ -4,16 +4,16 @@ import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Dashboard;
+
 import frc.robot.Constants.SensorConstants;
+import frc.robot.Dashboard;
 
 public class PigeonSubsystem extends SubsystemBase {
     private static PigeonSubsystem INSTANCE;
 
     @SuppressWarnings("WeakerAccess")
     public static PigeonSubsystem getInstance() {
-        if (INSTANCE == null)
-            INSTANCE = new PigeonSubsystem();
+        if (INSTANCE == null) INSTANCE = new PigeonSubsystem();
         return INSTANCE;
     }
 
@@ -26,7 +26,7 @@ public class PigeonSubsystem extends SubsystemBase {
 
     /**
      * Get the pitch (forward/backward angle) of the robot
-     * 
+     *
      * @return double angle in degrees
      */
     public double getPitch() {
@@ -35,7 +35,6 @@ public class PigeonSubsystem extends SubsystemBase {
 
     public Rotation2d getRotation2d() {
         return pigeonSensor.getRotation2d();
-
     }
 
     public double getAngle() {
@@ -65,5 +64,4 @@ public class PigeonSubsystem extends SubsystemBase {
             Dashboard.getInstance().balance.setBalanced(false);
         }
     }
-
 }

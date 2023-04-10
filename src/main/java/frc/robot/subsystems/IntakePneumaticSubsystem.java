@@ -5,18 +5,18 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotState;
-import frc.robot.Constants.IntakeConstants;
 
-public class IntakePneumaticSubsystem extends SubsystemBase{
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.RobotState;
+
+public class IntakePneumaticSubsystem extends SubsystemBase {
 
     private static IntakePneumaticSubsystem INSTANCE;
-    
+
     @SuppressWarnings("WeakerAccess")
     public static IntakePneumaticSubsystem getInstance() {
-        if(INSTANCE == null) INSTANCE = new IntakePneumaticSubsystem();
+        if (INSTANCE == null) INSTANCE = new IntakePneumaticSubsystem();
         return INSTANCE;
-        
     }
 
     private boolean forward;
@@ -24,7 +24,7 @@ public class IntakePneumaticSubsystem extends SubsystemBase{
     CANSparkMax intakeMotor;
     DoubleSolenoid intake;
 
-    private IntakePneumaticSubsystem(){
+    private IntakePneumaticSubsystem() {
         intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_DRIVE_CAN_ID, MotorType.kBrushless);
         intakeMotor.setSmartCurrentLimit(20, 30);
         intake = PneumaticHubSubsystem.getDoubleSolenoid(IntakeConstants.OPEN_CLOSE_SOLENOID);
@@ -33,31 +33,29 @@ public class IntakePneumaticSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-        RobotState.setIntakeOpen(!(intake.get()==DoubleSolenoid.Value.kReverse));
+        RobotState.setIntakeOpen(!(intake.get() == DoubleSolenoid.Value.kReverse));
     }
 
-    public void openIntake(){
+    public void openIntake() {
         intake.set(DoubleSolenoid.Value.kForward);
     }
 
-    public void closeIntake(){
+    public void closeIntake() {
         intake.set(DoubleSolenoid.Value.kReverse);
     }
-    
-    public void setIntakeMotorSpeed(double speed){
+
+    public void setIntakeMotorSpeed(double speed) {
         intakeMotor.set(speed);
     }
 
-    public void switchIntake(){
-        if(forward){       
-             intake.set(DoubleSolenoid.Value.kReverse);
-             forward = false;
+    public void switchIntake() {
+        if (forward) {
+            intake.set(DoubleSolenoid.Value.kReverse);
+            forward = false;
 
-        }else{
+        } else {
             intake.set(DoubleSolenoid.Value.kForward);
             forward = true;
         }
     }
-
-
 }

@@ -5,14 +5,15 @@
 package frc.robot.commands.Drive;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+
 import frc.robot.RobotState;
 
 public class SwitchSpeed extends InstantCommand {
 
-  public SwitchSpeed() {}
-  
-  @Override
-  public void initialize() {
-    RobotState.toggleSlow();
-  }
+    public SwitchSpeed() {}
+
+    @Override
+    public void initialize() {
+        RobotState.toggleSlow();
+    }
 }

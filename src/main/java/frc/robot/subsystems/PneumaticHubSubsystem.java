@@ -2,16 +2,18 @@ package frc.robot.subsystems;
 
 import java.util.ArrayList;
 
+import lombok.Synchronized;
+import lombok.val;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants.PneumaticConstants;
 import frc.robot.utils.DoubleSolenoidConstants;
 import frc.robot.utils.SolenoidBase;
-import lombok.Synchronized;
-import lombok.val;
 
 public class PneumaticHubSubsystem extends SubsystemBase {
 
@@ -20,8 +22,7 @@ public class PneumaticHubSubsystem extends SubsystemBase {
 
     // Getter Method for Singleton Instance
     public static PneumaticHubSubsystem getInstance() {
-        if (INSTANCE == null)
-            INSTANCE = new PneumaticHubSubsystem();
+        if (INSTANCE == null) INSTANCE = new PneumaticHubSubsystem();
         return INSTANCE;
     }
 
@@ -51,7 +52,8 @@ public class PneumaticHubSubsystem extends SubsystemBase {
     }
 
     /**
-     * Allows disabling of all solenoids. This is mainly used so they can be manually actuated for testing.
+     * Allows disabling of all solenoids. This is mainly used so they can be manually actuated for
+     * testing.
      */
     @Synchronized("solenoids")
     public void disableAllSolenoids() {

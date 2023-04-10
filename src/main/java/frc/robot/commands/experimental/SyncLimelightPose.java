@@ -8,52 +8,51 @@ import java.util.Set;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+
 import frc.robot.subsystems.DiffDriveSubsystem;
 import frc.robot.subsystems.LimelightSubsytem;
 
 public class SyncLimelightPose extends CommandBase {
-  private final LimelightSubsytem limelightSubsytem;
-  private final DiffDriveSubsystem diffDriveSubsystem;
-  private final Set<Subsystem> subsystems;
-  private boolean finished;
-  /** Creates a new PointToTagCommand. */
-  public SyncLimelightPose(LimelightSubsytem limelightSubsytem, DiffDriveSubsystem diffDriveSubsystem)
-  {
-    this.diffDriveSubsystem = diffDriveSubsystem;
-    this.limelightSubsytem = limelightSubsytem;
-    this.subsystems = Set.of(this.limelightSubsytem,this.diffDriveSubsystem);
-    // Use addRequirements() here to declare subsystem dependencies.
-    finished = false;
-  }
+    private final LimelightSubsytem limelightSubsytem;
+    private final DiffDriveSubsystem diffDriveSubsystem;
+    private final Set<Subsystem> subsystems;
+    private boolean finished;
+    /** Creates a new PointToTagCommand. */
+    public SyncLimelightPose(
+            LimelightSubsytem limelightSubsytem, DiffDriveSubsystem diffDriveSubsystem) {
+        this.diffDriveSubsystem = diffDriveSubsystem;
+        this.limelightSubsytem = limelightSubsytem;
+        this.subsystems = Set.of(this.limelightSubsytem, this.diffDriveSubsystem);
+        // Use addRequirements() here to declare subsystem dependencies.
+        finished = false;
+    }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    
-  }
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    if(limelightSubsytem.hasTargets()){
-    //diffDriveSubsystem.resetOdometry(new Pose2d(botpose[0], botpose[1], new Rotation2d(botpose[5]*(3.1415/180))));
-    diffDriveSubsystem.resetOdometry(limelightSubsytem.getLimelightPose());
-  }
-    
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        if (limelightSubsytem.hasTargets()) {
+            // diffDriveSubsystem.resetOdometry(new Pose2d(botpose[0], botpose[1], new
+            // Rotation2d(botpose[5]*(3.1415/180))));
+            diffDriveSubsystem.resetOdometry(limelightSubsytem.getLimelightPose());
+        }
+    }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return finished;
-  }
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return finished;
+    }
 
-  @Override
-  public Set<Subsystem> getRequirements() {
-      return this.subsystems;
-  }
+    @Override
+    public Set<Subsystem> getRequirements() {
+        return this.subsystems;
+    }
 }

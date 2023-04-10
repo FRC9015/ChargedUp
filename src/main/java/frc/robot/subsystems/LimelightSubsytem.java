@@ -37,12 +37,9 @@ public class LimelightSubsytem extends SubsystemBase {
         tv = limelight.getEntry("tv");
         tid = limelight.getEntry("tid");
         botpose = limelight.getEntry("botpose");
-
     }
 
-    /**
-     * Check if the camera has (a) target(s) in sight
-     */
+    /** Check if the camera has (a) target(s) in sight */
     public boolean hasTargets() {
         double tvResult = tv.getDouble(0);
         if (tvResult == 0) {
@@ -52,17 +49,13 @@ public class LimelightSubsytem extends SubsystemBase {
         }
     }
 
-    /**
-     * Get the ID of the detected primary AprilTag
-     */
+    /** Get the ID of the detected primary AprilTag */
     public int getPrimaryAprilTag() {
         double rawTagId = tid.getDouble(-1);
         return (int) rawTagId;
     }
 
-    /**
-     * Set the mode of the camera
-     */
+    /** Set the mode of the camera */
     public void setMode(CamMode newMode) {
         NetworkTableEntry numMode = limelight.getEntry("camMode");
         if (newMode == CamMode.VISION) {
@@ -92,7 +85,6 @@ public class LimelightSubsytem extends SubsystemBase {
         } else {
             return (null);
         }
-
     }
 
     @Override
@@ -106,9 +98,7 @@ public class LimelightSubsytem extends SubsystemBase {
             xFilter.reset();
             yFilter.reset();
             rotFilter.reset();
-
         }
-
     }
 
     @Override
@@ -116,5 +106,4 @@ public class LimelightSubsytem extends SubsystemBase {
         // This method will be called once per scheduler run during simulation
 
     }
-
 }

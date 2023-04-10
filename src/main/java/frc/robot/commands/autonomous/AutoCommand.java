@@ -1,5 +1,3 @@
 package frc.robot.commands.autonomous;
 
-public class AutoCommand {
-    
-}
+public class AutoCommand {}

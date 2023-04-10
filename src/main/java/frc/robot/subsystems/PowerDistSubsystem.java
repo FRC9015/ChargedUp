@@ -9,32 +9,31 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PowerDistSubsystem extends SubsystemBase {
-  private static PowerDistSubsystem INSTANCE;
+    private static PowerDistSubsystem INSTANCE;
 
-  public static PowerDistSubsystem getInstance() {
-    if (INSTANCE == null) 
-      INSTANCE = new PowerDistSubsystem();
-    
-    return INSTANCE;
-  }
+    public static PowerDistSubsystem getInstance() {
+        if (INSTANCE == null) INSTANCE = new PowerDistSubsystem();
 
-  private PowerDistribution pdh;
-  private int PDH_CAN_ID = 2;
+        return INSTANCE;
+    }
 
-  private PowerDistSubsystem() {
-    pdh = new PowerDistribution(PDH_CAN_ID, ModuleType.kRev);
-  }
+    private PowerDistribution pdh;
+    private int PDH_CAN_ID = 2;
 
-  public void setSwitchable(boolean isOn) {
-    pdh.setSwitchableChannel(isOn);
-  }
+    private PowerDistSubsystem() {
+        pdh = new PowerDistribution(PDH_CAN_ID, ModuleType.kRev);
+    }
 
-  public boolean getSwitchable() {
-    return pdh.getSwitchableChannel();
-  }
+    public void setSwitchable(boolean isOn) {
+        pdh.setSwitchableChannel(isOn);
+    }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+    public boolean getSwitchable() {
+        return pdh.getSwitchableChannel();
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
 }

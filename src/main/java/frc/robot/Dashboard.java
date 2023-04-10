@@ -13,11 +13,11 @@ import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+
 import frc.robot.Constants.*;
 
 /** Singleton Dashboard Class */
 public class Dashboard {
-    
 
     private static Dashboard INSTANCE = new Dashboard();
 
@@ -31,9 +31,9 @@ public class Dashboard {
     }
 
     private ShuffleboardTab teleopTab, autoTab, currentTab, debugTab;
-    private ShuffleboardLayout balanceLayout, driveLayout, counterweightLayout, autoPathLayout; 
+    private ShuffleboardLayout balanceLayout, driveLayout, counterweightLayout, autoPathLayout;
     private SimpleWidget intakeOpen, footDown;
-    private static SendableChooser<Command> autoPathChooser; 
+    private static SendableChooser<Command> autoPathChooser;
     private static ArrayList<String> dataInstances;
 
     public DriveData drive;
@@ -75,18 +75,30 @@ public class Dashboard {
     }
 
     public void initLayouts() {
-        balanceLayout = currentTab.getLayout(DashboardConstants.BALANCE_LAYOUT_NAME, BuiltInLayouts.kList)
-                .withSize(1, 4).withPosition(2, 0);
+        balanceLayout =
+                currentTab
+                        .getLayout(DashboardConstants.BALANCE_LAYOUT_NAME, BuiltInLayouts.kList)
+                        .withSize(1, 4)
+                        .withPosition(2, 0);
         // Create a List layout for drivetrain information on the Teleop Tab
         // Drive data is only needed during Teleop
-        driveLayout = teleopTab.getLayout(DashboardConstants.DRIVE_LAYOUT_NAME, BuiltInLayouts.kList).withSize(2, 4)
-                .withPosition(0, 0);
-        counterweightLayout = teleopTab.getLayout(DashboardConstants.COUNTERWEIGHT_LAYOUT_NAME, BuiltInLayouts.kList).withSize(1, 2)
-        .withPosition(3, 0);
+        driveLayout =
+                teleopTab
+                        .getLayout(DashboardConstants.DRIVE_LAYOUT_NAME, BuiltInLayouts.kList)
+                        .withSize(2, 4)
+                        .withPosition(0, 0);
+        counterweightLayout =
+                teleopTab
+                        .getLayout(
+                                DashboardConstants.COUNTERWEIGHT_LAYOUT_NAME, BuiltInLayouts.kList)
+                        .withSize(1, 2)
+                        .withPosition(3, 0);
 
-        autoPathLayout = autoTab.getLayout(DashboardConstants.AUTO_PATH_LAYOUT_NAME, BuiltInLayouts.kList).withSize(1, 1);
+        autoPathLayout =
+                autoTab.getLayout(DashboardConstants.AUTO_PATH_LAYOUT_NAME, BuiltInLayouts.kList)
+                        .withSize(1, 1);
     }
-    
+
     public void initSubclasses() {
         drive = new DriveData(driveLayout);
         balance = new BalanceData(balanceLayout);
@@ -95,14 +107,16 @@ public class Dashboard {
     }
 
     /**
-     * Change the currently selected tab on the dashboard <p>
-     * IMPORTANT: This method only switches tabs if we are in a match. This is detected by checking if the FMS is attached.
+     * Change the currently selected tab on the dashboard
+     *
+     * <p>IMPORTANT: This method only switches tabs if we are in a match. This is detected by
+     * checking if the FMS is attached.
+     *
      * @param newTab The tab to switch to, represented by the {@link CurrentTab} enum
      */
     public void setCurrentTab(CurrentTab newTab) {
         // If the FMS is NOT attached, then we should not switch tabs
         if (DriverStation.isFMSAttached() == false) return;
-
 
         if (newTab == CurrentTab.TeleOp) {
             currentTab = teleopTab;
@@ -111,7 +125,7 @@ public class Dashboard {
             currentTab = autoTab;
             Shuffleboard.selectTab(DashboardConstants.AUTO_TAB_NAME);
         }
-        
+
         // Refresh layouts when current tab is switched
         initLayouts();
         initSubclasses();
@@ -119,6 +133,7 @@ public class Dashboard {
 
     /**
      * Add a {@link Sendable} object to the debug dashboard
+     *
      * @param name
      * @param send
      */
@@ -126,18 +141,21 @@ public class Dashboard {
         // check if the sendable with the given name has already been sent
         int indexExists = dataInstances.indexOf(name);
         if (indexExists < 0) {
-            //debugTab.add(name, send);
+            // debugTab.add(name, send);
             dataInstances.add(name);
         }
-        
     }
 
     public void addAutoPathChooser(SendableChooser<Command> chooser) {
-        if (autoPathChooser == null) {autoTab.add(chooser); autoPathChooser = chooser;}
+        if (autoPathChooser == null) {
+            autoTab.add(chooser);
+            autoPathChooser = chooser;
+        }
     }
 
     /**
      * Add a number to the debug dashboard
+     *
      * @param name Name of number
      * @param num double value that you would like to show (int vals can be coerced)
      * @return SimpleWidget instance that you use for updating the data via NetworkTables
@@ -154,28 +172,30 @@ public class Dashboard {
         return toReturn;
     }
 
-    /**
-     * Dashboard subclass that handles all drive system data and interactions
-     */
+    /** Dashboard subclass that handles all drive system data and interactions */
     public class DriveData {
 
         private ShuffleboardLayout layout;
         private static SimpleWidget speedMultiplierSelect, speedMode;
 
-
         public DriveData(ShuffleboardLayout myLayout) {
             this.layout = myLayout;
 
             // Creates a number slider with a min value of 0 and max value of 1;
-            if(speedMultiplierSelect == null) speedMultiplierSelect = layout.addPersistent("Speed Multiplier", DriveConstants.SLOW_SPEED_MULTIPLIER)
-                    .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0.1, "max", 0.9));
+            if (speedMultiplierSelect == null)
+                speedMultiplierSelect =
+                        layout.addPersistent(
+                                        "Speed Multiplier", DriveConstants.SLOW_SPEED_MULTIPLIER)
+                                .withWidget(BuiltInWidgets.kNumberSlider)
+                                .withProperties(Map.of("min", 0.1, "max", 0.9));
             // Boolean display for whether the drivetrain is running in Slow Mode
-            if(speedMode == null) speedMode = layout.add("Slow Mode", true).withWidget(BuiltInWidgets.kBooleanBox);
+            if (speedMode == null)
+                speedMode = layout.add("Slow Mode", true).withWidget(BuiltInWidgets.kBooleanBox);
         }
 
         /**
          * Get the speed from the slider
-         * 
+         *
          * @return
          */
         public double getSpeedMultiplier() {
@@ -188,7 +208,8 @@ public class Dashboard {
     }
 
     /**
-     * Dashboard subclass that displays balance data as well as auto balancing state (balancing using the drive system)
+     * Dashboard subclass that displays balance data as well as auto balancing state (balancing
+     * using the drive system)
      */
     public class BalanceData {
         private ShuffleboardLayout layout;
@@ -198,10 +219,16 @@ public class Dashboard {
             this.layout = myLayout;
 
             // Dial display for current pitch
-            if(angleDisplay == null) angleDisplay = layout.add("Pitch Angle", 0).withWidget(BuiltInWidgets.kDial)
-                    .withProperties(Map.of("min", -45, "max", 45));
-            if(isBalanced == null) isBalanced = layout.add("Balanced", false).withWidget(BuiltInWidgets.kBooleanBox);
-            if(autoMode == null) autoMode = layout.add("Auto Balanced", false).withWidget(BuiltInWidgets.kBooleanBox);
+            if (angleDisplay == null)
+                angleDisplay =
+                        layout.add("Pitch Angle", 0)
+                                .withWidget(BuiltInWidgets.kDial)
+                                .withProperties(Map.of("min", -45, "max", 45));
+            if (isBalanced == null)
+                isBalanced = layout.add("Balanced", false).withWidget(BuiltInWidgets.kBooleanBox);
+            if (autoMode == null)
+                autoMode =
+                        layout.add("Auto Balanced", false).withWidget(BuiltInWidgets.kBooleanBox);
         }
 
         public void setAngle(double currentAngle) {
@@ -217,9 +244,7 @@ public class Dashboard {
         }
     }
 
-    /**
-     * Displays data related to the counterweight system
-     */
+    /** Displays data related to the counterweight system */
     public class CounterweightData {
 
         private ShuffleboardLayout layout;
@@ -228,7 +253,8 @@ public class Dashboard {
         public CounterweightData(ShuffleboardLayout myLayout) {
             layout = myLayout;
 
-            if (endstop == null) endstop = layout.add("Endstop", false).withWidget(BuiltInWidgets.kBooleanBox);
+            if (endstop == null)
+                endstop = layout.add("Endstop", false).withWidget(BuiltInWidgets.kBooleanBox);
         }
 
         public void setEndstop(boolean clicked) {
@@ -236,16 +262,12 @@ public class Dashboard {
         }
     }
 
-    /**
-     * Select and display status for PathPlanner autonomous trajectories
-     */
+    /** Select and display status for PathPlanner autonomous trajectories */
     public class AutoPathData {
         // private ShuffleboardLayout layout;
 
         public AutoPathData(ShuffleboardLayout myLayout) {
             // this.layout = myLayout;
         }
-        
-    } 
-
+    }
 }

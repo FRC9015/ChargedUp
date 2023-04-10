@@ -1,6 +1,5 @@
 package frc.robot.controllers;
 
-import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.util.sendable.Sendable;
@@ -15,7 +14,7 @@ public class OperatorController implements Sendable {
 
     private final GenericHID rawController;
     private final DoubleSupplier tankLeft, tankRight, arcadeFwd, arcadeTurn, lTrigger, rTrigger;
-    private final JoystickButton a, b, x, y, start, back, ls, rs, lb, rb, lTrig, rTrig;
+    private final JoystickButton a, b, x, y, start, back, ls, rs, lb, rb;
     private final POVButton up, down, left, right;
 
     public OperatorController(XboxController controller) {
@@ -45,10 +44,6 @@ public class OperatorController implements Sendable {
 
         start = new JoystickButton(controller, XboxController.Button.kStart.value);
         back = new JoystickButton(controller, XboxController.Button.kBack.value);
-        
-        lTrig = new JoystickButton(controller, XboxController.Axis.kLeftTrigger.value);
-        rTrig = new JoystickButton(controller, XboxController.Axis.kRightTrigger.value);
-
 
         rawController = controller;
     }
@@ -85,11 +80,11 @@ public class OperatorController implements Sendable {
         return arcadeTurn.getAsDouble();
     }
 
-    public JoystickButton getA(){
+    public JoystickButton getA() {
         return a;
     }
 
-    public JoystickButton getB(){
+    public JoystickButton getB() {
         return b;
     }
 
@@ -101,59 +96,43 @@ public class OperatorController implements Sendable {
         return y;
     }
 
-    public JoystickButton getStart(){
+    public JoystickButton getStart() {
         return start;
     }
 
-    public JoystickButton getBack(){
+    public JoystickButton getBack() {
         return back;
     }
 
-    public JoystickButton getLS(){
+    public JoystickButton getLS() {
         return ls;
     }
 
-    public JoystickButton getRS(){
+    public JoystickButton getRS() {
         return rs;
     }
 
-    public JoystickButton getRB(){
+    public JoystickButton getRB() {
         return rb;
     }
 
-    public JoystickButton getLB(){
+    public JoystickButton getLB() {
         return lb;
     }
 
-    public Trigger getLTrigAsButton(){
-        return new Trigger(new BooleanSupplier() {
-
-            @Override
-            public boolean getAsBoolean() {
-                return  lTrigger.getAsDouble()>0.3;
-            }
-            
-        });
+    public Trigger getLTrigAsButton() {
+        return new Trigger(() -> lTrigger.getAsDouble() > 0.3);
     }
 
-
-
-    public Trigger getRTrigAsButton(){
-        return new Trigger(new BooleanSupplier() {
-
-            @Override
-            public boolean getAsBoolean() {
-                return  rTrigger.getAsDouble()>0.3;
-            }
-            
-        });
+    public Trigger getRTrigAsButton() {
+        return new Trigger(() -> rTrigger.getAsDouble() > 0.3);
     }
 
-    public double getLTrigger(){
+    public double getLTrigger() {
         return lTrigger.getAsDouble();
     }
 
-    public double getRTrigger(){
+    public double getRTrigger() {
         return rTrigger.getAsDouble();
     }
 
@@ -162,7 +141,5 @@ public class OperatorController implements Sendable {
     }
 
     @Override
-    public void initSendable(SendableBuilder builder) {
-        
-    }
+    public void initSendable(SendableBuilder builder) {}
 }

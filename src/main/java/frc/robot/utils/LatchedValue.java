@@ -14,7 +14,7 @@ public class LatchedValue<T> {
     }
 
     public boolean setValue(T valToSet) {
-        if(!isSet) {
+        if (!isSet) {
             value = valToSet;
             isSet = true;
             return true;

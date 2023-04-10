@@ -1,10 +1,11 @@
 package frc.robot.commands.Arm;
 
+import java.util.Set;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.ArmSubsystem;
 
-import java.util.Set;
+import frc.robot.subsystems.ArmSubsystem;
 
 public class ArmUp implements Command {
     private final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
@@ -20,8 +21,7 @@ public class ArmUp implements Command {
     }
 
     @Override
-    public void execute() {
-    }
+    public void execute() {}
 
     @Override
     public boolean isFinished() {

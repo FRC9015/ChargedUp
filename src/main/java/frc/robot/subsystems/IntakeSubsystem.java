@@ -6,11 +6,12 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-    private final static IntakeSubsystem INSTANCE = new IntakeSubsystem();
+    private static final IntakeSubsystem INSTANCE = new IntakeSubsystem();
 
     @SuppressWarnings("WeakerAccess")
     public static IntakeSubsystem getInstance() {
@@ -21,18 +22,19 @@ public class IntakeSubsystem extends SubsystemBase {
     CANSparkMax intakeMotor;
     PneumaticHubSubsystem pHub = PneumaticHubSubsystem.getInstance();
 
-    private IntakeSubsystem(){
-        intakeActuator = PneumaticHubSubsystem.getDoubleSolenoid(IntakeConstants.OPEN_CLOSE_SOLENOID);
+    private IntakeSubsystem() {
+        intakeActuator =
+                PneumaticHubSubsystem.getDoubleSolenoid(IntakeConstants.OPEN_CLOSE_SOLENOID);
 
         intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_DRIVE_CAN_ID, MotorType.kBrushless);
         intakeMotor.setIdleMode(IdleMode.kBrake);
     }
 
-    public void openIntake(){
+    public void openIntake() {
         intakeActuator.set(DoubleSolenoid.Value.kForward);
     }
 
-    public void closeIntake(){
+    public void closeIntake() {
         intakeActuator.set(DoubleSolenoid.Value.kReverse);
     }
 
@@ -40,13 +42,11 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotor.set(speed);
     }
 
-    public synchronized void switchIntake(){
-        if(intakeActuator.get() == DoubleSolenoid.Value.kForward) {       
+    public synchronized void switchIntake() {
+        if (intakeActuator.get() == DoubleSolenoid.Value.kForward) {
             openIntake();
         } else if (intakeActuator.get() == DoubleSolenoid.Value.kReverse) {
             closeIntake();
         }
     }
-
-
 }

@@ -5,14 +5,13 @@ import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 
-/**
- * Class that represents PIDF constants, and allows editing of them via Sendable.
- */
+/** Class that represents PIDF constants, and allows editing of them via Sendable. */
 public class PIDFConstants implements Sendable {
     private double kP, kI, kD, kIZone, kFF;
 
     /**
      * Construct with only basic PID constants
+     *
      * @param P Proportional term
      * @param I Integral term
      * @param D Derivative term
@@ -25,10 +24,12 @@ public class PIDFConstants implements Sendable {
 
     /**
      * Construct constants for a PID controller with FeedFoward
+     *
      * @param P Proportional term
      * @param I Integral term
      * @param D Derivative term
-     * @param IZone Specifies the range the |error| must be within for the integral term to take effect. Must be positive, or set to zero to disable.
+     * @param IZone Specifies the range the |error| must be within for the integral term to take
+     *     effect. Must be positive, or set to zero to disable.
      * @param FF FeedForward term
      */
     public PIDFConstants(double P, double I, double D, double IZone, double FF) {
@@ -41,6 +42,7 @@ public class PIDFConstants implements Sendable {
 
     /**
      * Construct PIDF constants from a SparkMaxPIDController
+     *
      * @param basePID {@link SparkMaxPIDController} that we should inherit initial values from
      * @param slotID PID Slot to read
      */
@@ -63,9 +65,13 @@ public class PIDFConstants implements Sendable {
     }
 
     /**
-     * Update a SparkMaxPIDController with the values in this object. Useful for tuning from the dashboard. <p>
-     * <b>IMPORTANT:</b> These settings will not persist unless the {@link com.revrobotics.CANSparkMax#burnFlash() CANSparkMax.burnFlash()} method is called.
-     * @param toUpdate {@link SparkMaxPIDController} to update  
+     * Update a SparkMaxPIDController with the values in this object. Useful for tuning from the
+     * dashboard.
+     *
+     * <p><b>IMPORTANT:</b> These settings will not persist unless the {@link
+     * com.revrobotics.CANSparkMax#burnFlash() CANSparkMax.burnFlash()} method is called.
+     *
+     * @param toUpdate {@link SparkMaxPIDController} to update
      */
     public synchronized void updateSparkMax(SparkMaxPIDController toUpdate) {
         // Method is synchronized to prevent simultaneous updates
