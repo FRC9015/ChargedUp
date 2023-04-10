@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.PneumaticConstants;
 import frc.robot.RobotState;
-import frc.robot.subsystems.LEDSubsystem.LEDPreset;
 
 public class FootSubsystem extends SubsystemBase {
 
@@ -44,12 +43,12 @@ public class FootSubsystem extends SubsystemBase {
         if (forward) {
             foot.set(DoubleSolenoid.Value.kReverse);
             forward = false;
-            LEDSubsystem.getInstance().setPreset(LEDPreset.LOGOSLOW);
+            // LEDSubsystem.getInstance().setPreset(LEDPreset.LOGOSLOW);
 
         } else {
             foot.set(DoubleSolenoid.Value.kForward);
             forward = true;
-            LEDSubsystem.getInstance().setPreset(LEDPreset.RAINBOW);
+            // LEDSubsystem.getInstance().setPreset(LEDPreset.RAINBOW);
         }
     }
 }

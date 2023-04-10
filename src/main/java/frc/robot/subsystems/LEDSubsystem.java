@@ -2,21 +2,23 @@ package frc.robot.subsystems;
 
 import java.util.function.Function;
 
-import lombok.Synchronized;
-
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import frc.qefrc.qelib.led.LEDPattern;
+import frc.qefrc.qelib.led.LEDSection;
+import frc.qefrc.qelib.led.LEDSectionController;
+import frc.qefrc.qelib.led.LEDStrip;
+import frc.qefrc.qelib.led.patterns.QERainbow;
 
 import frc.robot.Helpers;
 
 public class LEDSubsystem extends SubsystemBase {
     private static LEDSubsystem INSTANCE;
 
-    @Synchronized("INSTANCE")
     public static LEDSubsystem getInstance() {
         if (INSTANCE == null) INSTANCE = new LEDSubsystem();
         return INSTANCE;
@@ -31,8 +33,10 @@ public class LEDSubsystem extends SubsystemBase {
     public final Color CONE = Color.kYellow;
     public final Color CUBE = Color.kPurple;
 
-    private AddressableLED ledStrip;
     private AddressableLEDBuffer ledBuffer;
+    private LEDStrip customLED;
+    private LEDPattern qerainbow;
+    private LEDSection defaultSection, halfSection;
 
     // Effect Variables
     private int rainbowFirstPixelHue;
@@ -40,135 +44,25 @@ public class LEDSubsystem extends SubsystemBase {
     private int scannerEyePosition = 0;
     private int scannerScanDirection = 1;
 
-    private double freq = 10, amp = 1, speed = 10;
-    // private Color color1=new Color(32, 83, 250), color2=new Color(246, 107, 14);
-
-    public enum LEDeffect {
-        SingleColorWave,
-        DoubleColorWave,
-        SingleColorPulse,
-        Rainbow,
-        off
-    }
-
-    public enum LEDPreset {
-        CONE,
-        CUBE,
-        RAINBOW,
-        LOGOSLOW,
-        LOGOFAST,
-        OFF,
-        FLASHINGRED,
-        GREEN
-    }
-
-    LEDPreset chosenPreset = LEDPreset.FLASHINGRED;
-    LEDeffect choseneffect = LEDeffect.DoubleColorWave;
-
     private LEDSubsystem() {
 
-        SmartDashboard.putNumber("LED R", 0);
-        SmartDashboard.putNumber("LED G", 0);
-        SmartDashboard.putNumber("LED B", 0);
-        SmartDashboard.putNumber("freq", 0);
-        SmartDashboard.putNumber("amp", 0);
-        SmartDashboard.putNumber("another", 0);
+        customLED = new LEDStrip(LED_PORT, LED_LENGTH);
+        defaultSection = customLED.getSection(0, LED_LENGTH - 1);
+        halfSection = customLED.getSection(0, 60);
+        qerainbow =
+                new QERainbow(halfSection);
 
-        ledStrip = new AddressableLED(LED_PORT);
-        ledStrip.setLength(LED_LENGTH);
-
-        ledBuffer = new AddressableLEDBuffer(LED_LENGTH);
-
-        ledStrip.setData(ledBuffer);
-        ledStrip.start();
+        customLED.start();
     }
 
     @Override
     public void periodic() {
-        // Read the current slider values and calculate the LED color
-        // double red = SmartDashboard.getNumber("LED R", 0);
-        // double green = SmartDashboard.getNumber("LED G", 0);
-        // double blue = SmartDashboard.getNumber("LED B", 0);
-        // double freq = SmartDashboard.getNumber("freq", 0);
-        // double amp = SmartDashboard.getNumber("amp", 0);
-        // double speed = SmartDashboard.getNumber("another", 0);
-
-        // Update the LED strip with the new color
-        // Color mycolor = new Color(MathUtil.clamp((int) red, 0, 255),
-        // MathUtil.clamp((int) green, 0, 255),
-        // MathUtil.clamp((int) blue, 0, 255));
-
-        ledStrip.setData(ledBuffer);
-
-        double red = SmartDashboard.getNumber("LED R", 0);
-        double green = SmartDashboard.getNumber("LED G", 0);
-        double blue = SmartDashboard.getNumber("LED B", 0);
-        // double freq = SmartDashboard.getNumber("freq", 0);
-        // double amp = SmartDashboard.getNumber("amp", 0);
-        // double speed = SmartDashboard.getNumber("another", 0);
-
-        // Color color = new Color(red, green, blue);
-
-        // Update the LED strip with the new color
-        // Color mycolor = new Color(MathUtil.clamp((int) red, 0, 255),
-        // MathUtil.clamp((int) green, 0, 255), MathUtil.clamp((int) blue, 0, 255));
-        // pulseColorSolid(mycolor,freq,amp,speed);
-
-        // pulsetwoColor(new Color(255,0,0), new Color(0,0,255), freq, speed);
-        // pulsetwoColor(new Color(246,107,14), new Color(10,10,250), freq, speed);
-        switch (chosenPreset) {
-            case CONE:
-                freq = 2;
-                amp = 255;
-                speed = 15;
-                pulseColor(new Color(255, 100, 0), freq, amp, speed);
-                break;
-            case CUBE:
-                freq = 2;
-                amp = 255;
-                speed = 15;
-                pulseColor(new Color(20, 10, 255), freq, amp, speed);
-                break;
-            case LOGOFAST:
-                pulsetwoColor(new Color(32, 83, 250), new Color(246, 107, 14), 10, 30);
-                break;
-            case LOGOSLOW:
-                freq = 2;
-                speed = 2;
-                pulsetwoColor(new Color(20, 10, 255), QE_ORANGE, freq, speed);
-                break;
-            case OFF:
-                staticColor(new Color(0, 0, 0));
-                break;
-            case RAINBOW:
-                rainbow();
-                break;
-            case FLASHINGRED:
-                pulseColor(new Color(255, 0, 0), 0, 255, 15);
-                break;
-            case GREEN:
-                pulseColor(new Color(0, 255, 0), 1, 300, 5);
-                break;
-
-            default:
-                break;
+        if (DriverStation.isEnabled()) {
+            customLED.setColor(Color.kRed);
+        } else {
+            customLED.setPattern(qerainbow, true);
         }
-
-        ledStrip.setData(ledBuffer);
-    }
-
-    public void setEffect(
-            LEDeffect eff, Color mColor1, Color mColor2, double mfreq, double mamp, double mspeed) {
-        choseneffect = eff;
-        // color1 = mColor1;
-        // color2 = mColor2;
-        freq = mfreq;
-        amp = mamp;
-        speed = mspeed;
-    }
-
-    public void setPreset(LEDPreset preset) {
-        chosenPreset = preset;
+        customLED.update();
     }
 
     /* ---------- BASE LED METHODS ---------- */

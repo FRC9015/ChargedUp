@@ -72,7 +72,13 @@
     }
   },
   "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
     "Retained Values": {
+      "open": false
+    },
+    "Transitory Values": {
       "open": false
     },
     "transitory": {

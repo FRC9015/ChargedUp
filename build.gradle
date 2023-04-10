@@ -97,7 +97,7 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok:1.18.26'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
 
-    implementation 'com.github.FRC9015:QELib:main-SNAPSHOT'
+    implementation 'com.github.FRC9015:QELib:e73d23d7f0'
 }
 
 // Formats code

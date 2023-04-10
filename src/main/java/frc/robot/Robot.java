@@ -7,11 +7,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DiffDriveSubsystem;
 import frc.robot.subsystems.FootSubsystem;
-import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.subsystems.LEDSubsystem.LEDPreset;
+// import frc.robot.subsystems.LEDSubsystem;
+// import frc.robot.subsystems.LEDSubsystem.LEDPreset;
 
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
@@ -30,7 +29,7 @@ public class Robot extends TimedRobot {
     private RobotContainer robotContainer;
     private AutoPaths autoPaths;
 
-    private LEDSubsystem leds;
+    // private LEDSubsystem leds;
     /**
      * This method is run when the robot is first started up and should be used for any
      * initialization code.
@@ -48,7 +47,7 @@ public class Robot extends TimedRobot {
 
         // CameraServer.startAutomaticCapture();
 
-        leds = LEDSubsystem.getInstance();
+        // leds = LEDSubsystem.getInstance();
     }
 
     /**
@@ -75,15 +74,15 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        if (calibrationLimitSwitch.get()) {
-            ArmSubsystem.getInstance().resetArm();
-            // if(DriverStation.isFMSAttached()){
-            leds.setPreset(LEDPreset.GREEN);
+        // if (calibrationLimitSwitch.get()) {
+        //     ArmSubsystem.getInstance().resetArm();
+        //     // if(DriverStation.isFMSAttached()){
+        //     leds.setPreset(LEDPreset.GREEN);
 
-            // }else{
-            // robotContainer.getLedSubsystem().setPreset(LEDPreset.OFF);
-            // }
-        }
+        //     // }else{
+        //     // robotContainer.getLedSubsystem().setPreset(LEDPreset.OFF);
+        //     // }
+        // }
     }
 
     /**

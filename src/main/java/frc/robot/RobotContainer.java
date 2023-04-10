@@ -38,7 +38,6 @@ import frc.robot.subsystems.DiffDriveSubsystem;
 import frc.robot.subsystems.FootSubsystem;
 import frc.robot.subsystems.IntakePneumaticSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.subsystems.LEDSubsystem.LEDPreset;
 import frc.robot.subsystems.LimelightSubsytem;
 import frc.robot.subsystems.PigeonSubsystem;
 
@@ -627,15 +626,15 @@ public class RobotContainer {
 
         //    operator.getStart().onTrue(new InstantCommand(()->ledSubsystem.pulseColor(new
         // Color(255, 50, 50),2,255,10),ledSubsystem));
-        operator.getStart()
-                .onTrue(
-                        new InstantCommand(
-                                () -> ledSubsystem.setPreset(LEDPreset.CONE), ledSubsystem));
+        // operator.getStart()
+        //         .onTrue(
+        //                 new InstantCommand(
+        //                         () -> ledSubsystem.setPreset(LEDPreset.CONE), ledSubsystem));
 
-        operator.getBack()
-                .onTrue(
-                        new InstantCommand(
-                                () -> ledSubsystem.setPreset(LEDPreset.CUBE), ledSubsystem));
+        // operator.getBack()
+        //         .onTrue(
+        //                 new InstantCommand(
+        //                         () -> ledSubsystem.setPreset(LEDPreset.CUBE), ledSubsystem));
 
         operator.getLS()
                 .whileTrue(
