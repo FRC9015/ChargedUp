@@ -103,7 +103,7 @@ public final class Constants {
     }
 
     public static final class PneumaticConstants {
-        public static final int P_HUB_CAN_ID = 0; // TODO: Update this and PH to CAN ID 4 despite the fact that Micah thinks it's stupid
+        public static final int P_HUB_CAN_ID = 4;
 
         public static final DoubleSolenoidConstants LIFT_FEET_CONSTANTS = new DoubleSolenoidConstants(11, 10);
     }
