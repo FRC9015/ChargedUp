@@ -1,7 +1,8 @@
 plugins {
     id "java"
-    id "org.jetbrains.kotlin.jvm" version "1.7.10"
     id "edu.wpi.first.GradleRIO" version "2023.4.3"
+    id "com.diffplug.spotless" version "6.11.0"
+
 }
 
 def javaVersion = JavaVersion.VERSION_11
@@ -46,11 +47,11 @@ wpi.java.debugJni = false
 def includeDesktopSupport = true
 
 
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = javaVersion.toString()
-    }
-}
+// compileKotlin {
+//     kotlinOptions {
+//         jvmTarget = javaVersion.toString()
+//     }
+// }
 
 test {
     useJUnitPlatform()
@@ -96,6 +97,20 @@ dependencies {
 
     implementation 'com.github.FRC9015:QELib:main-SNAPSHOT'
 }
+
+spotless {
+    java {
+
+        googleJavaFormat('1.15.0').aosp()
+
+        trimTrailingWhitespace()
+        endWithNewline()
+
+        importOrder('java.util' , 'edu.wpi', 'frc.qefrc.qelib', 'frc.robot' )
+        removeUnusedImports()
+    }
+}
+
 
 // Simulation configuration (e.g. environment variables).
 wpi.sim.addGui().defaultEnabled = true

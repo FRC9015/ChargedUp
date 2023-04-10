@@ -9,7 +9,8 @@
 		"bierner.github-markdown-preview",
 		"mortorqrobotics.wpilib-java-snippets",
 		"brenek.kotlin-for-frc",
-		"mhutchie.git-graph"
+		"mhutchie.git-graph",
+		"richardwillis.vscode-spotless-gradle"
 		
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
