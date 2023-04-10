@@ -600,7 +600,8 @@ public class RobotContainer {
 
         operator.getY().whileTrue(new ArmPIDCommand(0.81, 0.595, true, 0, operator));
         operator.getB().whileTrue(new ArmPIDCommand(0.60, 0.13, true, 0, operator));
-        operator.getA().whileTrue(new ArmPIDCommand(0.2096, 0.458, false, 0, operator));
+        // Intake from ground preset
+        operator.getA().whileTrue(new ArmPIDCommand(0.15, 0.3, false, 0, operator));
 
         operator.getX()
                 .whileTrue(
