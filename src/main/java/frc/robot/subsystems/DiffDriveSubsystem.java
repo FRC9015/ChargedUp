@@ -293,21 +293,6 @@ public class DiffDriveSubsystem extends SubsystemBase {
         setSpeeds(WheelSpeeds);
     }
 
-    public void arcadeDriveRawer(double fwd, double turn, boolean rateLimited) {
-
-        turn*=0.9;
-
-
-        fwd = rateLimited ? accelRateLimit1.calculate(fwd) : fwd;
-        turn = rateLimited ? accelRateLimit2.calculate(turn) : turn;
-
-        turn*=(1-0.5*Math.abs(fwd));
-
-
-        left1.set(fwd-turn);
-        right1.set(fwd+turn);
-    }
-
     /**
      * Tank Drive the robot without any speed multiplier and optional rate limiting
      * 
@@ -384,7 +369,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
         RamseteCommand ramseteCommand = new RamseteCommand(trajectorytogo, odometry::getPoseMeters,
                 new RamseteController(), DriveConstants.KINEMATICS, ramseteOutputBiConsumer, m_diffDriveSubsystem);
 
-        System.out.println("ramseteCommand");
+         
 
         ramseteCommand.schedule();
     }

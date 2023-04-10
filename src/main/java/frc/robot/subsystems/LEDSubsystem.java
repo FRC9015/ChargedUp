@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Helpers;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class LEDSubsystem extends SubsystemBase {
   private static LEDSubsystem INSTANCE;
@@ -97,7 +96,7 @@ public class LEDSubsystem extends SubsystemBase {
     // MathUtil.clamp((int) blue, 0, 255));
 
     ledStrip.setData(ledBuffer);
-  }
+  
 
   double red = SmartDashboard.getNumber("LED R", 0);
   double green = SmartDashboard.getNumber("LED G", 0);
@@ -138,7 +137,7 @@ public class LEDSubsystem extends SubsystemBase {
         pulsetwoColor(new Color(20, 10, 255), QE_ORANGE, freq, speed);
         break;
       case OFF:
-        setStaticColor(new Color(0, 0, 0));
+        staticColor(new Color(0, 0, 0));
         break;
       case RAINBOW:
        rainbow();
@@ -232,12 +231,14 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public void blue() {
-    setStaticColor(Color.kBlue);
+    staticColor(Color.kBlue);
   }
 
   public void blue(int start, int end) {
-    setStaticColorOnRange(start, end, Color.kBlue);
+    staticColorInRange(start, end, Color.kBlue);
   }
+
+  
 
   /* -------- EFFECTS ---------- */
 
@@ -296,12 +297,7 @@ public class LEDSubsystem extends SubsystemBase {
         int red = (int) ((color1.red * brightness + color2.red * (1 - brightness)) * 255);
         int green = (int) ((color1.green * brightness + (color2.green * 1 - brightness)) * 255);
         int blue = (int) ((color1.blue * brightness + (color2.blue * 1 - brightness)) * 255);
-        System.out.print(brightness);
-        System.out.print("   ");
-        System.out.print(color1.blue);
-        System.out.print("   ");
-
-        System.out.println(color2.blue);
+        
         ledBuffer.setLED(i, new Color(red, green, blue));
       }
     }

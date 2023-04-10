@@ -59,7 +59,6 @@ public class BalanceCommand extends CommandBase {
 
 
     // angleFilter calculates a moving average of the angle to correct for any spikes
-    System.out.println(pigeon.getPitch());
     double angle = angleFilter.calculate(pigeon.getPitch());
 
     double moveSpeed = balancePID.calculate(angle);

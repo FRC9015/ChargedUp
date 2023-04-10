@@ -53,7 +53,7 @@ public class Robot extends TimedRobot
         autoPaths = AutoPaths.getInstance();
 
         //CameraServer.startAutomaticCapture();
-        
+
         leds = LEDSubsystem.getInstance();
         
     }
@@ -92,12 +92,11 @@ public class Robot extends TimedRobot
         if (calibrationLimitSwitch.get()){
             ArmSubsystem.getInstance().resetArm();
             //if(DriverStation.isFMSAttached()){
-                robotContainer.getLedSubsystem().setPreset(LEDPreset.GREEN);
+                leds.setPreset(LEDPreset.GREEN);
 
            // }else{
             //robotContainer.getLedSubsystem().setPreset(LEDPreset.OFF);
             //}
-            System.out.println("calibrated");
         }
     }
     

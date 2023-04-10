@@ -112,15 +112,12 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void telescopeArm(double motorspeed) {
         if (getTeleEncoderPos() <= 0.1) {
-            System.out.println("not fulll speeed");
             telescopeArm.set(Math.max(-0.1, motorspeed * 0.95));
 
         } else if (getTeleEncoderPos() >= 0.57) {
-            System.out.println("not fulll speeed");
             telescopeArm.set(Math.min(0.1, motorspeed * 0.95));
         } else {
             telescopeArm.set(motorspeed);
-            System.out.println("fulll speeed");
         }
     }
 
@@ -136,7 +133,6 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void SetActivatePID(boolean active) {
-        System.out.println("setarmy");
         activatePID = active;
     }
 
@@ -153,9 +149,6 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setPID() {
-        System.out.print(rotateEncoder.getPosition());
-        System.out.println(rotatePidSetpoint);
-        System.out.println(activatePID);
         if (activatePID) {
             releaseBrake();
             rotateArm.set(pid.calculate(rotateEncoder.getPosition(), rotatePidSetpoint));
@@ -183,10 +176,6 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void periodic() {
-
-        // System.out.print("telescope position:");
-        // System.out.println(telescopeEncoder.getPosition());
-        // applyBrake();
     }
 
     public void simulationPeriodic() {

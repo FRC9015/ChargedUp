@@ -130,8 +130,6 @@ public class OperatorController implements Sendable {
 
             @Override
             public boolean getAsBoolean() {
-                // TODO Auto-generated method stub
-                //System.out.println(lTrigger.getAsDouble());
                 return  lTrigger.getAsDouble()>0.3;
             }
             
@@ -145,7 +143,6 @@ public class OperatorController implements Sendable {
 
             @Override
             public boolean getAsBoolean() {
-                // TODO Auto-generated method stub
                 return  rTrigger.getAsDouble()>0.3;
             }
             
@@ -166,12 +163,6 @@ public class OperatorController implements Sendable {
 
     @Override
     public void initSendable(SendableBuilder builder) {
-        // TODO Auto-generated method stub
         
     }
-
-    // This allows us to send this DriverController to the Dashboard and read all of
-    // its values
-
-
 }
