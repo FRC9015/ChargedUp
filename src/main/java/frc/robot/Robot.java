@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DiffDriveSubsystem;
 import frc.robot.subsystems.FootSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
@@ -29,6 +30,7 @@ public class Robot extends TimedRobot
     private RobotContainer robotContainer;    
     private AutoPaths autoPaths;
     
+    private LEDSubsystem leds;
     /**
      * This method is run when the robot is first started up and should be used for any
      * initialization code.
@@ -45,6 +47,8 @@ public class Robot extends TimedRobot
         autoPaths = AutoPaths.getInstance();
 
         //CameraServer.startAutomaticCapture();
+
+        leds = LEDSubsystem.getInstance();
         
     }
     
@@ -105,7 +109,8 @@ public class Robot extends TimedRobot
     
     /** This method is called periodically during autonomous. */
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+    }
     
     
     @Override
