@@ -18,8 +18,7 @@ public class SyncLimelightPose extends CommandBase {
     private final Set<Subsystem> subsystems;
     private boolean finished;
     /** Creates a new PointToTagCommand. */
-    public SyncLimelightPose(
-            LimelightSubsytem limelightSubsytem, DiffDriveSubsystem diffDriveSubsystem) {
+    public SyncLimelightPose(LimelightSubsytem limelightSubsytem, DiffDriveSubsystem diffDriveSubsystem) {
         this.diffDriveSubsystem = diffDriveSubsystem;
         this.limelightSubsytem = limelightSubsytem;
         this.subsystems = Set.of(this.limelightSubsytem, this.diffDriveSubsystem);

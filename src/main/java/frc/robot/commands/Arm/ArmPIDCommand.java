@@ -52,28 +52,22 @@ public class ArmPIDCommand extends CommandBase {
     public void execute() {
 
         if (Math.abs(controller.getTankLeft()) > 0.05) {
-            rotPidController.setSetpoint(
-                    rotPidController.getSetpoint() - controller.getTankLeft() * 0.01);
+            rotPidController.setSetpoint(rotPidController.getSetpoint() - controller.getTankLeft() * 0.01);
         }
 
         if (Math.abs(controller.getTankRight()) > 0.05) {
-            telePidController.setSetpoint(
-                    telePidController.getSetpoint() - controller.getTankRight() * 0.01);
+            telePidController.setSetpoint(telePidController.getSetpoint() - controller.getTankRight() * 0.01);
             ;
         }
 
         armSubsystem.rotateArm(
-                Math.max(
-                        Math.min(0.6, rotPidController.calculate(armSubsystem.getRotEncoderPos())),
-                        -0.6));
+                Math.max(Math.min(0.6, rotPidController.calculate(armSubsystem.getRotEncoderPos())), -0.6));
         if (waitToExtend) {
             if (armSubsystem.getRotEncoderPos() > 0.3) {
-                armSubsystem.telescopeArm(
-                        telePidController.calculate(armSubsystem.getTeleEncoderPos()));
+                armSubsystem.telescopeArm(telePidController.calculate(armSubsystem.getTeleEncoderPos()));
             }
         } else {
-            armSubsystem.telescopeArm(
-                    telePidController.calculate(armSubsystem.getTeleEncoderPos()));
+            armSubsystem.telescopeArm(telePidController.calculate(armSubsystem.getTeleEncoderPos()));
         }
     }
 

@@ -25,8 +25,7 @@ public class BalancePIDCommand extends PIDCommand {
     private static PigeonSubsystem pigeon = PigeonSubsystem.getInstance();
     private static DiffDriveSubsystem drive = DiffDriveSubsystem.getInstance();
     private static MedianFilter angleFilter =
-            new MedianFilter(
-                    25); // Robot refreshes at ~50Hz, so average over the last half second of
+            new MedianFilter(25); // Robot refreshes at ~50Hz, so average over the last half second of
     // measurements
 
     public BalancePIDCommand() {

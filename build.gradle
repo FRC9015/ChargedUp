@@ -104,10 +104,11 @@ dependencies {
 spotless {
     java {
 
-        googleJavaFormat('1.15.0').aosp()
+        palantirJavaFormat('2.9.0')
 
         trimTrailingWhitespace()
         endWithNewline()
+        indentWithSpaces (4)
 
         importOrder('java.util' , 'edu.wpi', 'frc.qefrc.qelib', 'frc.robot' )
         removeUnusedImports()

@@ -19,7 +19,8 @@ public class DriverController implements Sendable {
 
     private final DoubleSupplier tankLeft, tankRight, arcadeFwd, arcadeTurn;
     private final DoubleSupplier lTrigger, rTrigger;
-    @Getter private final JoystickButton a, b, x, y, start, back, ls, rs, lb, rb, lTrig, rTrig;
+    @Getter
+    private final JoystickButton a, b, x, y, start, back, ls, rs, lb, rb, lTrig, rTrig;
     private final POVButton up, down, left, right;
 
     public DriverController(XboxController controller) {
@@ -93,14 +94,13 @@ public class DriverController implements Sendable {
     }
 
     public Trigger getRTrigAsButton() {
-        return new Trigger(
-                new BooleanSupplier() {
+        return new Trigger(new BooleanSupplier() {
 
-                    @Override
-                    public boolean getAsBoolean() {
-                        return rTrigger.getAsDouble() > 0.3;
-                    }
-                });
+            @Override
+            public boolean getAsBoolean() {
+                return rTrigger.getAsDouble() > 0.3;
+            }
+        });
     }
 
     public double getLTrigger() {

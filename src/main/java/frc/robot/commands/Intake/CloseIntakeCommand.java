@@ -8,8 +8,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.IntakePneumaticSubsystem;
 
 public class CloseIntakeCommand implements Command {
-    private final IntakePneumaticSubsystem intakeNewmaticSubsystem =
-            IntakePneumaticSubsystem.getInstance();
+    private final IntakePneumaticSubsystem intakeNewmaticSubsystem = IntakePneumaticSubsystem.getInstance();
     private final Set<Subsystem> subsystems;
 
     public CloseIntakeCommand() {

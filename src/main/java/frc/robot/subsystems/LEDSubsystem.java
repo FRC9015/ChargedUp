@@ -154,8 +154,7 @@ public class LEDSubsystem extends SubsystemBase {
         ledStrip.setData(ledBuffer);
     }
 
-    public void setEffect(
-            LEDeffect eff, Color mColor1, Color mColor2, double mfreq, double mamp, double mspeed) {
+    public void setEffect(LEDeffect eff, Color mColor1, Color mColor2, double mfreq, double mamp, double mspeed) {
         choseneffect = eff;
         // color1 = mColor1;
         // color2 = mColor2;
@@ -188,18 +187,12 @@ public class LEDSubsystem extends SubsystemBase {
             double time = System.currentTimeMillis() / 1000.0; // current time in seconds
             for (int i = 0; i < ledBuffer.getLength(); i++) {
                 double brightness =
-                        0.5
-                                + 0.5
-                                        * Math.sin(
-                                                2 * Math.PI * frequency * i / ledBuffer.getLength()
-                                                        + time * another);
+                        0.5 + 0.5 * Math.sin(2 * Math.PI * frequency * i / ledBuffer.getLength() + time * another);
                 // brightness *= amplitude;
 
                 int red = (int) ((color1.red * brightness + color2.red * (1 - brightness)) * 255);
-                int green =
-                        (int) ((color1.green * brightness + color2.green * (1 - brightness)) * 255);
-                int blue =
-                        (int) ((color1.blue * brightness + color2.blue * (1 - brightness)) * 255);
+                int green = (int) ((color1.green * brightness + color2.green * (1 - brightness)) * 255);
+                int blue = (int) ((color1.blue * brightness + color2.blue * (1 - brightness)) * 255);
 
                 ledBuffer.setLED(i, new Color(red, green, blue));
             }
@@ -266,11 +259,7 @@ public class LEDSubsystem extends SubsystemBase {
             double time = System.currentTimeMillis() / 1000.0; // current time in seconds
             for (int i = 0; i < ledBuffer.getLength(); i++) {
                 double brightness =
-                        0.5
-                                + 0.5
-                                        * Math.sin(
-                                                2 * Math.PI * frequency * i / ledBuffer.getLength()
-                                                        + time * another);
+                        0.5 + 0.5 * Math.sin(2 * Math.PI * frequency * i / ledBuffer.getLength() + time * another);
                 brightness *= amplitude;
                 int red = (int) (color.red * brightness);
                 int green = (int) (color.green * brightness);
@@ -285,11 +274,7 @@ public class LEDSubsystem extends SubsystemBase {
             double time = System.currentTimeMillis() / 1000.0; // current time in seconds
             for (int i = 0; i < ledBuffer.getLength(); i++) {
                 double brightness =
-                        0.5
-                                + 0.5
-                                        * Math.sin(
-                                                2 * Math.PI * frequency / ledBuffer.getLength()
-                                                        + time * another);
+                        0.5 + 0.5 * Math.sin(2 * Math.PI * frequency / ledBuffer.getLength() + time * another);
                 brightness *= amplitude;
                 int red = (int) (color.red * brightness);
                 int green = (int) (color.green * brightness);
@@ -304,18 +289,12 @@ public class LEDSubsystem extends SubsystemBase {
             double time = System.currentTimeMillis() / 1000.0; // current time in seconds
             for (int i = 0; i < ledBuffer.getLength(); i++) {
                 double brightness =
-                        0.5
-                                + 0.5
-                                        * Math.sin(
-                                                2 * Math.PI * frequency * i / ledBuffer.getLength()
-                                                        + time * another);
+                        0.5 + 0.5 * Math.sin(2 * Math.PI * frequency * i / ledBuffer.getLength() + time * another);
                 // brightness *= amplitude;
 
                 int red = (int) ((color1.red * brightness + color2.red * (1 - brightness)) * 255);
-                int green =
-                        (int) ((color1.green * brightness + (color2.green * 1 - brightness)) * 255);
-                int blue =
-                        (int) ((color1.blue * brightness + (color2.blue * 1 - brightness)) * 255);
+                int green = (int) ((color1.green * brightness + (color2.green * 1 - brightness)) * 255);
+                int blue = (int) ((color1.blue * brightness + (color2.blue * 1 - brightness)) * 255);
 
                 ledBuffer.setLED(i, new Color(red, green, blue));
             }
@@ -405,12 +384,8 @@ public class LEDSubsystem extends SubsystemBase {
      */
     public void chaos(boolean firstTime) {
         // This function randomly regenerates a color
-        Function<Color, Color> randomColorShift =
-                (Color aColor) ->
-                        new Color(
-                                Helpers.randomShift(aColor.red),
-                                Helpers.randomShift(aColor.green),
-                                Helpers.randomShift(aColor.blue));
+        Function<Color, Color> randomColorShift = (Color aColor) -> new Color(
+                Helpers.randomShift(aColor.red), Helpers.randomShift(aColor.green), Helpers.randomShift(aColor.blue));
 
         synchronized (ledBuffer) {
             if (firstTime) {

@@ -19,8 +19,7 @@ public class UpdatePIDFConstantsCommand extends InstantCommand {
      * @param constants Constants object to use for updating the controllers
      * @param controllers The controllers to update
      */
-    public UpdatePIDFConstantsCommand(
-            PIDFConstants constants, SparkMaxPIDController... controllers) {
+    public UpdatePIDFConstantsCommand(PIDFConstants constants, SparkMaxPIDController... controllers) {
         this.constants = constants;
         this.controllers = controllers;
     }

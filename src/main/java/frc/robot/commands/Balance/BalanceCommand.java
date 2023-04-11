@@ -26,9 +26,7 @@ public class BalanceCommand extends CommandBase {
     private boolean finished = false;
 
     public BalanceCommand() {
-        angleFilter =
-                new MedianFilter(
-                        5); // Robot refreshes at ~50Hz, so average over the last half second of
+        angleFilter = new MedianFilter(5); // Robot refreshes at ~50Hz, so average over the last half second of
         // measurements
 
         SmartDashboard.putNumber("bal P", kP);
@@ -37,9 +35,7 @@ public class BalanceCommand extends CommandBase {
 
         // angleFilter = new MedianFilter((int)SmartDashboard.getNumber("bal filter", 20)); // Robot
         // refreshes at ~50Hz, so average over the last half second of measurements
-        angleFilter =
-                new MedianFilter(
-                        filtersize); // Robot refreshes at ~50Hz, so average over the last half
+        angleFilter = new MedianFilter(filtersize); // Robot refreshes at ~50Hz, so average over the last half
         // second of measurements
 
         addRequirements(pigeon, drive);

@@ -19,8 +19,7 @@ public class PointToTagCommand extends CommandBase {
     private final Set<Subsystem> subsystems;
     private final PIDController pid;
     /** Creates a new PointToTagCommand. */
-    public PointToTagCommand(
-            LimelightSubsytem limelightSubsytem, DiffDriveSubsystem diffDriveSubsystem) {
+    public PointToTagCommand(LimelightSubsytem limelightSubsytem, DiffDriveSubsystem diffDriveSubsystem) {
         this.diffDriveSubsystem = diffDriveSubsystem;
         this.limelightSubsytem = limelightSubsytem;
         this.subsystems = Set.of(this.diffDriveSubsystem, this.limelightSubsytem);
