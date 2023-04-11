@@ -11,9 +11,14 @@ public class SolenoidBase {
         Single
     }
 
-    @Getter private DoubleSolenoid doubleSolenoid;
-    @Getter private Solenoid singleSolenoid;
-    @Getter private final SolenoidType type;
+    @Getter
+    private DoubleSolenoid doubleSolenoid;
+
+    @Getter
+    private Solenoid singleSolenoid;
+
+    @Getter
+    private final SolenoidType type;
 
     public SolenoidBase(DoubleSolenoid solenoid) {
         doubleSolenoid = solenoid;

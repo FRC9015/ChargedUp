@@ -75,28 +75,23 @@ public class Dashboard {
     }
 
     public void initLayouts() {
-        balanceLayout =
-                currentTab
-                        .getLayout(DashboardConstants.BALANCE_LAYOUT_NAME, BuiltInLayouts.kList)
-                        .withSize(1, 4)
-                        .withPosition(2, 0);
+        balanceLayout = currentTab
+                .getLayout(DashboardConstants.BALANCE_LAYOUT_NAME, BuiltInLayouts.kList)
+                .withSize(1, 4)
+                .withPosition(2, 0);
         // Create a List layout for drivetrain information on the Teleop Tab
         // Drive data is only needed during Teleop
-        driveLayout =
-                teleopTab
-                        .getLayout(DashboardConstants.DRIVE_LAYOUT_NAME, BuiltInLayouts.kList)
-                        .withSize(2, 4)
-                        .withPosition(0, 0);
-        counterweightLayout =
-                teleopTab
-                        .getLayout(
-                                DashboardConstants.COUNTERWEIGHT_LAYOUT_NAME, BuiltInLayouts.kList)
-                        .withSize(1, 2)
-                        .withPosition(3, 0);
+        driveLayout = teleopTab
+                .getLayout(DashboardConstants.DRIVE_LAYOUT_NAME, BuiltInLayouts.kList)
+                .withSize(2, 4)
+                .withPosition(0, 0);
+        counterweightLayout = teleopTab
+                .getLayout(DashboardConstants.COUNTERWEIGHT_LAYOUT_NAME, BuiltInLayouts.kList)
+                .withSize(1, 2)
+                .withPosition(3, 0);
 
-        autoPathLayout =
-                autoTab.getLayout(DashboardConstants.AUTO_PATH_LAYOUT_NAME, BuiltInLayouts.kList)
-                        .withSize(1, 1);
+        autoPathLayout = autoTab.getLayout(DashboardConstants.AUTO_PATH_LAYOUT_NAME, BuiltInLayouts.kList)
+                .withSize(1, 1);
     }
 
     public void initSubclasses() {
@@ -183,14 +178,11 @@ public class Dashboard {
 
             // Creates a number slider with a min value of 0 and max value of 1;
             if (speedMultiplierSelect == null)
-                speedMultiplierSelect =
-                        layout.addPersistent(
-                                        "Speed Multiplier", DriveConstants.SLOW_SPEED_MULTIPLIER)
-                                .withWidget(BuiltInWidgets.kNumberSlider)
-                                .withProperties(Map.of("min", 0.1, "max", 0.9));
+                speedMultiplierSelect = layout.addPersistent("Speed Multiplier", DriveConstants.SLOW_SPEED_MULTIPLIER)
+                        .withWidget(BuiltInWidgets.kNumberSlider)
+                        .withProperties(Map.of("min", 0.1, "max", 0.9));
             // Boolean display for whether the drivetrain is running in Slow Mode
-            if (speedMode == null)
-                speedMode = layout.add("Slow Mode", true).withWidget(BuiltInWidgets.kBooleanBox);
+            if (speedMode == null) speedMode = layout.add("Slow Mode", true).withWidget(BuiltInWidgets.kBooleanBox);
         }
 
         /**
@@ -220,15 +212,11 @@ public class Dashboard {
 
             // Dial display for current pitch
             if (angleDisplay == null)
-                angleDisplay =
-                        layout.add("Pitch Angle", 0)
-                                .withWidget(BuiltInWidgets.kDial)
-                                .withProperties(Map.of("min", -45, "max", 45));
-            if (isBalanced == null)
-                isBalanced = layout.add("Balanced", false).withWidget(BuiltInWidgets.kBooleanBox);
-            if (autoMode == null)
-                autoMode =
-                        layout.add("Auto Balanced", false).withWidget(BuiltInWidgets.kBooleanBox);
+                angleDisplay = layout.add("Pitch Angle", 0)
+                        .withWidget(BuiltInWidgets.kDial)
+                        .withProperties(Map.of("min", -45, "max", 45));
+            if (isBalanced == null) isBalanced = layout.add("Balanced", false).withWidget(BuiltInWidgets.kBooleanBox);
+            if (autoMode == null) autoMode = layout.add("Auto Balanced", false).withWidget(BuiltInWidgets.kBooleanBox);
         }
 
         public void setAngle(double currentAngle) {
@@ -253,8 +241,7 @@ public class Dashboard {
         public CounterweightData(ShuffleboardLayout myLayout) {
             layout = myLayout;
 
-            if (endstop == null)
-                endstop = layout.add("Endstop", false).withWidget(BuiltInWidgets.kBooleanBox);
+            if (endstop == null) endstop = layout.add("Endstop", false).withWidget(BuiltInWidgets.kBooleanBox);
         }
 
         public void setEndstop(boolean clicked) {
