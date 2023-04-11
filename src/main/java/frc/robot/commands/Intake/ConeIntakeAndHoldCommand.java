@@ -12,12 +12,12 @@ public class ConeIntakeAndHoldCommand extends CommandBase {
     public ConeIntakeAndHoldCommand() {
         addRequirements(intake);
         timer = new Timer();
-        timer.reset();
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        timer.reset();
         timer.start();
         intake.closeIntake();
         intake.setIntakeMotorSpeed(0.45);
@@ -26,6 +26,7 @@ public class ConeIntakeAndHoldCommand extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        timer.stop();
         intake.setIntakeMotorSpeed(0);
     }
 
