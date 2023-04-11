@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Constants.DriveConstants;
+import frc.robot.subsystems.DiffDriveSubsystem;
 import java.io.File;
 
 public class AutoPaths {
@@ -36,33 +38,25 @@ public class AutoPaths {
     }
 
     public void init() {
-
         commandAutos.addOption(
-                "getHighConeMobilizeAuto", RobotContainer.getInstance().getHighConeMobilizeAuto());
+                "HighConeMobilizeBalance", RobotContainer.getInstance().getHighConeMobilizeBalanceAuto());
         commandAutos.addOption(
-                "getHighCubeMobilizeAuto", RobotContainer.getInstance().getHighCubeMobilzeAuto());
+                "HighCubeMobilizeBalance", RobotContainer.getInstance().getHighCubeMobilzeBalanceAuto());
+        commandAutos.addOption("HighConeMobilize", RobotContainer.getInstance().getHighConeMobilizeAuto());
+        commandAutos.addOption("HighCubeMobilize", RobotContainer.getInstance().getHighCubeMobilzeAuto());
+        commandAutos.addOption("HighConeBalance", RobotContainer.getInstance().getHighConeBalanceAuto());
+        commandAutos.addOption("HighCubeBalance", RobotContainer.getInstance().getHighCubeBalanceAuto());
         commandAutos.addOption(
-                "HighConeMobilizeBalance",
-                RobotContainer.getInstance().getHighConeMobilizeBalanceAuto());
+                "**HighCubeMobilizeIntake", RobotContainer.getInstance().getHighCubeMobilzeBalanceAuto());
         commandAutos.addOption(
-                "HighCubeMobilizeBalance",
-                RobotContainer.getInstance().getHighCubeMobilzeBalanceAuto());
+                "**HighConeMobilizeIntake", RobotContainer.getInstance().getHighConeMobilizeIntakeAuto());
         commandAutos.addOption(
-                "HighConeMobilize", RobotContainer.getInstance().getHighConeMobilizeAuto());
+                "**TEST** just balance", RobotContainer.getInstance().justBalance());
         commandAutos.addOption(
-                "HighCubeMobilize", RobotContainer.getInstance().getHighCubeMobilzeAuto());
+                "**TEST** openIntake", RobotContainer.getInstance().getTurn90());
         commandAutos.addOption(
-                "HighConeBalance", RobotContainer.getInstance().getHighConeBalanceAuto());
-        commandAutos.addOption(
-                "HighCubeBalance", RobotContainer.getInstance().getHighCubeBalanceAuto());
-        commandAutos.addOption(
-                "**HighCubeMobilizeIntake",
-                RobotContainer.getInstance().getHighCubeMobilzeBalanceAuto());
-        commandAutos.addOption(
-                "**HighConeMobilizeIntake",
-                RobotContainer.getInstance().getHighConeMobilizeIntakeAuto());
-        commandAutos.addOption("**TEST** just balance", RobotContainer.getInstance().justBalance());
-        commandAutos.addOption("**TEST** openIntake", RobotContainer.getInstance().getTurn90());
+                "**TEST** Drive 12in",
+                DiffDriveSubsystem.getInstance().getDriveDistanceCommand(Units.inchesToMeters(6)));
     }
 
     public SendableChooser<Command> getCommandAutos() {
@@ -115,8 +109,7 @@ public class AutoPaths {
         }
 
         for (String pathName : pathNames) {
-            PathPlannerTrajectory traj =
-                    PathPlanner.loadPath(pathName, DriveConstants.kPathConstraints);
+            PathPlannerTrajectory traj = PathPlanner.loadPath(pathName, DriveConstants.kPathConstraints);
 
             paths.addOption(pathName, traj);
         }
