@@ -75,7 +75,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        if (calibrationLimitSwitch.get()) {
+        if (calibrationLimitSwitch.get() || robotContainer.getDriver().getB().getAsBoolean()) {
             ArmSubsystem.getInstance().resetArm();
             // if(DriverStation.isFMSAttached()){
             leds.setPreset(LEDPreset.GREEN);
