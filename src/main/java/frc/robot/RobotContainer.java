@@ -438,7 +438,7 @@ public class RobotContainer {
 
         // When the driver's left bumper is pressed, switch between low and high speed.
         //driver.getLB().whileTrue(new StartEndCommand(() -> armSubsystem.SetActivatePID(true),() -> armSubsystem.SetActivatePID(true), armSubsystem));
-        driver.getStart().toggleOnTrue(new BalanceCommand(pigeonSubsystem, driveSubsystem));
+        driver.getStart().toggleOnTrue(new SimpleBalanceCommand(pigeonSubsystem, driveSubsystem,footSubsystem));
         driver.getBack().onTrue(new InstantCommand(()->footSubsystem.toggleFoot() ,footSubsystem));
         
         operator.getRTrigAsButton().whileTrue(new InstantCommand(()-> intakeNewmaticSubsystem.openIntake(), intakeNewmaticSubsystem)).whileFalse(new InstantCommand(()-> intakeNewmaticSubsystem.closeIntake(), intakeNewmaticSubsystem));
