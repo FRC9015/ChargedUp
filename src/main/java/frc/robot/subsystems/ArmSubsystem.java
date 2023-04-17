@@ -117,11 +117,11 @@ public class ArmSubsystem implements Subsystem {
 
     public void telescopeArm(double motorspeed) {
         if (getTeleEncoderPos()<=0.1){
-            System.out.println("not fulll speeed");
+            //System.out.println("not fulll speeed");
             telescopeArm.set(Math.max(-0.1, motorspeed*0.95));
 
         }else if(getTeleEncoderPos()>=0.57){
-            System.out.println("not fulll speeed");
+            //System.out.println("not fulll speeed");
             telescopeArm.set(Math.min(0.1, motorspeed*0.95));
         }
         else{

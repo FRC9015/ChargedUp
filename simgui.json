@@ -14,6 +14,23 @@
         "visible": true
       }
     },
+    "Other Devices": {
+      "SPARK MAX [11]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [12]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [13]": {
+        "header": {
+          "open": true
+        }
+      }
+    },
     "RoboRIO": {
       "window": {
         "visible": true
@@ -24,6 +41,7 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/CounterweightPIDSubsystem/PID Controller": "PIDController",
+      "/LiveWindow/LimelightSubsytem": "Subsystem",
       "/LiveWindow/PigeonSubsystem": "Subsystem",
       "/LiveWindow/PigeonSubsystem/pigeon": "Gyro",
       "/LiveWindow/Ungrouped/DigitalInput[0]": "Digital Input",
@@ -58,9 +76,34 @@
       "/LiveWindow/Ungrouped/PIDController[35]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[36]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[37]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[38]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[39]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[40]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[41]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[42]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[43]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[44]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[45]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[46]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[47]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[48]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[49]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[50]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[51]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[52]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[53]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[54]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[55]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[56]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[57]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[58]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[59]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[5]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[60]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[61]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[62]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[6]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[7]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[8]": "PIDController",
@@ -69,6 +112,18 @@
       "/Shuffleboard/Autonomous/SendableChooser[0]": "String Chooser",
       "/SmartDashboard/PPRamseteCommand_field": "Field2d",
       "/SmartDashboard/field": "Field2d"
+    },
+    "windows": {
+      "/Shuffleboard/Autonomous/SendableChooser[0]": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/field": {
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables": {
@@ -87,6 +142,9 @@
             "open": false
           }
         },
+        "Tuning": {
+          "open": true
+        },
         "open": true
       },
       "SmartDashboard": {
@@ -98,7 +156,13 @@
     }
   },
   "NetworkTables Info": {
-    "Connections": {
+    "Clients": {
+      "open": true
+    },
+    "shuffleboard": {
+      "Subscribers": {
+        "open": true
+      },
       "open": true
     },
     "visible": true

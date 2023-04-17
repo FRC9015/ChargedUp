@@ -350,7 +350,7 @@ public class DiffDriveSubsystem extends SubsystemBase {
     }
     //issue: the left is just folowing the right
 
-    private void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+    public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
         leftPID.setReference(speeds.leftMetersPerSecond, CANSparkMax.ControlType.kVelocity);
         rightPID.setReference(speeds.rightMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     }

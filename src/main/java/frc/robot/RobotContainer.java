@@ -434,7 +434,10 @@ public class RobotContainer {
         driver.getUpDpad().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
         driver.getDownDpad().whileTrue(new WeightBackCommand(counterweightPIDSubsystem));
         //driver.getLeftDpad().whileTrue(new WeightBackCommand(counterweightPIDSubsystem));
-        //driver.getRightDpad().whileTrue(new WeightForwardCommand(counterweightPIDSubsystem));
+
+
+        //TESTING ******
+        driver.getRightDpad().onTrue(new turnCommand(driveSubsystem, pigeonSubsystem, 90));
 
         // When the driver's left bumper is pressed, switch between low and high speed.
         //driver.getLB().whileTrue(new StartEndCommand(() -> armSubsystem.SetActivatePID(true),() -> armSubsystem.SetActivatePID(true), armSubsystem));
