@@ -5,24 +5,16 @@
 
 package frc.robot;
 
-import java.util.HashMap;
-
-import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.server.PathPlannerServer;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -39,9 +31,7 @@ import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimelightSubsytem;
 import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.subsystems.LEDSubsystem.LEDPreset;
-import frc.robot.subsystems.LEDSubsystem.LEDeffect;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
-import kotlin.contracts.Effect;
 
 /**
  * Very little robot logic should actually be handled in the {@link Robot}
@@ -118,6 +108,59 @@ public class RobotContainer {
         //armSubsystem.resetArm();
     
     }
+
+    public Command newHighCubeMobilizeBalance(){
+        return( new SequentialCommandGroup(
+            highCube(),
+            new WaitCommand(0.1),
+            new armpidCommand(armSubsystem, 0.60,0.13,false,0.1,operator),
+            new dumbDriveCommand(driveSubsystem, 4),
+            new dumbDriveCommand(driveSubsystem, -1.8),
+            new SimpleBalanceCommand(pigeonSubsystem, driveSubsystem, footSubsystem)
+        )
+        );
+    }
+
+    public Command newHighConeMobilizeBalance(){
+        return( new SequentialCommandGroup(
+            highCone(),
+            new WaitCommand(1),
+            new armpidCommand(armSubsystem, 0.60,0.05,true,0.1,operator),
+            new dumbDriveCommand(driveSubsystem, -4),
+            new dumbDriveCommand(driveSubsystem, 1.8),
+            new SimpleBalanceCommand(pigeonSubsystem, driveSubsystem, footSubsystem)
+        )
+        );
+    }
+
+    public Command newHighCubeMobilizeIn(){
+        return( new SequentialCommandGroup(
+            highCube(),
+            new WaitCommand(0.1),
+            new armpidCommand(armSubsystem, 0.60,0.13,false,0.1,operator),
+            new dumbDriveCommand(driveSubsystem, 4),
+            new turnCommand(driveSubsystem, pigeonSubsystem, 180),
+            new armpidCommand(armSubsystem, 0.2096,0.458,false,0,operator),
+            new dumbDriveCommand(driveSubsystem, 0.5).alongWith(
+                new StartEndCommand(
+                    () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.3), 
+                    ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+                    intakeNewmaticSubsystem).withTimeout(0.25))
+        )
+        );
+    }
+
+    public Command newHighConeMobilize(){
+        return( new SequentialCommandGroup(
+            highCone(),
+            new WaitCommand(1),
+            new armpidCommand(armSubsystem, 0.60,0.05,true,0.1,operator),
+            new dumbDriveCommand(driveSubsystem, -4)
+
+        )
+        );
+    }
+
 
     public Command getHighCubeMobilzeBalanceAuto()
     {
@@ -514,5 +557,38 @@ public class RobotContainer {
      */
     public Command getTeleopCommand() {
         return null; // null as this is already handled by the drive subsystem's default command
+    }
+
+    //Auto helper commands
+    private Command highCube(){
+        return(
+            new SequentialCommandGroup(
+                new armpidCommand(armSubsystem, 0.81,0.6,true,0.1,operator).withTimeout(3).alongWith(
+                    new StartEndCommand(
+                    () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.1), 
+                    ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+                    intakeNewmaticSubsystem).withTimeout(0.25)
+                ),
+                new StartEndCommand(
+                    () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.5), 
+                    ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+                    intakeNewmaticSubsystem).withTimeout(0.2)
+            )
+        );
+    }
+
+    private Command highCone(){
+        return(
+            new SequentialCommandGroup(
+            new armpidCommand(armSubsystem, 2.4,0,false,0.2,operator).withTimeout(3).andThen(new armpidCommand(armSubsystem, 2.6,0.635,false,0.2,operator).withTimeout(2)).alongWith(
+                new StartEndCommand(
+                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.1), 
+                ()->intakeNewmaticSubsystem.setIntakeMotorSpeed(0), 
+                intakeNewmaticSubsystem).withTimeout(0.25)
+            ),
+            new WaitCommand(0.5),
+            new CloseIntakeCommand(intakeNewmaticSubsystem)
+            )
+        );
     }
 }

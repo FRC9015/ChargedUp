@@ -1,17 +1,12 @@
 package frc.robot.commands;
 
 import frc.robot.Dashboard;
-import frc.robot.Helpers;
 import frc.robot.subsystems.FootSubsystem;
 import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import com.revrobotics.CANSparkMax.IdleMode;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.MedianFilter;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class SimpleBalanceCommand extends CommandBase {

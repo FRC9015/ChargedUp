@@ -1,15 +1,10 @@
 package frc.robot;
 
-import java.io.File;
-import java.util.ArrayList;
 
-import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.DriveConstants;
 
 public class AutoPaths {
     private static final AutoPaths INSTANCE = new AutoPaths();
@@ -20,7 +15,6 @@ public class AutoPaths {
 
     //private File pathsDir;
     //private File[] pathFiles;
-    private ArrayList<String> pathNames;
     private SendableChooser<Command> paths;
 
     private AutoPaths() {
