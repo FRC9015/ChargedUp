@@ -4,9 +4,18 @@
 
 package frc.robot.subsystems;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -22,7 +31,7 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   private final int LED_PORT = 9;
-  private final int LED_LENGTH = 139;
+  private final int LED_LENGTH = 1728;
 
   public final Color QE_NAVYBLUE = new Color(17, 43, 60);
   public final Color QE_BLUE = new Color(32, 83, 117);
@@ -35,8 +44,14 @@ public class LEDSubsystem extends SubsystemBase {
 
   private int rainbowFirstPixelHue;
 
+  private FileReader fileReader;
+  private List<AddressableLEDBuffer> ledBuffers;
+
+  private int frame =0;
+
   private double freq=10, amp=1, speed=10;
   //private Color color1=new Color(32, 83, 250), color2=new Color(246, 107, 14);
+  
 
   public enum LEDeffect{
     SingleColorWave,
@@ -60,6 +75,44 @@ public class LEDSubsystem extends SubsystemBase {
 
   private LEDSubsystem() {
 
+    File deploydirectory = Filesystem.getDeployDirectory();
+    File roll = new File(deploydirectory, "roll.txt");
+    try {
+      fileReader = new FileReader(roll);
+    } catch (FileNotFoundException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    
+    BufferedReader bufferedReader = new BufferedReader(fileReader);
+    String line;
+    try{
+      ledBuffers = new ArrayList<>();
+      AddressableLEDBuffer currentBuffer = null;
+      int currentIndex = 0;
+      while ((line = bufferedReader.readLine()) != null) {
+        if (line.startsWith("new")) {
+          currentBuffer = new AddressableLEDBuffer(LED_LENGTH);
+          ledBuffers.add(currentBuffer);
+          currentIndex=0;
+      }else {
+        String[] rgb = line.split(",");
+        int r = Integer.parseInt(rgb[0].trim());
+        int g = Integer.parseInt(rgb[1].trim());
+        int b = Integer.parseInt(rgb[2].trim());
+
+
+
+        currentBuffer.setRGB(currentIndex, r, g, b);
+        currentIndex++;
+      }
+    }} catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    System.out.println(ledBuffers.size());
+
+  
     SmartDashboard.putNumber("LED R", 0);
     SmartDashboard.putNumber("LED G", 0);
     SmartDashboard.putNumber("LED B", 0);
@@ -136,7 +189,14 @@ public class LEDSubsystem extends SubsystemBase {
 
     }
     
-    ledStrip.setData(ledBuffer);
+    //ledStrip.setData(ledBuffers.get(frame));
+    ledStrip.setData(ledBuffers.get(Math.round(frame/2)));
+
+    System.out.println(frame);
+    if (frame==ledBuffers.size()*2-4){
+      frame=-1;
+    }
+    frame++;
   }
 
   public void setEffect(LEDeffect eff, Color mColor1, Color mColor2,double mfreq, double mamp, double mspeed){
@@ -270,4 +330,5 @@ public void pulsetwoColor(Color color1, Color color2, double frequency, double a
       rainbowFirstPixelHue %= 180;
     }
   }
+  
 }
