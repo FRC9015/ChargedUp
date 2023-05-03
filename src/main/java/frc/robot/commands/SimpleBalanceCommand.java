@@ -1,30 +1,36 @@
 package frc.robot.commands;
 
 import frc.robot.Dashboard;
+import frc.robot.Helpers;
 import frc.robot.subsystems.FootSubsystem;
 import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.subsystems.drive.DiffDriveSubsystem;
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class SimpleBalanceCommand extends CommandBase {
 
 
-
+  boolean pidActive;
 
 
   private PigeonSubsystem pigeon;
   private DiffDriveSubsystem drive;
   private FootSubsystem foot;
 
-  private int filtersize=10;
+  private int filtersize=30;
 
   private MedianFilter angleFilter;
 
   private boolean finished = false;
     
+  private double kP = 0.005, kI = 0, kD = 0.0008;
+
+
+  private PIDController balancePID = new PIDController(kP, kI, kD);
 
   public SimpleBalanceCommand(PigeonSubsystem newPigeon, DiffDriveSubsystem newDrive,FootSubsystem newfootSubsystem) {
 
@@ -32,6 +38,10 @@ public class SimpleBalanceCommand extends CommandBase {
     pigeon = newPigeon;
     drive = newDrive;
     foot = newfootSubsystem;
+
+    
+
+
 
     //angleFilter = new MedianFilter((int)SmartDashboard.getNumber("bal filter", 20)); // Robot refreshes at ~50Hz, so average over the last half second of measurements
     angleFilter = new MedianFilter(filtersize); // Robot refreshes at ~50Hz, so average over the last half second of measurements
@@ -53,20 +63,26 @@ public class SimpleBalanceCommand extends CommandBase {
   public void execute() {
     //finds and filters the angle
     double angle = angleFilter.calculate(pigeon.getPitch());
+    System.out.println(angle);
 
+    if(pidActive){
+
+      double moveSpeed = balancePID.calculate(angle);
+
+      drive.arcadeDriveRaw(Helpers.limitDecimal(-moveSpeed, 0.2), 0, false);
+
+    }else{
     //drives in the direction to balance and when its balanced it stops
-    if (angle>=0.1){
+    if (pigeon.getPitch()>=1){
       drive.arcadeDriveRaw(0.1, 0, false);
-    }else if (angle<-0.1){
+    }else if (pigeon.getPitch()<-1){
       drive.arcadeDriveRaw(-0.1, 0, false);
     }else{
-      drive.arcadeDriveRaw(0,0,false);
-      foot.footDown();
-      finished=true;
+      pidActive = true;
     }
 
 
-  }
+  }}
 
   // Called once the command ends or is interrupted.
   @Override

@@ -1,9 +1,5 @@
 package frc.robot.subsystems;
 
-import java.io.PipedInputStream;
-
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -11,12 +7,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.IntakeConstants;
 
 public class ArmSubsystem implements Subsystem {
     private final static ArmSubsystem INSTANCE = new ArmSubsystem();
@@ -47,7 +40,6 @@ public class ArmSubsystem implements Subsystem {
 
     private final DoubleSolenoid rotateArmBrake;
 
-    private double torque;
 
     private double rotatePidSetpoint, telescopePidSetpoint;
 
@@ -82,7 +74,6 @@ public class ArmSubsystem implements Subsystem {
         rotOffset =0;
         teleOffset=0;
 
-        torque = 0;
     }
 
     public void changeTeleOffset(double change){
@@ -126,7 +117,6 @@ public class ArmSubsystem implements Subsystem {
         }
         else{
         telescopeArm.set(motorspeed);
-        System.out.println("fulll speeed");
         }
     }
 
@@ -190,6 +180,8 @@ public class ArmSubsystem implements Subsystem {
 
         // System.out.print("telescope position:");
         // System.out.println(telescopeEncoder.getPosition());
+        // System.out.print("rotate position:");
+        // System.out.println(rotateEncoder.getPosition());
         //applyBrake();
     }
 

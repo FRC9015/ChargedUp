@@ -30,7 +30,7 @@ public class dumbDriveCommand implements Command {
     public void initialize() {
         initialState = new State(0, 0.0);
 
-
+        time =0;
         State finalState = new State(desiredDistance, 0.0);
 
         //might be wrong acceleration

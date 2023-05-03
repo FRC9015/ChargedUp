@@ -21,8 +21,8 @@ public class BalanceCommand extends CommandBase {
   private PigeonSubsystem pigeon;
   private DiffDriveSubsystem drive;
 
-  private double kP = 0.0065, kI = 0, kD = 0.0001;
-  private int filtersize=10;
+  private double kP = 0.005, kI = 0.00, kD = 0.0009;
+  private int filtersize=30;
   private PIDController balancePID = new PIDController(kP, kI, kD);
 
   private MedianFilter angleFilter;
@@ -58,7 +58,7 @@ public class BalanceCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //balancePID.setPID(SmartDashboard.getNumber("bal P", kP), SmartDashboard.getNumber("bal I", kI), SmartDashboard.getNumber("bal D", kD));
+    balancePID.setPID(SmartDashboard.getNumber("bal P", kP), SmartDashboard.getNumber("bal I", kI), SmartDashboard.getNumber("bal D", kD));
 
 
 

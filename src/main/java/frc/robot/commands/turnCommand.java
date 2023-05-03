@@ -22,22 +22,23 @@ public class turnCommand implements Command {
     private double desiredAngle;
     private TrapezoidProfile profile;
     private double time =0;
-    private PIDController pid = new PIDController(0, 0, 0);
+    private PIDController pid = new PIDController(0.0002, 0, 0);
 
     public turnCommand(DiffDriveSubsystem mydiffDriveSubsystem, PigeonSubsystem mypigeonSubsystem,double rotationAngle) {
         this.pigeonSubsystem = mypigeonSubsystem;
         this.diffDriveSubsystem = mydiffDriveSubsystem;
-        this.desiredAngle = rotationAngle;
+        desiredAngle = rotationAngle;
         this.subsystems = Set.of(this.pigeonSubsystem,this.diffDriveSubsystem);
     }
 
     @Override
     public void initialize() {
         initialState = new State(pigeonSubsystem.getAngle(), 0.0);
-
+        time =0;
 
         //the weird number i multiply by is to convert degrees to meters
         State finalState = new State(pigeonSubsystem.getAngle()+desiredAngle*0.0035429138888889, 0.0);
+
 
         //might be wrong acceleration
         profile = new TrapezoidProfile(
@@ -66,7 +67,8 @@ public class turnCommand implements Command {
 
 
         diffDriveSubsystem.setSpeeds(new DifferentialDriveWheelSpeeds(targetVelocity+correctoin, -(targetVelocity+correctoin)));
-        
+        //diffDriveSubsystem.setSpeeds(new DifferentialDriveWheelSpeeds(correctoin, -(correctoin)));
+   
 
 
         time++;

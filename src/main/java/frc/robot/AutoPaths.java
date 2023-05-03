@@ -29,17 +29,24 @@ public class AutoPaths {
         //pathNames.add(pathName);
         //pathNames.add(pathName);
 
-       
+        paths.addOption("new cone leave balance", RobotContainer.getInstance().newHighConeMobilizeBalance());
+        paths.addOption("new cube leave balance", RobotContainer.getInstance().newHighCubeMobilizeBalance());
+        paths.addOption("new cone leave intake", RobotContainer.getInstance().newHighConeMobilizeIn());
+        paths.addOption("new cube leave intake", RobotContainer.getInstance().newHighCubeMobilizeIn());
+        paths.addOption("HighCube", RobotContainer.getInstance().getHighCubeAuto());
+
         paths.addOption("HighConeMobilizeBalance", RobotContainer.getInstance().getHighConeMobilizeBalanceAuto());
         paths.addOption("HighCubeMobilizeBalance", RobotContainer.getInstance().getHighCubeMobilzeBalanceAuto());
         paths.addOption("HighConeMobilize", RobotContainer.getInstance().getHighConeMobilizeAuto());
         paths.addOption("HighCubeMobilize", RobotContainer.getInstance().getHighCubeMobilzeAuto());
         paths.addOption("HighConeBalance", RobotContainer.getInstance().getHighConeBalanceAuto());
         paths.addOption("HighCubeBalance", RobotContainer.getInstance().getHighCubeBalanceAuto());
-        paths.addOption("**HighCubeMobilizeIntake", RobotContainer.getInstance().getHighCubeMobilzeBalanceAuto());
-        paths.addOption("**HighConeMobilizeIntake", RobotContainer.getInstance().getHighConeMobilizeIntakeAuto());
-        paths.addOption("**TEST** just balance", RobotContainer.getInstance().justBalance());
-        paths.addOption("**TEST** openIntake", RobotContainer.getInstance().getTurn90());
+        paths.addOption("HighConeMobilizeBalanceWITHHASTE", RobotContainer.getInstance().getHighConeMobilizeBalanceAutoWITHHASTE());
+
+        paths.addOption("**TEST** just new balance", RobotContainer.getInstance().justBalance());
+        paths.addOption("**TEST** turn 360", RobotContainer.getInstance().getTurn360());
+        paths.addOption("**TEST** drive 1m", RobotContainer.getInstance().getDrive1m());
+
 
 
 
