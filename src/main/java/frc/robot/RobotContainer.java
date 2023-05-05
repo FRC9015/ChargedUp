@@ -365,8 +365,6 @@ public class RobotContainer {
                                 () -> driveSubsystem.stop(),
                                 driveSubsystem)); // While left bumper held, slow robot down
 
-        // driver.getY().whileTrue(new ArmPIDCommand(0.81, 0.595, true, 0, operator));
-
         operator.getRTrigAsButton().whileTrue(new ConeIntakeAndHoldCommand()).onFalse(new OpenIntakeCommand());
         operator.getLB().whileTrue(new RunIntakeMotorCommand(-0.5));
 

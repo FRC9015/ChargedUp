@@ -78,14 +78,33 @@
     "transitory": {
       "Shuffleboard": {
         "Autonomous": {
+          "AutoPath": {
+            "open": true
+          },
           "Balance": {
             "open": false
-          }
+          },
+          "SendableChooser[0]": {
+            "open": true
+          },
+          "open": true
+        },
+        "Debug": {
+          "Speed": {
+            "open": true
+          },
+          "open": true
         },
         "TeleOp": {
           "RobotState": {
             "open": false
           }
+        },
+        "Tuning": {
+          "micahs pidf": {
+            "open": true
+          },
+          "open": true
         },
         "open": true
       },
