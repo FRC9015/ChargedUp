@@ -46,9 +46,6 @@ public class RobotState implements Sendable {
 
     private static boolean intakeOpen = false;
 
-    // Tracks if piston for extension is in or out (extended or retracted)
-    private static boolean pistonExtended = false;
-
     public static boolean getIntakeOpen() {
         return intakeOpen;
     }
@@ -56,6 +53,18 @@ public class RobotState implements Sendable {
     public static synchronized void setIntakeOpen(boolean isOpen) {
         intakeOpen = isOpen;
     }
+
+    // BEGIN Piston Extension
+    private static boolean pistonExtended = false;
+
+    public static boolean getPistonExtended() {
+        return pistonExtended;
+    }
+
+    public static synchronized void setPistonExtended(boolean isExtended) {
+        pistonExtended = isExtended;
+    }
+    // END Piston Extension
 
     private static boolean footDown = false;
 
