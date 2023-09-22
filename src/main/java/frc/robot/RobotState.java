@@ -45,10 +45,16 @@ public class RobotState implements Sendable {
     }
 
     private static boolean intakeOpen = false;
+    private static boolean feederIntakeOpen = false;
 
     public static boolean getIntakeOpen() {
         return intakeOpen;
     }
+
+    public static boolean getFeederIntakeOpen() {
+        return feederIntakeOpen;
+    }
+
 
     public static synchronized void setIntakeOpen(boolean isOpen) {
         intakeOpen = isOpen;
