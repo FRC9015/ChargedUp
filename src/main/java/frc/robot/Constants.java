@@ -109,6 +109,13 @@ public final class Constants {
                 new DoubleSolenoidConstants(13, 12);
     }
 
+    public static final class FeederIntakeConstants {
+        public static final int FEEDER_INTAKE_DRIVE_CAN_ID = 69; //These constants are placeholder values TODO FIND THE CANSPARKMAX ID AND PUT IT HERE
+
+        public static final DoubleSolenoidConstants OPEN_CLOSE_SOLENOID =
+                new DoubleSolenoidConstants(13, 12);
+    }
+
     public static final class PneumaticConstants {
         public static final int P_HUB_CAN_ID = 4;
 
