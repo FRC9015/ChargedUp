@@ -33,7 +33,7 @@ public class FeederIntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        RobotState.setIntakeOpen(!(feederIntake.get() == DoubleSolenoid.Value.kReverse));
+        RobotState.setFeederIntakeOpen(!(feederIntake.get() == DoubleSolenoid.Value.kReverse));
     }
 
     public void extendFeeder() {

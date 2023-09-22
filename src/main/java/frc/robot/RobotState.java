@@ -60,6 +60,10 @@ public class RobotState implements Sendable {
         intakeOpen = isOpen;
     }
 
+    public static synchronized void setFeederIntakeOpen(boolean isOpen) {
+        feederIntakeOpen = isOpen;
+    }
+
     // BEGIN Piston Extension
     private static boolean pistonExtended = false;
 
