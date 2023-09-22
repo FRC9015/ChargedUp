@@ -28,6 +28,8 @@ import frc.robot.commands.Arm.ArmUp;
 import frc.robot.commands.Balance.BalanceCommand;
 import frc.robot.commands.Drive.ArcadeDrive;
 import frc.robot.commands.Drive.SlowedWhileActiveCommand;
+import frc.robot.commands.FeederIntake.ExtendFeederCommand;
+import frc.robot.commands.FeederIntake.RetractFeederCommand;
 import frc.robot.commands.Intake.CloseIntakeCommand;
 import frc.robot.commands.Intake.OpenIntakeCommand;
 import frc.robot.commands.experimental.SyncLimelightPose;
@@ -35,6 +37,7 @@ import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DiffDriveSubsystem;
+import frc.robot.subsystems.FeederIntakeSubsystem; 
 import frc.robot.subsystems.FootSubsystem;
 import frc.robot.subsystems.IntakePneumaticSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -446,6 +449,14 @@ public class RobotContainer {
 
     public Command getTurn90() {
         return (new CloseIntakeCommand());
+    }
+
+    public Command ExtendFeeder() {
+        return (new ExtendFeederCommand());
+    }
+
+    public Command RetractFeeder() {
+        return (new RetractFeederCommand());
     }
 
     // public Command getAutonomousCommandcopy()
