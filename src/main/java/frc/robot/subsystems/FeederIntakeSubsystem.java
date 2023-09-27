@@ -19,8 +19,6 @@ public class FeederIntakeSubsystem extends SubsystemBase {
         return INSTANCE;
     }
 
-    private boolean forward;
-
     CANSparkMax feederIntakeMotor;
     DoubleSolenoid feederIntake;
 
@@ -31,7 +29,6 @@ public class FeederIntakeSubsystem extends SubsystemBase {
         feederIntakeMotor.setSmartCurrentLimit(20, 30);
         feederIntake =
                 PneumaticHubSubsystem.getDoubleSolenoid(FeederIntakeConstants.OPEN_CLOSE_SOLENOID);
-        forward = false;
     }
 
     @Override
