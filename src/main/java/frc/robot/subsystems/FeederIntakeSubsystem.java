@@ -46,20 +46,10 @@ public class FeederIntakeSubsystem extends SubsystemBase {
 
     public void retractFeeder() {
         feederIntake.set(DoubleSolenoid.Value.kReverse);
+        setIntakeMotorSpeed(0);
     }
 
     public void setIntakeMotorSpeed(double speed) {
         feederIntakeMotor.set(speed);
-    }
-
-    public void switchFeeder() {
-        if (forward) {
-            feederIntake.set(DoubleSolenoid.Value.kReverse);
-            forward = false;
-
-        } else {
-            feederIntake.set(DoubleSolenoid.Value.kForward);
-            forward = true;
-        }
     }
 }

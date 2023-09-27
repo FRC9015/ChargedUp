@@ -37,6 +37,7 @@ import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DiffDriveSubsystem;
+import frc.robot.subsystems.FeederIntakeSubsystem;
 import frc.robot.subsystems.FootSubsystem;
 import frc.robot.subsystems.IntakePneumaticSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -65,6 +66,7 @@ public class RobotContainer {
     FootSubsystem footSubsystem = FootSubsystem.getInstance();
     IntakePneumaticSubsystem intakeNewmaticSubsystem = IntakePneumaticSubsystem.getInstance();
     LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
+    FeederIntakeSubsystem feederIntakeSubsystem = FeederIntakeSubsystem.getInstance();
 
     public final RobotState robotState = RobotState.getInstance();
     private AutoPaths autoPaths = AutoPaths.getInstance();
@@ -620,11 +622,13 @@ public class RobotContainer {
 
         operator.getUpDpad()
                 .whileTrue(
-                        new InstantCommand(() -> armSubsystem.changeRotOffset(0.01), armSubsystem));
+                        new InstantCommand(
+                                () -> feederIntakeSubsystem.extendFeeder(), feederIntakeSubsystem));
         operator.getDownDpad()
                 .whileTrue(
                         new InstantCommand(
-                                () -> armSubsystem.changeRotOffset(-0.01), armSubsystem));
+                                () -> feederIntakeSubsystem.retractFeeder(),
+                                feederIntakeSubsystem));
 
         operator.getRightDpad()
                 .whileTrue(
