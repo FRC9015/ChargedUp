@@ -37,7 +37,6 @@ import frc.robot.controllers.DriverController;
 import frc.robot.controllers.OperatorController;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DiffDriveSubsystem;
-import frc.robot.subsystems.FeederIntakeSubsystem; 
 import frc.robot.subsystems.FootSubsystem;
 import frc.robot.subsystems.IntakePneumaticSubsystem;
 import frc.robot.subsystems.LEDSubsystem;

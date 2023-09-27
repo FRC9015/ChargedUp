@@ -55,7 +55,6 @@ public class RobotState implements Sendable {
         return feederIntakeOpen;
     }
 
-
     public static synchronized void setIntakeOpen(boolean isOpen) {
         intakeOpen = isOpen;
     }

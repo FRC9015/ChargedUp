@@ -24,11 +24,13 @@ public class FeederIntakeSubsystem extends SubsystemBase {
     CANSparkMax feederIntakeMotor;
     DoubleSolenoid feederIntake;
 
-
     private FeederIntakeSubsystem() {
-        feederIntakeMotor = new CANSparkMax(FeederIntakeConstants.FEEDER_INTAKE_DRIVE_CAN_ID, MotorType.kBrushless);
+        feederIntakeMotor =
+                new CANSparkMax(
+                        FeederIntakeConstants.FEEDER_INTAKE_DRIVE_CAN_ID, MotorType.kBrushless);
         feederIntakeMotor.setSmartCurrentLimit(20, 30);
-        feederIntake = PneumaticHubSubsystem.getDoubleSolenoid(FeederIntakeConstants.OPEN_CLOSE_SOLENOID);
+        feederIntake =
+                PneumaticHubSubsystem.getDoubleSolenoid(FeederIntakeConstants.OPEN_CLOSE_SOLENOID);
         forward = false;
     }
 

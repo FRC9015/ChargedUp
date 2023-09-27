@@ -8,9 +8,8 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.FeederIntakeSubsystem;
 
 public class ExtendFeederCommand implements Command {
-    private final FeederIntakeSubsystem feederIntakeSubsystem =
-            FeederIntakeSubsystem.getInstance();
-    private final Set <Subsystem> subsystems;
+    private final FeederIntakeSubsystem feederIntakeSubsystem = FeederIntakeSubsystem.getInstance();
+    private final Set<Subsystem> subsystems;
 
     public ExtendFeederCommand() {
         this.subsystems = Set.of(this.feederIntakeSubsystem);
