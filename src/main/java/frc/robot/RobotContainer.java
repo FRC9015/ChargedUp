@@ -621,11 +621,11 @@ public class RobotContainer {
         // armSubsystem.getRotEncoderPos(),0,false,0.05)));
 
         operator.getUpDpad()
-                .whileTrue(
+                .onTrue(
                         new InstantCommand(
                                 () -> feederIntakeSubsystem.extendFeeder(), feederIntakeSubsystem));
         operator.getDownDpad()
-                .whileTrue(
+                .onTrue(
                         new InstantCommand(
                                 () -> feederIntakeSubsystem.retractFeeder(),
                                 feederIntakeSubsystem));
