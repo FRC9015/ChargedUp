@@ -24,6 +24,7 @@ public class FeederIntakeSubsystem extends SubsystemBase {
     CANSparkMax feederIntakeMotor;
     DoubleSolenoid feederIntake;
 
+
     private FeederIntakeSubsystem() {
         feederIntakeMotor = new CANSparkMax(FeederIntakeConstants.FEEDER_INTAKE_DRIVE_CAN_ID, MotorType.kBrushless);
         feederIntakeMotor.setSmartCurrentLimit(20, 30);
@@ -38,6 +39,7 @@ public class FeederIntakeSubsystem extends SubsystemBase {
 
     public void extendFeeder() {
         feederIntake.set(DoubleSolenoid.Value.kForward);
+        setIntakeMotorSpeed(0.2);
     }
 
     public void retractFeeder() {
