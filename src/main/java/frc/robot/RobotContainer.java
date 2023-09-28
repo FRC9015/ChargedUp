@@ -626,7 +626,9 @@ public class RobotContainer {
                                 new ArmPIDCommand(0.25, 0, false, 0.1, operator)
                                         .alongWith(
                                                 new InstantCommand(
-                                                        () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.2),
+                                                        () ->
+                                                                intakeNewmaticSubsystem
+                                                                        .setIntakeMotorSpeed(0.2),
                                                         intakeNewmaticSubsystem)),
                                 new ExtendFeederCommand()));
         operator.getDownDpad()
