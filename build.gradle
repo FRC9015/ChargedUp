@@ -101,18 +101,18 @@ dependencies {
 }
 
 // Formats code
-spotless {
-    java {
+// spotless {
+//     java {
 
-        googleJavaFormat('1.15.0').aosp()
+//         googleJavaFormat('1.15.0').aosp()
 
-        trimTrailingWhitespace()
-        endWithNewline()
+//         trimTrailingWhitespace()
+//         endWithNewline()
 
-        importOrder('java.util' , 'edu.wpi', 'frc.qefrc.qelib', 'frc.robot' )
-        removeUnusedImports()
-    }
-}
+//         importOrder('java.util' , 'edu.wpi', 'frc.qefrc.qelib', 'frc.robot' )
+//         removeUnusedImports()
+//     }
+// }
 
 // Helps find potential bugs
 spotbugsMain {
