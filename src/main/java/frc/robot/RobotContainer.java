@@ -109,7 +109,7 @@ public class RobotContainer {
     public Command getHighCubeMobilzeBalanceAuto() {
         return (new SequentialCommandGroup(
                         new PrintCommand("getHighCubeMobilzeBalanceAuto"),
-                        new ArmPIDCommand(0.81, 0.6, true, 0.1, operator)
+                        new ArmPIDCommand(0.81, -0.6, true, 0.1, operator)
                                 .withTimeout(3)
                                 .alongWith(
                                         new StartEndCommand(
@@ -127,7 +127,7 @@ public class RobotContainer {
                                 intakePneumaticSubsystem)
                                 .withTimeout(0.2),
                         new ParallelCommandGroup(
-                                new ArmPIDCommand(0.60, 0.13, true, 0.1, operator),
+                                new ArmPIDCommand(0.60, -0.13, true, 0.1, operator),
                                 new RepeatCommand(
                                                 new InstantCommand(
                                                         () -> driveSubsystem.arcadeDrive(0.3, 0),
@@ -154,7 +154,7 @@ public class RobotContainer {
     public Command getHighCubeBalanceAuto() {
         return (new SequentialCommandGroup(
                         new PrintCommand("getHighCubeMobilzeBalanceAuto"),
-                        new ArmPIDCommand(0.81, 0.6, true, 0.1, operator)
+                        new ArmPIDCommand(0.81, -0.6, true, 0.1, operator)
                                 .withTimeout(3)
                                 .alongWith(
                                         new StartEndCommand(
@@ -172,7 +172,7 @@ public class RobotContainer {
                                 intakePneumaticSubsystem)
                                 .withTimeout(0.2),
                         new ParallelCommandGroup(
-                                new ArmPIDCommand(0.60, 0.13, true, 0.1, operator),
+                                new ArmPIDCommand(0.60, -0.13, true, 0.1, operator),
                                 new RepeatCommand(
                                                 new InstantCommand(
                                                         () -> driveSubsystem.arcadeDrive(0.3, 0),
@@ -189,7 +189,7 @@ public class RobotContainer {
     public Command getHighCubeMobilzeAuto() {
         return (new SequentialCommandGroup(
                 new PrintCommand("getHighCubeMobilzeAuto"),
-                new ArmPIDCommand(0.81, 0.6, true, 0.1, operator)
+                new ArmPIDCommand(0.81, -0.6, true, 0.1, operator)
                         .withTimeout(3)
                         .alongWith(
                                 new StartEndCommand(
@@ -207,7 +207,7 @@ public class RobotContainer {
                         intakePneumaticSubsystem)
                         .withTimeout(0.2),
                 new ParallelCommandGroup(
-                        new ArmPIDCommand(0.60, 0.13, true, 0.1, operator),
+                        new ArmPIDCommand(0.60, -0.13, true, 0.1, operator),
                         new RepeatCommand(
                                         new InstantCommand(
                                                 () -> driveSubsystem.arcadeDrive(0.3, 0),
@@ -240,7 +240,7 @@ public class RobotContainer {
                         intakePneumaticSubsystem)
                         .withTimeout(0.2),
                 new ParallelCommandGroup(
-                        new ArmPIDCommand(0.40, 0.13, true, 0.1, operator),
+                        new ArmPIDCommand(0.40, -0.13, true, 0.1, operator),
                         new RepeatCommand(
                                         new InstantCommand(
                                                 () -> driveSubsystem.arcadeDrive(0.3, 0),
@@ -250,7 +250,7 @@ public class RobotContainer {
                                 new InstantCommand(
                                         () -> driveSubsystem.arcadeDrive(0, 0.6), driveSubsystem))
                         .withTimeout(1.38),
-                new ArmPIDCommand(0.2096, 0.458, false, 0.15, operator),
+                new ArmPIDCommand(0.2096, -0.458, false, 0.15, operator),
                 new RepeatCommand(
                         new InstantCommand(
                                         () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0.2),
@@ -266,7 +266,7 @@ public class RobotContainer {
                         new ArmPIDCommand(2.4, 0, false, 0.2, operator)
                                 .withTimeout(4)
                                 .andThen(
-                                        new ArmPIDCommand(2.6, 0.635, false, 0.2, operator)
+                                        new ArmPIDCommand(2.6, -0.635, false, 0.2, operator)
                                                 .withTimeout(2))
                                 .alongWith(
                                         new StartEndCommand(
@@ -285,7 +285,7 @@ public class RobotContainer {
                                 intakePneumaticSubsystem)
                                 .withTimeout(0.2),
                         new ParallelCommandGroup(
-                                new ArmPIDCommand(0.60, 0.05, true, 0.1, operator),
+                                new ArmPIDCommand(0.60, -0.05, true, 0.1, operator),
                                 new RepeatCommand(
                                                 new InstantCommand(
                                                         () -> driveSubsystem.arcadeDrive(-0.3, 0),
@@ -316,7 +316,7 @@ public class RobotContainer {
                         new ArmPIDCommand(2.4, 0, false, 0.2, operator)
                                 .withTimeout(4)
                                 .andThen(
-                                        new ArmPIDCommand(2.6, 0.635, false, 0.2, operator)
+                                        new ArmPIDCommand(2.6, -0.635, false, 0.2, operator)
                                                 .withTimeout(2))
                                 .alongWith(
                                         new StartEndCommand(
@@ -331,7 +331,7 @@ public class RobotContainer {
                         new WaitCommand(0.5),
                         new CloseIntakeCommand(),
                         new WaitCommand(1),
-                        new ArmPIDCommand(0.60, 0.05, true, 0.1, operator),
+                        new ArmPIDCommand(0.60, -0.05, true, 0.1, operator),
                         new RepeatCommand(
                                         new InstantCommand(
                                                 () -> driveSubsystem.arcadeDrive(-0.3, 0),
@@ -350,7 +350,7 @@ public class RobotContainer {
                 new PrintCommand("getHighConeMobilizeAuto"),
                 new ArmPIDCommand(2.4, 0, false, 0.2, operator)
                         .withTimeout(3)
-                        .andThen(new ArmPIDCommand(2.6, 0.635, false, 0.2, operator).withTimeout(2))
+                        .andThen(new ArmPIDCommand(2.6, -0.635, false, 0.2, operator).withTimeout(2))
                         .alongWith(
                                 new StartEndCommand(
                                                 () ->
@@ -364,7 +364,7 @@ public class RobotContainer {
                 new WaitCommand(0.5),
                 new CloseIntakeCommand(),
                 new WaitCommand(1),
-                new ArmPIDCommand(0.60, 0.05, true, 0.1, operator),
+                new ArmPIDCommand(0.60, -0.05, true, 0.1, operator),
                 new RepeatCommand(
                                 new InstantCommand(
                                         () -> driveSubsystem.arcadeDrive(-0.4, 0), driveSubsystem))
@@ -380,7 +380,7 @@ public class RobotContainer {
                 new PrintCommand("getHighConeMobilizeAuto"),
                 new ArmPIDCommand(2.4, 0, false, 0.2, operator)
                         .withTimeout(3)
-                        .andThen(new ArmPIDCommand(2.6, 0.635, false, 0.2, operator).withTimeout(2))
+                        .andThen(new ArmPIDCommand(2.6, -0.635, false, 0.2, operator).withTimeout(2))
                         .alongWith(
                                 new StartEndCommand(
                                                 () ->
@@ -394,7 +394,7 @@ public class RobotContainer {
                 new WaitCommand(0.5),
                 new CloseIntakeCommand(),
                 new WaitCommand(1),
-                new ArmPIDCommand(0.60, 0.05, true, 0.1, operator),
+                new ArmPIDCommand(0.60, -0.05, true, 0.1, operator),
                 new RepeatCommand(
                                 new InstantCommand(
                                         () -> driveSubsystem.arcadeDrive(-0.4, 0), driveSubsystem))
@@ -414,7 +414,7 @@ public class RobotContainer {
                 new PrintCommand("getHighConeMobilizeAuto"),
                 new ArmPIDCommand(2.4, 0, false, 0.2, operator)
                         .withTimeout(3)
-                        .andThen(new ArmPIDCommand(2.6, 0.635, false, 0.2, operator).withTimeout(2))
+                        .andThen(new ArmPIDCommand(2.6, -0.635, false, 0.2, operator).withTimeout(2))
                         .alongWith(
                                 new StartEndCommand(
                                                 () ->
@@ -428,7 +428,7 @@ public class RobotContainer {
                 new WaitCommand(0.5),
                 new CloseIntakeCommand(),
                 new ParallelCommandGroup(
-                        new ArmPIDCommand(0.60, 0.05, true, 0.1, operator),
+                        new ArmPIDCommand(0.60, -0.05, true, 0.1, operator),
                         new RepeatCommand(
                                         new InstantCommand(
                                                 () -> driveSubsystem.arcadeDrive(-0.3, 0),
@@ -438,7 +438,7 @@ public class RobotContainer {
                                 new InstantCommand(
                                         () -> driveSubsystem.arcadeDrive(0, 0), driveSubsystem))
                         .withTimeout(0.8),
-                new ArmPIDCommand(0.2096, 0.458, false, 0.15, operator),
+                new ArmPIDCommand(0.2096, -0.458, false, 0.15, operator),
                 new RepeatCommand(
                         new InstantCommand(
                                         () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0.2),
@@ -640,11 +640,11 @@ public class RobotContainer {
         operator.getRightDpad()
                 .whileTrue(
                         new InstantCommand(
-                                () -> armSubsystem.changeTeleOffset(0.01), armSubsystem));
+                                () -> armSubsystem.changeTeleOffset(-0.01), armSubsystem));
         operator.getLeftDpad()
                 .whileTrue(
                         new InstantCommand(
-                                () -> armSubsystem.changeTeleOffset(-0.01), armSubsystem));
+                                () -> armSubsystem.changeTeleOffset(0.01), armSubsystem));
 
         //    operator.getStart().onTrue(new InstantCommand(()->ledSubsystem.pulseColor(new
         // Color(255, 50, 50),2,255,10),ledSubsystem));
