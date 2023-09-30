@@ -64,7 +64,7 @@ public class RobotContainer {
     ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     LimelightSubsytem limelightSubsytem = LimelightSubsytem.getInstance();
     FootSubsystem footSubsystem = FootSubsystem.getInstance();
-    IntakePneumaticSubsystem intakeNewmaticSubsystem = IntakePneumaticSubsystem.getInstance();
+    IntakePneumaticSubsystem intakePneumaticSubsystem = IntakePneumaticSubsystem.getInstance();
     LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
     FeederIntakeSubsystem feederIntakeSubsystem = FeederIntakeSubsystem.getInstance();
 
@@ -114,17 +114,17 @@ public class RobotContainer {
                                 .alongWith(
                                         new StartEndCommand(
                                                         () ->
-                                                                intakeNewmaticSubsystem
+                                                                intakePneumaticSubsystem
                                                                         .setIntakeMotorSpeed(0.1),
                                                         () ->
-                                                                intakeNewmaticSubsystem
+                                                                intakePneumaticSubsystem
                                                                         .setIntakeMotorSpeed(0),
-                                                        intakeNewmaticSubsystem)
+                                                intakePneumaticSubsystem)
                                                 .withTimeout(0.25)),
                         new StartEndCommand(
-                                        () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.5),
-                                        () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0),
-                                        intakeNewmaticSubsystem)
+                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.5),
+                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
+                                intakePneumaticSubsystem)
                                 .withTimeout(0.2),
                         new ParallelCommandGroup(
                                 new ArmPIDCommand(0.60, 0.13, true, 0.1, operator),
@@ -159,17 +159,17 @@ public class RobotContainer {
                                 .alongWith(
                                         new StartEndCommand(
                                                         () ->
-                                                                intakeNewmaticSubsystem
+                                                                intakePneumaticSubsystem
                                                                         .setIntakeMotorSpeed(0.1),
                                                         () ->
-                                                                intakeNewmaticSubsystem
+                                                                intakePneumaticSubsystem
                                                                         .setIntakeMotorSpeed(0),
-                                                        intakeNewmaticSubsystem)
+                                                intakePneumaticSubsystem)
                                                 .withTimeout(0.25)),
                         new StartEndCommand(
-                                        () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.5),
-                                        () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0),
-                                        intakeNewmaticSubsystem)
+                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.5),
+                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
+                                intakePneumaticSubsystem)
                                 .withTimeout(0.2),
                         new ParallelCommandGroup(
                                 new ArmPIDCommand(0.60, 0.13, true, 0.1, operator),
@@ -194,17 +194,17 @@ public class RobotContainer {
                         .alongWith(
                                 new StartEndCommand(
                                                 () ->
-                                                        intakeNewmaticSubsystem.setIntakeMotorSpeed(
+                                                        intakePneumaticSubsystem.setIntakeMotorSpeed(
                                                                 0.1),
                                                 () ->
-                                                        intakeNewmaticSubsystem.setIntakeMotorSpeed(
+                                                        intakePneumaticSubsystem.setIntakeMotorSpeed(
                                                                 0),
-                                                intakeNewmaticSubsystem)
+                                        intakePneumaticSubsystem)
                                         .withTimeout(0.25)),
                 new StartEndCommand(
-                                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.5),
-                                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0),
-                                intakeNewmaticSubsystem)
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.5),
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
+                        intakePneumaticSubsystem)
                         .withTimeout(0.2),
                 new ParallelCommandGroup(
                         new ArmPIDCommand(0.60, 0.13, true, 0.1, operator),
@@ -227,17 +227,17 @@ public class RobotContainer {
                         .alongWith(
                                 new StartEndCommand(
                                                 () ->
-                                                        intakeNewmaticSubsystem.setIntakeMotorSpeed(
+                                                        intakePneumaticSubsystem.setIntakeMotorSpeed(
                                                                 0.1),
                                                 () ->
-                                                        intakeNewmaticSubsystem.setIntakeMotorSpeed(
+                                                        intakePneumaticSubsystem.setIntakeMotorSpeed(
                                                                 0),
-                                                intakeNewmaticSubsystem)
+                                        intakePneumaticSubsystem)
                                         .withTimeout(0.25)),
                 new StartEndCommand(
-                                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.5),
-                                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0),
-                                intakeNewmaticSubsystem)
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.5),
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
+                        intakePneumaticSubsystem)
                         .withTimeout(0.2),
                 new ParallelCommandGroup(
                         new ArmPIDCommand(0.40, 0.13, true, 0.1, operator),
@@ -253,8 +253,8 @@ public class RobotContainer {
                 new ArmPIDCommand(0.2096, 0.458, false, 0.15, operator),
                 new RepeatCommand(
                         new InstantCommand(
-                                        () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.2),
-                                        intakeNewmaticSubsystem)
+                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0.2),
+                                intakePneumaticSubsystem)
                                 .alongWith(
                                         new InstantCommand(
                                                 () -> driveSubsystem.arcadeDrive(0.2, 0))))));
@@ -271,18 +271,18 @@ public class RobotContainer {
                                 .alongWith(
                                         new StartEndCommand(
                                                         () ->
-                                                                intakeNewmaticSubsystem
+                                                                intakePneumaticSubsystem
                                                                         .setIntakeMotorSpeed(0.1),
                                                         () ->
-                                                                intakeNewmaticSubsystem
+                                                                intakePneumaticSubsystem
                                                                         .setIntakeMotorSpeed(0),
-                                                        intakeNewmaticSubsystem)
+                                                intakePneumaticSubsystem)
                                                 .withTimeout(0.25)),
                         new WaitCommand(0.5),
                         new StartEndCommand(
-                                        () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.4),
-                                        () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0),
-                                        intakeNewmaticSubsystem)
+                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.4),
+                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
+                                intakePneumaticSubsystem)
                                 .withTimeout(0.2),
                         new ParallelCommandGroup(
                                 new ArmPIDCommand(0.60, 0.05, true, 0.1, operator),
@@ -321,12 +321,12 @@ public class RobotContainer {
                                 .alongWith(
                                         new StartEndCommand(
                                                         () ->
-                                                                intakeNewmaticSubsystem
+                                                                intakePneumaticSubsystem
                                                                         .setIntakeMotorSpeed(0.1),
                                                         () ->
-                                                                intakeNewmaticSubsystem
+                                                                intakePneumaticSubsystem
                                                                         .setIntakeMotorSpeed(0),
-                                                        intakeNewmaticSubsystem)
+                                                intakePneumaticSubsystem)
                                                 .withTimeout(0.25)),
                         new WaitCommand(0.5),
                         new CloseIntakeCommand(),
@@ -354,12 +354,12 @@ public class RobotContainer {
                         .alongWith(
                                 new StartEndCommand(
                                                 () ->
-                                                        intakeNewmaticSubsystem.setIntakeMotorSpeed(
+                                                        intakePneumaticSubsystem.setIntakeMotorSpeed(
                                                                 0.1),
                                                 () ->
-                                                        intakeNewmaticSubsystem.setIntakeMotorSpeed(
+                                                        intakePneumaticSubsystem.setIntakeMotorSpeed(
                                                                 0),
-                                                intakeNewmaticSubsystem)
+                                        intakePneumaticSubsystem)
                                         .withTimeout(0.25)),
                 new WaitCommand(0.5),
                 new CloseIntakeCommand(),
@@ -384,12 +384,12 @@ public class RobotContainer {
                         .alongWith(
                                 new StartEndCommand(
                                                 () ->
-                                                        intakeNewmaticSubsystem.setIntakeMotorSpeed(
+                                                        intakePneumaticSubsystem.setIntakeMotorSpeed(
                                                                 0.1),
                                                 () ->
-                                                        intakeNewmaticSubsystem.setIntakeMotorSpeed(
+                                                        intakePneumaticSubsystem.setIntakeMotorSpeed(
                                                                 0),
-                                                intakeNewmaticSubsystem)
+                                        intakePneumaticSubsystem)
                                         .withTimeout(0.25)),
                 new WaitCommand(0.5),
                 new CloseIntakeCommand(),
@@ -418,12 +418,12 @@ public class RobotContainer {
                         .alongWith(
                                 new StartEndCommand(
                                                 () ->
-                                                        intakeNewmaticSubsystem.setIntakeMotorSpeed(
+                                                        intakePneumaticSubsystem.setIntakeMotorSpeed(
                                                                 0.1),
                                                 () ->
-                                                        intakeNewmaticSubsystem.setIntakeMotorSpeed(
+                                                        intakePneumaticSubsystem.setIntakeMotorSpeed(
                                                                 0),
-                                                intakeNewmaticSubsystem)
+                                        intakePneumaticSubsystem)
                                         .withTimeout(0.25)),
                 new WaitCommand(0.5),
                 new CloseIntakeCommand(),
@@ -441,8 +441,8 @@ public class RobotContainer {
                 new ArmPIDCommand(0.2096, 0.458, false, 0.15, operator),
                 new RepeatCommand(
                         new InstantCommand(
-                                        () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.2),
-                                        intakeNewmaticSubsystem)
+                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0.2),
+                                intakePneumaticSubsystem)
                                 .alongWith(
                                         new InstantCommand(
                                                 () -> driveSubsystem.arcadeDrive(0.2, 0))))));
@@ -494,8 +494,8 @@ public class RobotContainer {
         driver.getLb()
                 .onTrue(
                         new InstantCommand(
-                                () -> intakeNewmaticSubsystem.switchIntake(),
-                                intakeNewmaticSubsystem));
+                                () -> intakePneumaticSubsystem.switchIntake(),
+                                intakePneumaticSubsystem));
 
         driver.getUpDpad().whileTrue(new ArmUp());
         driver.getDownDpad().whileTrue(new ArmDown());
@@ -506,16 +506,16 @@ public class RobotContainer {
         driver.getRTrigAsButton()
                 .whileTrue(
                         new StartEndCommand(
-                                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.8),
-                                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0),
-                                intakeNewmaticSubsystem));
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0.8),
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
+                                intakePneumaticSubsystem));
 
         driver.getRb()
                 .whileTrue(
                         new StartEndCommand(
-                                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.8),
-                                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0),
-                                intakeNewmaticSubsystem));
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.8),
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
+                                intakePneumaticSubsystem));
         // driver.getX().onTrue(new OpenIntakeCommand(intakeNewmaticSubsystem));
         driver.getY().whileTrue(new SyncLimelightPose(limelightSubsytem, driveSubsystem));
         driver.getX()
@@ -566,25 +566,25 @@ public class RobotContainer {
         operator.getRTrigAsButton()
                 .whileTrue(
                         new InstantCommand(
-                                () -> intakeNewmaticSubsystem.openIntake(),
-                                intakeNewmaticSubsystem))
+                                () -> intakePneumaticSubsystem.openIntake(),
+                                intakePneumaticSubsystem))
                 .whileFalse(
                         new InstantCommand(
-                                () -> intakeNewmaticSubsystem.closeIntake(),
-                                intakeNewmaticSubsystem));
+                                () -> intakePneumaticSubsystem.closeIntake(),
+                                intakePneumaticSubsystem));
         operator.getLB()
                 .whileTrue(
                         new StartEndCommand(
-                                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(-0.5),
-                                () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0),
-                                intakeNewmaticSubsystem));
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.5),
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
+                                intakePneumaticSubsystem));
 
         operator.getLTrigAsButton()
                 .whileTrue(
                         new StartEndCommand(
-                                        () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0.8),
-                                        () -> intakeNewmaticSubsystem.setIntakeMotorSpeed(0),
-                                        intakeNewmaticSubsystem)
+                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0.8),
+                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
+                                intakePneumaticSubsystem)
                                 .alongWith(new PrintCommand("in")));
 
         // driver.getLTrigAsButton().onTrue(new SwitchSpeed());
@@ -627,9 +627,9 @@ public class RobotContainer {
                                         .alongWith(
                                                 new InstantCommand(
                                                         () ->
-                                                                intakeNewmaticSubsystem
+                                                                intakePneumaticSubsystem
                                                                         .setIntakeMotorSpeed(0.2),
-                                                        intakeNewmaticSubsystem)),
+                                                        intakePneumaticSubsystem)),
                                 new ExtendFeederCommand()));
         operator.getDownDpad()
                 .onTrue(
