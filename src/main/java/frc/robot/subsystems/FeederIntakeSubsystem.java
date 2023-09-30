@@ -28,7 +28,7 @@ public class FeederIntakeSubsystem extends SubsystemBase {
                         FeederIntakeConstants.FEEDER_INTAKE_DRIVE_CAN_ID, MotorType.kBrushless);
         feederIntakeMotor.setSmartCurrentLimit(20, 30);
         feederIntake =
-                PneumaticHubSubsystem.getDoubleSolenoid(FeederIntakeConstants.OPEN_CLOSE_SOLENOID);
+                FeederIntakeConstants.OPEN_CLOSE_SOLENOID;
     }
 
     @Override

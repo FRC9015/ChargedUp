@@ -9,7 +9,8 @@ import com.pathplanner.lib.PathConstraints;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
-
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import frc.robot.subsystems.PneumaticHubSubsystem;
 import frc.robot.utils.DoubleSolenoidConstants;
 
 /**
@@ -105,8 +106,6 @@ public final class Constants {
     public static final class IntakeConstants {
         public static final int INTAKE_DRIVE_CAN_ID = 21;
 
-        public static final DoubleSolenoidConstants OPEN_CLOSE_SOLENOID =
-                new DoubleSolenoidConstants(13, 12);
     }
 
     public static final class FeederIntakeConstants {
@@ -114,14 +113,12 @@ public final class Constants {
                 23; // These constants are placeholder values TODO FIND THE CANSPARKMAX ID AND PUT
         // IT HERE
 
-        public static final DoubleSolenoidConstants OPEN_CLOSE_SOLENOID =
-                new DoubleSolenoidConstants(11, 10);
+        public static final DoubleSolenoid OPEN_CLOSE_SOLENOID = PneumaticHubSubsystem.getDoubleSolenoid(13,12);
     }
 
     public static final class PneumaticConstants {
         public static final int P_HUB_CAN_ID = 4;
 
-        public static final DoubleSolenoidConstants LIFT_FEET_CONSTANTS =
-                new DoubleSolenoidConstants(11, 10);
+        public static final DoubleSolenoid LIFT_FEET_CONSTANTS = PneumaticHubSubsystem.getDoubleSolenoid(11,14 );
     }
 }

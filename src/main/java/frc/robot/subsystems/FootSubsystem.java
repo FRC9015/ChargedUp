@@ -24,7 +24,7 @@ public class FootSubsystem extends SubsystemBase {
     // PneumaticHub pHub;
 
     private FootSubsystem() {
-        foot = PneumaticHubSubsystem.getDoubleSolenoid(PneumaticConstants.LIFT_FEET_CONSTANTS);
+        foot = PneumaticConstants.LIFT_FEET_CONSTANTS;
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.Constants.FeederIntakeConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.RobotState;
 
@@ -27,7 +27,7 @@ public class IntakePneumaticSubsystem extends SubsystemBase {
     private IntakePneumaticSubsystem() {
         intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_DRIVE_CAN_ID, MotorType.kBrushless);
         intakeMotor.setSmartCurrentLimit(20, 30);
-        intake = PneumaticHubSubsystem.getDoubleSolenoid(IntakeConstants.OPEN_CLOSE_SOLENOID);
+        intake = FeederIntakeConstants.OPEN_CLOSE_SOLENOID;
         forward = false;
     }
 

@@ -16,7 +16,7 @@ import frc.robot.Helpers;
 public class LEDSubsystem extends SubsystemBase {
     private static LEDSubsystem INSTANCE;
 
-    @Synchronized("INSTANCE")
+    //@Synchronized("INSTANCE")
     public static LEDSubsystem getInstance() {
         if (INSTANCE == null) INSTANCE = new LEDSubsystem();
         return INSTANCE;

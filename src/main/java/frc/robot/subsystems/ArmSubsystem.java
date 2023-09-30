@@ -54,7 +54,7 @@ public class ArmSubsystem extends SubsystemBase {
         rotateArm.setIdleMode(IdleMode.kBrake);
         telescopeArm = new CANSparkMax(ArmConstants.TELESCOPE_CAN_ID, MotorType.kBrushless);
         telescopeArm.setIdleMode(IdleMode.kBrake);
-
+        telescopeArm.setInverted(true);
         rotateEncoder = rotateArm.getEncoder();
         kStartingArmPosition = rotateEncoder.getPosition();
         rotatePidSetpoint = rotateEncoder.getPosition();
