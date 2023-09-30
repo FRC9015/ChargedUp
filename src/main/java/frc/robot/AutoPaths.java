@@ -36,25 +36,36 @@ public class AutoPaths {
     }
 
     public void init() {
-
+        // Cone Auto Options
         commandAutos.addOption(
-                "getHighConeMobilizeAuto", RobotContainer.getInstance().getHighConeMobilizeAuto());
-
+                "HighConeMobilize", 
+                RobotContainer.getInstance().getHighConeMobilizeAuto());
         commandAutos.addOption(
-                "HighConeMobilizeBalance",
+                "HighConeBalance", 
+                RobotContainer.getInstance().getHighConeBalanceAuto());
+        commandAutos.addOption(
+                "HighConeMobilizeBalance", 
                 RobotContainer.getInstance().getHighConeMobilizeBalanceAuto());
 
+        // Cube Auto Options
         commandAutos.addOption(
-                "HighConeMobilize", RobotContainer.getInstance().getHighConeMobilizeAuto());
-
+                "HighCubeMobilize", 
+                RobotContainer.getInstance().getHighCubeMobilzeAuto());
         commandAutos.addOption(
-                "HighCubeBalance", RobotContainer.getInstance().getHighCubeBalanceAuto());
+                "HighCubeBalance", 
+                RobotContainer.getInstance().getHighCubeBalanceAuto());
         commandAutos.addOption(
-                "**HighCubeMobilizeIntake",
+                "HighCubeMobilizeBalance",
                 RobotContainer.getInstance().getHighCubeMobilzeBalanceAuto());
 
-        commandAutos.addOption("**TEST** just balance", RobotContainer.getInstance().justBalance());
-        commandAutos.addOption("**TEST** openIntake", RobotContainer.getInstance().getTurn90());
+        // Don't use these
+        // commandAutos.addOption(
+        //         "**HighCubeMobilizeIntake", RobotContainer.getInstance().getHighCubeMobilzeBalanceAuto());
+        // commandAutos.addOption(
+        //         "**HighConeMobilizeIntake",
+        //         RobotContainer.getInstance().getHighConeMobilizeIntakeAuto());
+        // commandAutos.addOption("**TEST** just balance", RobotContainer.getInstance().justBalance());
+        // commandAutos.addOption("**TEST** openIntake", RobotContainer.getInstance().getTurn90());
     }
 
     public SendableChooser<Command> getCommandAutos() {
