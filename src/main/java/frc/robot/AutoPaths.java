@@ -39,28 +39,20 @@ public class AutoPaths {
 
         commandAutos.addOption(
                 "getHighConeMobilizeAuto", RobotContainer.getInstance().getHighConeMobilizeAuto());
-        commandAutos.addOption(
-                "getHighCubeMobilizeAuto", RobotContainer.getInstance().getHighCubeMobilzeAuto());
+
         commandAutos.addOption(
                 "HighConeMobilizeBalance",
                 RobotContainer.getInstance().getHighConeMobilizeBalanceAuto());
-        commandAutos.addOption(
-                "HighCubeMobilizeBalance",
-                RobotContainer.getInstance().getHighCubeMobilzeBalanceAuto());
+
         commandAutos.addOption(
                 "HighConeMobilize", RobotContainer.getInstance().getHighConeMobilizeAuto());
-        commandAutos.addOption(
-                "HighCubeMobilize", RobotContainer.getInstance().getHighCubeMobilzeAuto());
-        commandAutos.addOption(
-                "HighConeBalance", RobotContainer.getInstance().getHighConeBalanceAuto());
+
         commandAutos.addOption(
                 "HighCubeBalance", RobotContainer.getInstance().getHighCubeBalanceAuto());
         commandAutos.addOption(
                 "**HighCubeMobilizeIntake",
                 RobotContainer.getInstance().getHighCubeMobilzeBalanceAuto());
-        commandAutos.addOption(
-                "**HighConeMobilizeIntake",
-                RobotContainer.getInstance().getHighConeMobilizeIntakeAuto());
+
         commandAutos.addOption("**TEST** just balance", RobotContainer.getInstance().justBalance());
         commandAutos.addOption("**TEST** openIntake", RobotContainer.getInstance().getTurn90());
     }
