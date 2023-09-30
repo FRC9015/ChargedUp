@@ -17,7 +17,7 @@ public class BalanceCommand extends CommandBase {
     private PigeonSubsystem pigeon = PigeonSubsystem.getInstance();
     private DiffDriveSubsystem drive = DiffDriveSubsystem.getInstance();
 
-    private double kP = 0.0065, kI = 0, kD = 0.0001;
+    private double kP = 0.0075, kI = 0, kD = 0.0001;
     private int filtersize = 10;
     private PIDController balancePID = new PIDController(kP, kI, kD);
 
