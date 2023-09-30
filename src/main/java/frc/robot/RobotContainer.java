@@ -122,7 +122,7 @@ public class RobotContainer {
                                                         intakePneumaticSubsystem)
                                                 .withTimeout(0.25)),
                         new StartEndCommand(
-                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.5),
+                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.6),
                                         () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
                                         intakePneumaticSubsystem)
                                 .withTimeout(0.2),
@@ -167,7 +167,7 @@ public class RobotContainer {
                                                         intakePneumaticSubsystem)
                                                 .withTimeout(0.25)),
                         new StartEndCommand(
-                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.5),
+                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.6),
                                         () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
                                         intakePneumaticSubsystem)
                                 .withTimeout(0.2),
@@ -202,7 +202,7 @@ public class RobotContainer {
                                                 intakePneumaticSubsystem)
                                         .withTimeout(0.25)),
                 new StartEndCommand(
-                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.5),
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.6),
                                 () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
                                 intakePneumaticSubsystem)
                         .withTimeout(0.2),
@@ -235,7 +235,7 @@ public class RobotContainer {
                                                 intakePneumaticSubsystem)
                                         .withTimeout(0.25)),
                 new StartEndCommand(
-                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.5),
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.6),
                                 () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
                                 intakePneumaticSubsystem)
                         .withTimeout(0.2),
