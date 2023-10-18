@@ -626,6 +626,7 @@ public class RobotContainer {
                                 intakePneumaticSubsystem)
                                 .alongWith(new PrintCommand("in")));
 
+        // Extend feeder intake
         operator.getUpDpad()
                 .whileTrue(
                         new SequentialCommandGroup(
