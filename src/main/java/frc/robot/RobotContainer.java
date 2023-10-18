@@ -541,14 +541,14 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         init();
-        /*button bindings:
+        /*
+        button bindings:
         ABXY buttons for setting the arm/intake to preset locations for scoring and intaking
         dpad: up/down for adjusting the arm, left/right for slowly rotating the robot for the sake of scoring
         left trigger/bumper: deployabe intake rollers
         right trigger/bumper: intake claw
         start/select: balancing/foot
         6
-
         */
         // Toggle the balance command on and off when the driver's A button is pressed
         // driver.getA().toggleOnTrue(new BalanceCommand(pigeonSubsystem, driveSubsystem));
@@ -562,34 +562,11 @@ public class RobotContainer {
         // When the driver's left bumper is pressed, switch between low and high speed.
         // driver.getLB().whileTrue(new StartEndCommand(() -> armSubsystem.SetActivatePID(true),()
         // -> armSubsystem.SetActivatePID(true), armSubsystem));
+
+        /* ------ BEGIN DRIVER BUTTON BINDINGS ------ */
         driver.getStart().toggleOnTrue(new BalanceCommand());
         driver.getBack()
                 .onTrue(new InstantCommand(() -> footSubsystem.toggleFoot(), footSubsystem));
-
-        operator.getRTrigAsButton()
-                .whileTrue(
-                        new InstantCommand(
-                                () -> intakePneumaticSubsystem.openIntake(),
-                                intakePneumaticSubsystem))
-                .whileFalse(
-                        new InstantCommand(
-                                () -> intakePneumaticSubsystem.closeIntake(),
-                                intakePneumaticSubsystem));
-        operator.getLB()
-                .whileTrue(
-                        new StartEndCommand(
-                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.5),
-                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
-                                intakePneumaticSubsystem));
-
-        operator.getLTrigAsButton()
-                .whileTrue(
-                        new StartEndCommand(
-                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0.8),
-                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
-                                        intakePneumaticSubsystem)
-                                .alongWith(new PrintCommand("in")));
-
         // driver.getLTrigAsButton().onTrue(new SwitchSpeed());
         driver.getLTrigAsButton()
                 .or(driver.getLb())
@@ -610,7 +587,9 @@ public class RobotContainer {
         // driver.getBack().onTrue(new RavisRamseteCommand(driveSubsystem));
 
         driver.getY().whileTrue(new ArmPIDCommand(0.81, 0.595, true, 0, operator));
+        /* ------ END DRIVER BUTTON BINDINGS ------ */
 
+        /* ------ BEGIN OPERATOR BUTTON BINDINGS ------ */
         operator.getY().whileTrue(new ArmPIDCommand(0.81, 0.595, true, 0, operator));
         operator.getB().whileTrue(new ArmPIDCommand(0.60, 0.13, true, 0, operator));
         operator.getA().whileTrue(new ArmPIDCommand(0.2096, 0.458, false, 0, operator));
@@ -622,6 +601,30 @@ public class RobotContainer {
 
         // operator.getY().whileTrue(new SequentialCommandGroup( new ArmPIDCommand(
         // armSubsystem.getRotEncoderPos(),0,false,0.05)));
+
+        operator.getRTrigAsButton()
+                .whileTrue(
+                        new InstantCommand(
+                                () -> intakePneumaticSubsystem.openIntake(),
+                                intakePneumaticSubsystem))
+                .whileFalse(
+                        new InstantCommand(
+                                () -> intakePneumaticSubsystem.closeIntake(),
+                                intakePneumaticSubsystem));
+        operator.getLB()
+                .whileTrue(
+                        new StartEndCommand(
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.5),
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
+                                intakePneumaticSubsystem));
+
+        operator.getLTrigAsButton()
+                .whileTrue(
+                        new StartEndCommand(
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0.8),
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
+                                intakePneumaticSubsystem)
+                                .alongWith(new PrintCommand("in")));
 
         operator.getUpDpad()
                 .whileTrue(
@@ -646,9 +649,6 @@ public class RobotContainer {
                                 new RetractFeederCommand())));
                                         
         operator.getDownDpad();
-                
-                        
-                                
 
         operator.getRightDpad()
                 .whileTrue(
@@ -679,6 +679,7 @@ public class RobotContainer {
                                                 armSubsystem.rotateArm(
                                                         armSubsystem.getArmTorque() * 0.005),
                                         armSubsystem)));
+        /* ------ END OPERATOR BUTTON BINDINGS ------ */
     }
 
     public DriverController getDriver() {
