@@ -100,7 +100,11 @@ dependencies {
     implementation 'com.github.FRC9015:QELib:main-SNAPSHOT'
 }
 
+<<<<<<< Updated upstream
 // Formats code
+=======
+// // Formats code
+>>>>>>> Stashed changes
 // spotless {
 //     java {
 

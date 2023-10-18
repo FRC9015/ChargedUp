@@ -624,21 +624,31 @@ public class RobotContainer {
         // armSubsystem.getRotEncoderPos(),0,false,0.05)));
 
         operator.getUpDpad()
-                .onTrue(
+                .whileTrue(
                         new SequentialCommandGroup(
                                 new ArmPIDCommand(0.25, 0, false, 0.1, operator)
                                         .alongWith(
                                                 new InstantCommand(
                                                         () ->
                                                                 intakePneumaticSubsystem
-                                                                        .setIntakeMotorSpeed(0.2),
+                                                                        .setIntakeMotorSpeed(0.6),
                                                         intakePneumaticSubsystem)),
-                                new ExtendFeederCommand()));
-        operator.getDownDpad()
-                .onTrue(
-                        new InstantCommand(
-                                () -> feederIntakeSubsystem.retractFeeder(),
-                                feederIntakeSubsystem));
+                                new ExtendFeederCommand()))
+                .whileFalse(
+                        new SequentialCommandGroup(
+                                new ArmPIDCommand(0.5, 0, false, 0.1, operator)
+                                .alongWith(
+                                                new InstantCommand(
+                                                        () ->
+                                                                intakePneumaticSubsystem
+                                                                        .setIntakeMotorSpeed(0),
+                                                        intakePneumaticSubsystem),
+                                new RetractFeederCommand())));
+                                        
+        operator.getDownDpad();
+                
+                        
+                                
 
         operator.getRightDpad()
                 .whileTrue(
