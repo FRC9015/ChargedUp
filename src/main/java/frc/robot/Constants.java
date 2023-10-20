@@ -112,7 +112,7 @@ public final class Constants {
         public static final int FEEDER_INTAKE_DRIVE_CAN_ID = 23;
 
         public static final DoubleSolenoid EXTEND_RETRACT_SOLENOID = PneumaticHubSubsystem.getDoubleSolenoid(6, 7);
-        public static final DoubleSolenoid OPEN_CLOSE_SOLENOID = PneumaticHubSubsystem.getDoubleSolenoid(12,13);
+        public static final DoubleSolenoid OPEN_CLOSE_SOLENOID = PneumaticHubSubsystem.getDoubleSolenoid(13,12);
     }
 
     public static final class PneumaticConstants {
