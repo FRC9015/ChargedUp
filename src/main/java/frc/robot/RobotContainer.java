@@ -30,6 +30,7 @@ import frc.robot.commands.Drive.ArcadeDrive;
 import frc.robot.commands.Drive.SlowedWhileActiveCommand;
 import frc.robot.commands.FeederIntake.ExtendFeederCommand;
 import frc.robot.commands.FeederIntake.RetractFeederCommand;
+import frc.robot.commands.FeederIntake.FeederIntakeOverRideCommand;
 import frc.robot.commands.Intake.CloseIntakeCommand;
 import frc.robot.commands.Intake.OpenIntakeCommand;
 import frc.robot.commands.experimental.SyncLimelightPose;
@@ -378,7 +379,7 @@ public class RobotContainer {
 
     public Command getHighConeLeftMobilizeAuto() {
         return (new SequentialCommandGroup(
-                new PrintCommand("getHighConeMobilizeAuto"),
+                new PrintCommand("getHighConeLeftMobilizeAuto"),
                 new ArmPIDCommand(2.4, 0, false, 0.2, operator)
                         .withTimeout(3)
                         .andThen(
@@ -413,7 +414,7 @@ public class RobotContainer {
 
     public Command getHighConeMobilizeIntakeAuto() {
         return (new SequentialCommandGroup(
-                new PrintCommand("getHighConeMobilizeAuto"),
+                new PrintCommand("getHighConeMobilizeIntakeAuto"),
                 new ArmPIDCommand(2.4, 0, false, 0.2, operator)
                         .withTimeout(3)
                         .andThen(
@@ -431,8 +432,14 @@ public class RobotContainer {
                 new WaitCommand(0.5),
                 new CloseIntakeCommand(),
                 new ParallelCommandGroup(
-                        new ArmPIDCommand(0.60, 0.05, true, 0.1, operator),
-                        new RepeatCommand(
+                        new ArmPIDCommand(0.2, 0, false, 0.1, operator)
+                        .alongWith(
+                                new InstantCommand(
+                                        () ->
+                                                intakePneumaticSubsystem
+                                                        .setIntakeMotorSpeed(0.6),
+                                        intakePneumaticSubsystem)),
+                new ExtendFeederCommand(),                        new RepeatCommand(
                                         new InstantCommand(
                                                 () -> driveSubsystem.arcadeDrive(-0.3, 0),
                                                 driveSubsystem))
@@ -440,15 +447,8 @@ public class RobotContainer {
                 new RepeatCommand(
                                 new InstantCommand(
                                         () -> driveSubsystem.arcadeDrive(0, 0), driveSubsystem))
-                        .withTimeout(0.8),
-                new ArmPIDCommand(0.2096, 0.458, false, 0.15, operator),
-                new RepeatCommand(
-                        new InstantCommand(
-                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0.2),
-                                        intakePneumaticSubsystem)
-                                .alongWith(
-                                        new InstantCommand(
-                                                () -> driveSubsystem.arcadeDrive(0.2, 0))))));
+                        .withTimeout(0.8)));
+                
     }
 
     public Command getTurn90() {
@@ -617,17 +617,7 @@ public class RobotContainer {
                                 () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.5),
                                 () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
                                 intakePneumaticSubsystem));
-
-        operator.getLTrigAsButton()
-                .whileTrue(
-                        new StartEndCommand(
-                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0.8),
-                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
-                                intakePneumaticSubsystem)
-                                .alongWith(new PrintCommand("in")));
-
-        // Extend feeder intake
-        operator.getUpDpad()
+        operator.getRB()
                 .whileTrue(
                         new SequentialCommandGroup(
                                 new ArmPIDCommand(0.25, 0, false, 0.1, operator)
@@ -647,9 +637,39 @@ public class RobotContainer {
                                                                 intakePneumaticSubsystem
                                                                         .setIntakeMotorSpeed(0),
                                                         intakePneumaticSubsystem),
+                                new RetractFeederCommand())
+                                .withTimeout(3.0)
+                                .andThen(
+
+                                        new ArmPIDCommand(0, 0, false, 0.2, operator))));
+        operator.getLTrigAsButton()
+                .whileTrue(
+                        new StartEndCommand(
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0.8),
+                                () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
+                                intakePneumaticSubsystem)
+                                .alongWith(new PrintCommand("in")));
+
+        //Configurable Preset Buttons for the Operator                        
+        operator.getUpDpad()
+                .whileTrue(
+                        new InstantCommand(
+                                () -> feederIntakeSubsystem.feederExtensionOverRide(), feederIntakeSubsystem))
+                .whileFalse(
+                        new SequentialCommandGroup(
+                                new ArmPIDCommand(0.5, 0, false, 0.1, operator)
+                                .alongWith(
+                                                new InstantCommand(
+                                                        () ->
+                                                                intakePneumaticSubsystem
+                                                                        .setIntakeMotorSpeed(0),
+                                                        intakePneumaticSubsystem),
                                 new RetractFeederCommand())));
-                                        
-        operator.getDownDpad();
+ 
+        operator.getDownDpad()
+                .whileTrue(
+                        new InstantCommand(
+                                () -> feederIntakeSubsystem.feederIntakeOverRide(), feederIntakeSubsystem));
 
         operator.getRightDpad()
                 .whileTrue(
