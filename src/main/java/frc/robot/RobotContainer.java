@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -286,12 +287,23 @@ public class RobotContainer {
                                         intakePneumaticSubsystem)
                                 .withTimeout(0.2),
                         new ParallelCommandGroup(
-                                new ArmPIDCommand(0.60, 0.05, true, 0.1, operator),
+                                new ArmPIDCommand(0.20, 0, false, 0.1, operator),
                                 new RepeatCommand(
-                                                new InstantCommand(
+                                        new PrintCommand("Driving Forwards")
+                                                .alongWith(
+                                                        new InstantCommand(
                                                         () -> driveSubsystem.arcadeDrive(-0.3, 0),
-                                                        driveSubsystem))
-                                        .withTimeout(4.1)),
+                                                        driveSubsystem)))
+                                        .withTimeout(4.1),
+
+                                new InstantCommand(
+                                        () ->
+                                                intakePneumaticSubsystem
+                                                        .setIntakeMotorSpeed(0.6),
+                                        intakePneumaticSubsystem),
+                                new WaitCommand(3.7)
+                                        .andThen(
+                                                new ExtendFeederCommand())),
                         new RepeatCommand(
                                         new InstantCommand(
                                                 () -> driveSubsystem.arcadeDrive(0, 0),
@@ -301,7 +313,19 @@ public class RobotContainer {
                                         new InstantCommand(
                                                 () -> driveSubsystem.arcadeDrive(0.4, 0),
                                                 driveSubsystem))
-                                .withTimeout(1.55),
+                                .withTimeout(1.55)
+                                .alongWith(
+                                        new SequentialCommandGroup(
+                                                new ArmPIDCommand(0.5, 0, false, 0.1, operator)
+                                                .andThen(
+                                                        new InstantCommand(
+                                                                        () ->
+                                                                                intakePneumaticSubsystem
+                                                                                        .setIntakeMotorSpeed(0),
+                                                                                intakePneumaticSubsystem),
+                                                                        new RetractFeederCommand()),
+                                                new WaitCommand(1.5),
+                                                new ArmPIDCommand(-0.1, 0, false, 0.2, operator))),
                         new BalanceCommand())
                 .alongWith(
                         new WaitCommand(14.9)
