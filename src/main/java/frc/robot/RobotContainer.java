@@ -287,12 +287,63 @@ public class RobotContainer {
                                         intakePneumaticSubsystem)
                                 .withTimeout(0.2),
                         new ParallelCommandGroup(
-                                new ArmPIDCommand(0.20, 0, false, 0.1, operator),
+                                new ArmPIDCommand(0.60, 0.05, true, 0.1, operator),
+                                new RepeatCommand(
+                                                new InstantCommand(
+                                                        () -> driveSubsystem.arcadeDrive(-0.3, 0),
+                                                        driveSubsystem))
+                                        .withTimeout(4.1)),
+                        new RepeatCommand(
+                                        new InstantCommand(
+                                                () -> driveSubsystem.arcadeDrive(0, 0),
+                                                driveSubsystem))
+                                .withTimeout(0.8),
+                        new RepeatCommand(
+                                        new InstantCommand(
+                                                () -> driveSubsystem.arcadeDrive(0.4, 0),
+                                                driveSubsystem))
+                                .withTimeout(1.55),
+                        new BalanceCommand())
+                .alongWith(
+                        new WaitCommand(14.9)
+                                .andThen(
+                                        new InstantCommand(
+                                                () -> footSubsystem.footDown(), footSubsystem))));
+    }
+    
+    public Command getHighConeMobilizeIntakeBalanceAuto() {
+        return (new SequentialCommandGroup(
+                        new PrintCommand("getHighConeMobilizeIntakeBalanceAuto"),
+                        new OpenIntakeCommand(),
+                        new ArmPIDCommand(2.4, 0, false, 0.2, operator)
+                                .withTimeout(4)
+                                .andThen(
+                                        new ArmPIDCommand(2.6, 0.635, false, 0.2, operator) //Get arm to scoring position
+                                                .withTimeout(2))
+                                .alongWith(
+                                        new StartEndCommand(
+                                                        () ->
+                                                                intakePneumaticSubsystem
+                                                                        .setIntakeMotorSpeed(0.1), //This keeps the intake held on the piece while its being taken to scoring position
+                                                        () ->
+                                                                intakePneumaticSubsystem
+                                                                        .setIntakeMotorSpeed(0),
+                                                        intakePneumaticSubsystem)
+                                                .withTimeout(0.25)),
+                        new WaitCommand(0.5),
+                        new StartEndCommand(
+                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.4),
+                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0), //Scores Game Piece
+                                        intakePneumaticSubsystem)
+                                .withTimeout(0.2),
+                        new CloseIntakeCommand(),
+                        new ParallelCommandGroup(
+                                new ArmPIDCommand(0.20, 0, false, 0.1, operator), //Sets arm to its setpoint for intake
                                 new RepeatCommand(
                                         new PrintCommand("Driving Forwards")
                                                 .alongWith(
                                                         new InstantCommand(
-                                                        () -> driveSubsystem.arcadeDrive(-0.3, 0),
+                                                        () -> driveSubsystem.arcadeDrive(-0.3, 0), //Drive to intake 2nd piece
                                                         driveSubsystem)))
                                         .withTimeout(4.1),
 
@@ -308,30 +359,30 @@ public class RobotContainer {
                                         new InstantCommand(
                                                 () -> driveSubsystem.arcadeDrive(0, 0),
                                                 driveSubsystem))
-                                .withTimeout(0.8),
+                                .withTimeout(1),   //Stop to collect piece
                         new RepeatCommand(
                                         new InstantCommand(
-                                                () -> driveSubsystem.arcadeDrive(0.4, 0),
+                                                () -> driveSubsystem.arcadeDrive(0.4, 0), //Go backwards to intake and balance
                                                 driveSubsystem))
                                 .withTimeout(1.55)
                                 .alongWith(
                                         new SequentialCommandGroup(
-                                                new ArmPIDCommand(0.5, 0, false, 0.1, operator)
+                                                new ArmPIDCommand(0.5, 0, false, 0.1, operator) 
                                                 .andThen(
                                                         new InstantCommand(
                                                                         () ->
-                                                                                intakePneumaticSubsystem
+                                                                                intakePneumaticSubsystem                        //This section retracts the intake
                                                                                         .setIntakeMotorSpeed(0),
                                                                                 intakePneumaticSubsystem),
                                                                         new RetractFeederCommand()),
                                                 new WaitCommand(1.5),
                                                 new ArmPIDCommand(-0.1, 0, false, 0.2, operator))),
-                        new BalanceCommand())
+                        new BalanceCommand()) //Balances on the charge station
                 .alongWith(
                         new WaitCommand(14.9)
                                 .andThen(
                                         new InstantCommand(
-                                                () -> footSubsystem.footDown(), footSubsystem))));
+                                                () -> footSubsystem.footDown(), footSubsystem)))); //Plants foot
     }
 
     public Command getHighConeBalanceAuto() {
