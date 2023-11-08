@@ -707,7 +707,7 @@ public class RobotContainer {
                 .whileFalse(
                         new SequentialCommandGroup(
                                 new ArmPIDCommand(0.5, 0, false, 0.1, operator)
-                                .andThen(
+                                .alongWith(
                                         new InstantCommand(
                                                         () ->
                                                                 intakePneumaticSubsystem
