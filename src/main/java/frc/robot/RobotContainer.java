@@ -332,7 +332,7 @@ public class RobotContainer {
                                                 .withTimeout(0.25)),
                         new WaitCommand(0.5),
                         new StartEndCommand(
-                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.4),
+                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
                                         () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0), //Scores Game Piece
                                         intakePneumaticSubsystem)
                                 .withTimeout(0.2),
