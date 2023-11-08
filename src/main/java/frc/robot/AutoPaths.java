@@ -46,7 +46,10 @@ public class AutoPaths {
         commandAutos.addOption(
                 "HighConeMobilizeBalance", 
                 RobotContainer.getInstance().getHighConeMobilizeBalanceAuto());
-
+        commandAutos.addOption(
+                "HighConeMobilizeIntakeBalance", 
+                RobotContainer.getInstance().getHighConeMobilizeIntakeBalanceAuto());
+        
         // Cube Auto Options
         commandAutos.addOption(
                 "HighCubeMobilize", 
