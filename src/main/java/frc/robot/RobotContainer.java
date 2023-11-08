@@ -338,7 +338,7 @@ public class RobotContainer {
                                 .withTimeout(0.2),
                         new CloseIntakeCommand(),
                         new ParallelCommandGroup(
-                                new ArmPIDCommand(0.20, 0, false, 0.1, operator), //Sets arm to its setpoint for intake
+                                new ArmPIDCommand(0.15, 0, false, 0.1, operator), //Sets arm to its setpoint for intake
                                 new RepeatCommand(
                                         new PrintCommand("Driving Forwards")
                                                 .alongWith(
@@ -367,6 +367,7 @@ public class RobotContainer {
                                 .withTimeout(1.55)
                                 .alongWith(
                                         new SequentialCommandGroup(
+                                                new WaitCommand(2),
                                                 new ArmPIDCommand(0.5, 0, false, 0.1, operator) 
                                                 .andThen(
                                                         new InstantCommand(
