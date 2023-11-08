@@ -703,6 +703,7 @@ public class RobotContainer {
                                                                 intakePneumaticSubsystem
                                                                         .setIntakeMotorSpeed(0.6),
                                                         intakePneumaticSubsystem)),
+                                new WaitCommand(0.5),
                                 new ExtendFeederCommand()))
                 .whileFalse(
                         new SequentialCommandGroup(
