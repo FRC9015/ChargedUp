@@ -8,6 +8,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.ArmConstants;
@@ -55,11 +56,15 @@ public class ArmSubsystem extends SubsystemBase {
         telescopeArm = new CANSparkMax(ArmConstants.TELESCOPE_CAN_ID, MotorType.kBrushless);
         telescopeArm.setIdleMode(IdleMode.kBrake);
         telescopeArm.setInverted(true);
+
         rotateEncoder = rotateArm.getEncoder();
+        telescopeEncoder = telescopeArm.getEncoder();
+        rotateEncoder.setPosition(0);
+        telescopeEncoder.setPosition(0);
+        
         kStartingArmPosition = rotateEncoder.getPosition();
         rotatePidSetpoint = rotateEncoder.getPosition();
 
-        telescopeEncoder = telescopeArm.getEncoder();
         kStartingTelescopePosition = telescopeEncoder.getPosition();
         telescopePidSetpoint = telescopeEncoder.getPosition();
 
@@ -176,7 +181,9 @@ public class ArmSubsystem extends SubsystemBase {
         return torque;
     }
 
-    public void periodic() {}
+    public void periodic() {
+        SmartDashboard.putNumber("output", rotateArm.get());
+    }
 
     public void simulationPeriodic() {
         // This method will be called once per scheduler run during simulation

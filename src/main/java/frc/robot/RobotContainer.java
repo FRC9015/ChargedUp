@@ -696,14 +696,15 @@ public class RobotContainer {
         operator.getRB()
                 .whileTrue(
                         new SequentialCommandGroup(
-                                new ArmPIDCommand(0.2, 0, false, 0.1, operator)
+                                new ArmPIDCommand(0.35, 0, false, 0.2, operator),
+                                new WaitCommand(0.15),
+                                new ArmPIDCommand(0.2, 0, false, 0.2, operator)
                                         .alongWith(
                                                 new InstantCommand(
                                                         () ->
                                                                 intakePneumaticSubsystem
                                                                         .setIntakeMotorSpeed(0.6),
                                                         intakePneumaticSubsystem)),
-                                new WaitCommand(0.5),
                                 new ExtendFeederCommand()))
                 .whileFalse(
                         new SequentialCommandGroup(
@@ -715,8 +716,9 @@ public class RobotContainer {
                                                                         .setIntakeMotorSpeed(0),
                                                                 intakePneumaticSubsystem),
                                                         new RetractFeederCommand()),
-                                new WaitCommand(1.5),
-                                new ArmPIDCommand(-0.1, 0, false, 0.2, operator)));
+                                new WaitCommand(0.4),
+                                new ArmPIDCommand(-0.1, 0, false, 0.2, operator),
+                                new RetractFeederCommand()));
 
         operator.getLTrigAsButton()
                 .whileTrue(
