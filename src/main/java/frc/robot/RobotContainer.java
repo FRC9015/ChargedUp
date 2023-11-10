@@ -265,7 +265,7 @@ public class RobotContainer {
     public Command getHighConeMobilizeBalanceAuto() {
         return (new SequentialCommandGroup(
                         new PrintCommand("getHighConeMobilizeBalanceAuto"),
-                        new ArmPIDCommand(2.4, 0, false, 0.2, operator)
+                        new ArmPIDCommand(2.2, 0, false, 0.2, operator)// changed rotsetpoint to 2.2 from 2.4
                                 .withTimeout(4)
                                 .andThen(
                                         new ArmPIDCommand(2.6, 0.635, false, 0.2, operator)
@@ -274,17 +274,18 @@ public class RobotContainer {
                                         new StartEndCommand(
                                                         () ->
                                                                 intakePneumaticSubsystem
-                                                                        .setIntakeMotorSpeed(0.1),
+                                                                        .setIntakeMotorSpeed(-0.1),
                                                         () ->
                                                                 intakePneumaticSubsystem
                                                                         .setIntakeMotorSpeed(0),
                                                         intakePneumaticSubsystem)
                                                 .withTimeout(0.25)),
                         new WaitCommand(0.5),
-                        new StartEndCommand(
-                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.4),
-                                        () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
-                                        intakePneumaticSubsystem)
+                        new CloseIntakeCommand()
+                        // new StartEndCommand(
+                        //                 () -> intakePneumaticSubsystem.setIntakeMotorSpeed(-0.4),
+                        //                 () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
+                        //                 intakePneumaticSubsystem)
                                 .withTimeout(0.2),
                         new ParallelCommandGroup(
                                 new ArmPIDCommand(0.60, 0.05, true, 0.1, operator),
@@ -311,25 +312,25 @@ public class RobotContainer {
                                                 () -> footSubsystem.footDown(), footSubsystem))));
     }
     
-    public Command getHighConeMobilizeIntakeBalanceAuto() {
+    public Command getHighConeMobilizeIntakeBalanceAuto() {//rollers ran when cone is let go. pretty sure still hits wall.
         return (new SequentialCommandGroup(
                         new PrintCommand("getHighConeMobilizeIntakeBalanceAuto"),
                         new OpenIntakeCommand(),
-                        new ArmPIDCommand(2.4, 0, false, 0.2, operator)
-                                .withTimeout(4)
+                        new ArmPIDCommand(2.2, 0, false, 0.2, operator)// changed rotsetpoint to 2.2 from 2.4
+                                .withTimeout(4)//changed from 4
                                 .andThen(
                                         new ArmPIDCommand(2.6, 0.635, false, 0.2, operator) //Get arm to scoring position
-                                                .withTimeout(2))
-                                .alongWith(
-                                        new StartEndCommand(
-                                                        () ->
-                                                                intakePneumaticSubsystem
-                                                                        .setIntakeMotorSpeed(0.1), //This keeps the intake held on the piece while its being taken to scoring position
-                                                        () ->
-                                                                intakePneumaticSubsystem
-                                                                        .setIntakeMotorSpeed(0),
-                                                        intakePneumaticSubsystem)
-                                                .withTimeout(0.25)),
+                                                .withTimeout(2)),
+                                // .alongWith(
+                                //         new StartEndCommand(
+                                //                         () ->
+                                //                                 intakePneumaticSubsystem
+                                //                                         .setIntakeMotorSpeed(0.1), //This keeps the intake held on the piece while its being taken to scoring position
+                                //                         () ->
+                                //                                 intakePneumaticSubsystem
+                                //                                         .setIntakeMotorSpeed(0),
+                                //                         intakePneumaticSubsystem)
+                                //                 .withTimeout(0.25)),
                         new WaitCommand(0.5),
                         new StartEndCommand(
                                         () -> intakePneumaticSubsystem.setIntakeMotorSpeed(0),
@@ -343,28 +344,27 @@ public class RobotContainer {
                                         new PrintCommand("Driving Forwards")
                                                 .alongWith(
                                                         new InstantCommand(
-                                                        () -> driveSubsystem.arcadeDrive(-0.3, 0), //Drive to intake 2nd piece
+                                                        () -> driveSubsystem.arcadeDrive(-0.353, 0), //Drive to intake 2nd piece   where to toon distnace for intake
                                                         driveSubsystem)))
                                         .withTimeout(4.1),
-
                                 new InstantCommand(
                                         () ->
                                                 intakePneumaticSubsystem
                                                         .setIntakeMotorSpeed(0.6),
                                         intakePneumaticSubsystem),
-                                new WaitCommand(3.7)
+                                new WaitCommand(3)//changed so feeder goes out earlier went from 3.7 to 3.2
                                         .andThen(
                                                 new ExtendFeederCommand())),
                         new RepeatCommand(
                                         new InstantCommand(
                                                 () -> driveSubsystem.arcadeDrive(0, 0),
                                                 driveSubsystem))
-                                .withTimeout(1),   //Stop to collect piece
+                                .withTimeout(0.1),   //Stop to collect piece changed from 1
                         new RepeatCommand(
                                         new InstantCommand(
-                                                () -> driveSubsystem.arcadeDrive(0.4, 0), //Go backwards to intake and balance
+                                                () -> driveSubsystem.arcadeDrive(0.2, 0), //Go backwards to intake and balance  where to toon where it balances changed from .4
                                                 driveSubsystem))
-                                .withTimeout(1.55)
+                                .withTimeout(0.6)// changed from 1.4
                                 .alongWith(
                                         new SequentialCommandGroup(
                                                 new WaitCommand(2),
@@ -380,7 +380,7 @@ public class RobotContainer {
                                                 new ArmPIDCommand(-0.1, 0, false, 0.2, operator))),
                         new BalanceCommand()) //Balances on the charge station
                 .alongWith(
-                        new WaitCommand(14.9)
+                        new WaitCommand(14.7)// changed from 14.9
                                 .andThen(
                                         new InstantCommand(
                                                 () -> footSubsystem.footDown(), footSubsystem)))); //Plants foot
@@ -390,7 +390,7 @@ public class RobotContainer {
         return (new SequentialCommandGroup(
                         new PrintCommand("getHighConeMobilizeBalanceAuto"),
                         new OpenIntakeCommand(),
-                        new ArmPIDCommand(2.4, 0, false, 0.2, operator)
+                        new ArmPIDCommand(2.2, 0, false, 0.2, operator)// changed rotsetpoint from 2.4 to 2.2
                                 .withTimeout(4)
                                 .andThen(
                                         new ArmPIDCommand(2.6, 0.635, false, 0.2, operator)
@@ -416,13 +416,13 @@ public class RobotContainer {
                                 .withTimeout(2),
                         new BalanceCommand())
                 .alongWith(
-                        new WaitCommand(14.9)
+                        new WaitCommand(14.7)//chhanged from 14.9
                                 .andThen(
                                         new InstantCommand(
                                                 () -> footSubsystem.footDown(), footSubsystem))));
     }
 
-    public Command getHighConeMobilizeAuto() {
+    public Command getHighConeMobilizeAuto() {// intake does not open when the high cone auto is done
         return (new SequentialCommandGroup(
                 new PrintCommand("getHighConeMobilizeAuto"),
                 new ArmPIDCommand(2.4, 0, false, 0.2, operator)
@@ -433,7 +433,7 @@ public class RobotContainer {
                                 new StartEndCommand(
                                                 () ->
                                                         intakePneumaticSubsystem
-                                                                .setIntakeMotorSpeed(0.1),
+                                                                .setIntakeMotorSpeed(-0.1),
                                                 () ->
                                                         intakePneumaticSubsystem
                                                                 .setIntakeMotorSpeed(0),
@@ -696,15 +696,14 @@ public class RobotContainer {
         operator.getRB()
                 .whileTrue(
                         new SequentialCommandGroup(
-                                new ArmPIDCommand(0.35, 0, false, 0.2, operator),
-                                new WaitCommand(0.15),
-                                new ArmPIDCommand(0.2, 0, false, 0.2, operator)
+                                new ArmPIDCommand(0.2, 0, false, 0.1, operator)
                                         .alongWith(
                                                 new InstantCommand(
                                                         () ->
                                                                 intakePneumaticSubsystem
-                                                                        .setIntakeMotorSpeed(0.6),
+                                                                        .setIntakeMotorSpeed(0.7),
                                                         intakePneumaticSubsystem)),
+                                new WaitCommand(0.5),
                                 new ExtendFeederCommand()))
                 .whileFalse(
                         new SequentialCommandGroup(
@@ -716,9 +715,8 @@ public class RobotContainer {
                                                                         .setIntakeMotorSpeed(0),
                                                                 intakePneumaticSubsystem),
                                                         new RetractFeederCommand()),
-                                new WaitCommand(0.4),
-                                new ArmPIDCommand(-0.1, 0, false, 0.2, operator),
-                                new RetractFeederCommand()));
+                                new WaitCommand(1.5),
+                                new ArmPIDCommand(-0.1, 0, false, 0.2, operator)));
 
         operator.getLTrigAsButton()
                 .whileTrue(
